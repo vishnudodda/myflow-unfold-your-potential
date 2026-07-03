@@ -106,5 +106,5 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
       { onConflict: "user_id,assessment_id" },
     );
 
-    return { resultId: saved.id as string, output: output as unknown as Record<string, unknown> };
+    return { resultId: saved.id as string };
   });
