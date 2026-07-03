@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import type { Json } from "@/integrations/supabase/types";
 import { generateText } from "ai";
 import { createLovableAiGatewayProvider } from "./ai-gateway.server";
 
@@ -68,10 +69,10 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
       prompt: userMsg,
     });
 
-    let output: Record<string, unknown> = {};
+    let output: Json = {};
     try {
       const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/```$/, "").trim();
-      output = JSON.parse(cleaned);
+      output = JSON.parse(cleaned) as Json;
     } catch {
       output = { summary: text.slice(0, 500), raw: true };
     }
@@ -84,7 +85,10 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
         prompt_slug: prompt.slug,
         prompt_version: prompt.version,
         output,
-        confidence: typeof output.confidence === "number" ? output.confidence : null,
+        confidence:
+          output && typeof output === "object" && !Array.isArray(output) && typeof (output as Record<string, unknown>).confidence === "number"
+            ? ((output as Record<string, number>).confidence)
+            : null,
         model: prompt.model,
       })
       .select()
@@ -102,5 +106,5 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
       { onConflict: "user_id,assessment_id" },
     );
 
-    return { resultId: saved.id, output };
+    return { resultId: saved.id as string, output: output as unknown as Record<string, unknown> };
   });

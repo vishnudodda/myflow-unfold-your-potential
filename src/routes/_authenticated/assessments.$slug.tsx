@@ -67,7 +67,7 @@ function AssessmentPage() {
       const { error } = await supabase.from("user_responses").upsert(rows, { onConflict: "user_id,question_id" });
       if (error) throw error;
       toast.info("Analyzing your answers with AI…");
-      const result = await analyze({ data: { assessmentSlug: slug } });
+      const result = (await analyze({ data: { assessmentSlug: slug } })) as { resultId: string };
       navigate({ to: "/results/$id", params: { id: result.resultId } });
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Submission failed");
