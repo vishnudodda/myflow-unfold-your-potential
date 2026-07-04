@@ -59,7 +59,7 @@ function Index() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="max-w-xl">
-              <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight">The Nine Pillars</h2>
+              <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight">Nine modules, one map</h2>
               <p className="mt-4 text-muted-foreground">A holistic diagnostic framework of nine assessments, ten questions each. Every result is generated from your own answers — never generic.</p>
             </div>
             <div className="text-sm font-mono text-primary font-bold tracking-widest uppercase">(01—09)</div>

@@ -1,106 +1,63 @@
+## Goal
+Ship a fully-functional MyFlow app: remove the "Nine Pillars" tagline, fix the flow so users can move all the way from assessment → results → recommendations → roadmap without dead-ends, and finish the half-built Opportunities / Recommendations / Roadmap / Power Stats surfaces so every button leads to real, AI-generated content.
 
-# MyFlow — Implementation Plan
+## 1. Remove the "Nine Pillars" tagline
+- **`src/routes/_authenticated/dashboard.tsx`** — delete the `<h2>The Nine Pillars</h2>` block above the grid. Keep the module grid + the 10th "Growth Roadmap" tile.
+- **`src/routes/index.tsx`** — rename the landing section from "The Nine Pillars" to a neutral heading ("The Assessment" / "Nine modules, one map") so the phrase is gone from the marketing page too.
 
-Building the full PRD is a multi-turn effort. This plan sequences it so each phase ships something usable, and nothing is thrown away later. I'll start Phase 0 immediately after approval.
+## 2. Fix "unable to move to next feature"
+Root cause: on the last question the auto-advance stops and the "Submit & analyze" button is the only way forward, which is confusing after the earlier questions auto-advanced.
+- Keep auto-advance for questions 1..N-1.
+- On the **last** question, auto-trigger `submit()` ~350 ms after the final option is chosen (still show the button as a manual fallback with a clear "Submit & analyze" label).
+- Add a visible toast ("Saving your answers…" → "Analyzing…") and a blocking overlay so users see progress instead of a frozen screen while the AI runs.
+- After navigate to `/results/$id`, add a persistent bottom action bar on the results page with **primary CTAs** so users always know where to go next:
+  - `Generate my recommendations →` (`/recommendations`)
+  - `Build my growth roadmap →` (`/roadmap`)
+  - `Back to dashboard`
 
-## Phase 0 — Foundation (this turn after approval)
+## 3. Finish the Recommendations surface (opportunities, careers, learning, role models)
+Currently a placeholder page. Build it out end-to-end.
 
-1. Enable **Lovable Cloud** (Postgres + Auth) and provision **LOVABLE_API_KEY** for Lovable AI Gateway (Gemini).
-2. Configure **Email + Google** sign-in.
-3. Generate **3 rendered design directions** for the landing + dashboard using the "premium, Notion/Linear/Coursera-grade" brief from the PRD. You pick one; I lock its tokens (palette, type, radii, spacing) into `src/styles.css` and use them across every screen going forward.
+**New server functions** in `src/lib/recommendations.functions.ts` (all `.middleware([requireSupabaseAuth])`, prompts loaded via admin client to bypass RLS on `ai_prompts` — same pattern as the assessment fix):
+- `generateRecommendations()` — aggregates the user's completed `ai_results`, calls Lovable AI Gateway (`google/gemini-3-flash-preview`) using the seeded prompts (`analyze-career-discovery`, `learning-recommendations`, `role-model-stories`, `internship-opportunities`), and upserts rows into `career_matches`, `learning_resources`, `role_models`, `opportunities`.
+- `getRecommendations()` — reads all four tables for the current user.
 
-Once you pick a direction, everything else uses it — no redesigns per module.
+**`src/routes/_authenticated/recommendations.tsx`** — real UI:
+- Header + summary of how many assessments feed the recommendations.
+- Empty state with a `Generate recommendations` button when tables are empty.
+- Four tabbed sections (shadcn `Tabs`): **Careers**, **Learning**, **Role Models**, **Opportunities**.
+- Each tab shows cards with title, reasoning/reason, match score / trust score, external URL (opens in new tab), skill/industry tags.
+- Regenerate button (rate-limited by disabled state while loading) to re-run the AI.
 
-## Phase 1 — Auth, shell, onboarding
+## 4. Finish the Roadmap surface
+Currently a placeholder. Build:
+- `generateRoadmap()` server function — uses the seeded `growth-roadmap` prompt + user's ai_results + optional target career from `career_matches`; writes a row in `roadmaps` (with `content` JSONB containing 30-day / 3-month / 6-month / 1-year buckets) and inserts `roadmap_milestones` rows per horizon.
+- `getRoadmap()` / `toggleMilestone()` server functions.
+- **`src/routes/_authenticated/roadmap.tsx`** — timeline view with four horizon sections, milestone checklist (checkbox toggles `completed_at`), progress ring per horizon, empty state + `Generate my roadmap` CTA.
 
-- Landing page (marketing) with SEO metadata.
-- `/auth` (email + Google) with `_authenticated` gate.
-- Onboarding flow: age band (11–27), goals, module recommendation.
-- App shell: sidebar nav, top bar, mobile responsive.
-- DB: `profiles`, `user_roles` (with `has_role()`), `activity_logs`, `notifications`, `settings`.
+## 5. Finish the Power Statistics surface
+- `generatePowerStats()` server function — uses the `power-statistics` prompt to produce label/value/benchmark/narrative rows and inserts into `power_stats`.
+- New route **`src/routes/_authenticated/stats.tsx`** — grid of stat cards (label, big value, benchmark line, short narrative). Empty state + generate button.
+- Add `Stats` link to the top nav on dashboard.
 
-## Phase 2 — Questionnaire + AI engine (the core loop)
+## 6. Dashboard polish so nothing is a dead-end
+- Dashboard: after removing the tagline, add three CTA tiles below the module grid — **Recommendations**, **Growth Roadmap**, **Power Stats** — each linking to the routes above and showing a small state indicator (e.g. "Not generated yet" / "Last updated 2 days ago").
+- Results page: bottom CTA bar (from step 2) plus a small "Next steps" section listing the three follow-on surfaces.
 
-The PRD's heart. Built as a reusable engine so all 9 modules share it.
+## 7. Guardrails / small fixes
+- All new server functions load `ai_prompts` via `supabaseAdmin` (dynamic import inside handler) — the RLS on `ai_prompts` is admin-only, same fix as `analyzeAssessment`.
+- All AI calls include the `system_prompt` + templated `user_template`, response parsed as JSON with a fallback wrapper (same shape as `analyzeAssessment`).
+- Handle 429 / 402 from the gateway with a clear toast ("Rate limited, try again in a minute" / "Out of AI credits — top up in Settings").
+- Every new route gets a `head()` with unique title + description.
+- Every table write includes `user_id: context.userId`.
+- No changes to `ai_prompts` / `assessments` seed data — reuse what's already in the DB.
 
-- Schema: `assessment_categories`, `assessments`, `questions`, `question_options`, `user_responses`, `ai_results`, `ai_prompts` (versioned, editable by admin — decouples prompts from code per PRD §7).
-- Multi-step questionnaire component (progress bar, autosave, resume).
-- AI processing pipeline: server function → Lovable AI Gateway (Gemini 3 Flash) → structured JSON output → persist to `ai_results`.
-- Weighted-vector scoring utility.
-- Results view: SWOT, personality summary, confidence scores, reasoning (per PRD §7.8–7.9).
+## Technical notes
+- Stack: TanStack Start server functions (`createServerFn` from `@tanstack/react-start`), authenticated via `requireSupabaseAuth`.
+- AI: Lovable AI Gateway via existing `createLovableAiGatewayProvider` in `src/lib/ai-gateway.server.ts`.
+- No new tables required — `opportunities`, `career_matches`, `learning_resources`, `role_models`, `roadmaps`, `roadmap_milestones`, `power_stats` already exist with correct RLS.
+- No new packages needed.
 
-Seed all 9 questionnaires from PRD §8 (Self Identity, Values, Deep Insights, Purpose, Unlock Potential, Career Discovery, Career Compass, Habits, Financial) — 10 questions × 4 options each.
-
-## Phase 3 — Recommendation + Opportunity engines
-
-- Tables: `career_matches`, `learning_resources`, `role_models`, `success_stories`, `opportunities` (internships/scholarships).
-- Prompt library (PRD §13) as versioned rows in `ai_prompts`: Internship Suggestions, Self-Awareness Summary, Role Models, Learning Videos, Power Stats.
-- Recommendation cards, filters, ranking, trust score, expiration handling (§10.6).
-- Opportunity engine: live search stubbed initially (mock feed) with real integration points documented for later (Serper/Tavily/Google CSE).
-
-## Phase 4 — Growth Roadmap + Power Statistics
-
-- Roadmap engine (PRD §12): 5-stage pipeline → 30-day / 3-month / 6-month / 1-year plan with skills, resources, opportunities linked.
-- Roadmap UI: timeline, milestones, week-by-week action plan, check-in.
-- Power Stats dashboard (§11): benchmarks, percentile framing, motivation copy.
-- Progress tracking: habit check-ins, completed milestones, re-assessment prompts.
-
-## Phase 5 — Admin panel
-
-- Role-gated `/admin` (admin role via `user_roles` + `has_role()`).
-- CRUD: users, questionnaires, questions, AI prompts (edit + version), categories, recommendations, opportunities, learning resources.
-- Analytics: signups, completions per module, AI cost/latency, active users.
-
-## Phase 6 — Polish
-
-- Reports export (PDF), notifications, deep charts (Recharts), rate limits, audit logs, error boundaries per route, SEO on all public routes, a11y pass.
-
----
-
-## Technical details
-
-**Stack (locked by template):** TanStack Start + React 19, Tailwind v4, shadcn, TanStack Query, Lovable Cloud (Supabase managed), Lovable AI Gateway.
-
-**Routing:**
-```
-/                       landing
-/auth                   sign in / up
-/onboarding             (authenticated)
-/_authenticated/
-  dashboard             hub
-  assessments           list + progress
-  assessments/$slug     questionnaire
-  results/$id           AI output
-  roadmap               growth plan
-  recommendations       careers / learning / opportunities / role models
-  progress              tracking + power stats
-  profile
-  settings
-/_authenticated/_admin/*  admin panel
-```
-
-**AI layer:** every prompt is a DB row (`ai_prompts`, keyed by `slug` + `version`). Server function loads the prompt, injects user context, calls Gemini via the gateway helper (`src/lib/ai-gateway.server.ts` per the AI SDK knowledge), enforces structured output via zod schema, persists result. Prompts are editable in admin without a redeploy — this satisfies PRD §7 "prompts can be updated without modifying application logic".
-
-**Security:** RLS on every table scoped to `auth.uid()`; admin operations gated by `has_role(auth.uid(),'admin')`; service-role client only for verified webhooks/admin fns; financial data (§6.9) treated as sensitive per §15.8.
-
-**Data model highlights (Phase 2):**
-```
-profiles(user_id, age_band, display_name, avatar_url, onboarded_at)
-user_roles(user_id, role)          -- app_role enum
-assessment_categories(slug, name, order)
-assessments(slug, category_id, title, description)
-questions(assessment_id, order, text)
-question_options(question_id, label, value, trait_weights jsonb)
-user_responses(user_id, question_id, option_id, created_at)
-ai_prompts(slug, version, system_prompt, user_template, output_schema, active)
-ai_results(user_id, assessment_id, prompt_slug, prompt_version, output jsonb, confidence, created_at)
-```
-
----
-
-## What I need from you now
-
-1. **Approve this plan.**
-2. After approval, I'll enable Cloud + AI key and render the 3 design directions in the next turn. You pick one, then I execute Phases 1→6.
-
-Each subsequent phase is 1–2 turns; I'll pause between phases so you can steer.
+## Files touched
+- Edit: `src/routes/index.tsx`, `src/routes/_authenticated/dashboard.tsx`, `src/routes/_authenticated/assessments.$slug.tsx`, `src/routes/_authenticated/results.$id.tsx`, `src/routes/_authenticated/recommendations.tsx`, `src/routes/_authenticated/roadmap.tsx`
+- Create: `src/lib/recommendations.functions.ts`, `src/lib/roadmap.functions.ts`, `src/lib/stats.functions.ts`, `src/routes/_authenticated/stats.tsx`

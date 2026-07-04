@@ -72,9 +72,26 @@ function ResultPage() {
         <pre className="text-xs text-muted-foreground/60 whitespace-pre-wrap font-mono p-4 bg-muted/30 rounded-xl overflow-auto">
           {JSON.stringify(o, null, 2)}
         </pre>
-        <Link to="/dashboard" className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-xl font-semibold">
-          Back to dashboard
-        </Link>
+
+        <section className="pt-8 border-t border-border">
+          <h2 className="font-display text-2xl font-bold">Next steps</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Turn this analysis into action.</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <Link to="/recommendations" className="p-5 rounded-xl border border-border hover:border-primary/50 transition-colors">
+              <p className="font-display font-bold">Recommendations →</p>
+              <p className="mt-1 text-xs text-muted-foreground">Careers, learning, role models, opportunities.</p>
+            </Link>
+            <Link to="/roadmap" className="p-5 rounded-xl border border-border hover:border-primary/50 transition-colors">
+              <p className="font-display font-bold">Growth Roadmap →</p>
+              <p className="mt-1 text-xs text-muted-foreground">30 days · 3 · 6 · 12 month plan.</p>
+            </Link>
+            <Link to="/stats" className="p-5 rounded-xl border border-border hover:border-primary/50 transition-colors">
+              <p className="font-display font-bold">Power Stats →</p>
+              <p className="mt-1 text-xs text-muted-foreground">Benchmarked metrics about you.</p>
+            </Link>
+          </div>
+          <Link to="/dashboard" className="mt-8 inline-block text-sm text-muted-foreground hover:text-foreground">← Back to dashboard</Link>
+        </section>
       </main>
     </div>
   );
