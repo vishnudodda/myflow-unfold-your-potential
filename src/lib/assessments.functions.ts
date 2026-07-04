@@ -26,7 +26,8 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
 
     if (!responses || responses.length < 1) throw new Error("Complete the questionnaire first");
 
-    const { data: prompt } = await supabase
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: prompt } = await supabaseAdmin
       .from("ai_prompts")
       .select("*")
       .eq("slug", asmt.prompt_slug ?? `analyze-${asmt.slug}`)
