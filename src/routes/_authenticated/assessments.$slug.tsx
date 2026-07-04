@@ -29,6 +29,7 @@ function AssessmentPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [idx, setIdx] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [autoSubmitted, setAutoSubmitted] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -71,6 +72,7 @@ function AssessmentPage() {
       navigate({ to: "/results/$id", params: { id: result.resultId } });
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Submission failed");
+      setAutoSubmitted(false);
     } finally {
       setSubmitting(false);
     }
@@ -107,6 +109,13 @@ function AssessmentPage() {
                   setAnswers((a) => ({ ...a, [current.id]: o.id }));
                   if (idx < questions.length - 1) {
                     setTimeout(() => setIdx((i) => i + 1), 220);
+                  } else if (!autoSubmitted && !submitting) {
+                    setAutoSubmitted(true);
+                    setTimeout(() => {
+                      // ensure state updated
+                      const next = { ...answers, [current.id]: o.id };
+                      if (questions.every((q) => next[q.id])) submit();
+                    }, 350);
                   }
                 }}
                 className={`w-full text-left p-5 rounded-2xl border transition-all ${
@@ -120,6 +129,16 @@ function AssessmentPage() {
             );
           })}
         </div>
+
+        {submitting && (
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="text-center space-y-3">
+              <div className="size-10 mx-auto border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <p className="font-display text-lg">Analyzing your answers…</p>
+              <p className="text-sm text-muted-foreground">This takes 10–20 seconds.</p>
+            </div>
+          </div>
+        )}
 
         <div className="mt-12 flex justify-between">
           <Button variant="ghost" disabled={idx === 0} onClick={() => setIdx((i) => i - 1)}>

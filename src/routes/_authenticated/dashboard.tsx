@@ -53,6 +53,7 @@ function Dashboard() {
             <Link to="/dashboard" className="text-foreground">Dashboard</Link>
             <Link to="/roadmap" className="hover:text-foreground">Roadmap</Link>
             <Link to="/recommendations" className="hover:text-foreground">Recommendations</Link>
+            <Link to="/stats" className="hover:text-foreground">Power Stats</Link>
             <Link to="/profile" className="hover:text-foreground">Profile</Link>
           </nav>
           <Button variant="ghost" size="sm" onClick={signOut}>Sign out</Button>
@@ -67,7 +68,6 @@ function Dashboard() {
         </section>
 
         <section>
-          <h2 className="font-display text-2xl font-bold mb-6">The Nine Pillars</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border ring-1 ring-border">
             {categories.map((c, i) => {
               const a = assessments.find((x) => x.category_id === c.id);
