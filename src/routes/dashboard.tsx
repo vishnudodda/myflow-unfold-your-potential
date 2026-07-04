@@ -27,75 +27,84 @@ function Dashboard() {
   const r = session.result;
 
   return (
-    <main className="min-h-screen bg-background text-foreground px-6 py-10">
+    <main className="min-h-screen bg-gradient-to-br from-pastel-blue via-background to-pastel-lilac text-foreground px-6 py-10">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between">
           <Link to="/" className="font-display text-xl font-bold tracking-tighter">MYFLOW</Link>
-          <Button variant="outline" size="sm" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
+          <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
             Start over
           </Button>
         </div>
 
-        <h1 className="mt-10 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-          {session.name}, here's your map.
-        </h1>
+        <header className="mt-10">
+          <span className="inline-block text-[11px] font-mono uppercase tracking-widest bg-white/60 backdrop-blur px-3 py-1 rounded-full border border-border">
+            Your snapshot ✦
+          </span>
+          <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
+            {session.name}, here's your <span className="font-serif italic font-normal text-primary">map</span>.
+          </h1>
+        </header>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-6 gap-4">
-          {/* Summary */}
-          <Panel title="Summary" span="md:col-span-4">
-            <p className="font-display text-lg font-semibold">{r.summary?.headline}</p>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground list-disc pl-5">
-              {(r.summary?.bullets ?? []).map((b, i) => <li key={i}>{b}</li>)}
-            </ul>
+        {/* Row 1: Role Models + Opportunities (swapped to the top) */}
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Panel title="Role Models" tone="lilac" emoji="✨">
+            <div className="space-y-4">
+              {(r.roleModels ?? []).map((rm, i) => (
+                <div key={i} className="rounded-xl bg-white/70 p-3">
+                  <div className="font-semibold text-sm">{rm.name}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
+                </div>
+              ))}
+            </div>
           </Panel>
 
-          {/* Roadmap */}
-          <Panel title="Roadmap" span="md:col-span-2">
+          <Panel title="Opportunities" tone="mint" emoji="🌱">
+            <div className="space-y-3">
+              {(r.opportunities ?? []).map((o, i) => (
+                <div key={i} className="rounded-xl bg-white/70 p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="font-semibold text-sm">{o.title}</div>
+                    <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/15 text-primary" : o.confidence === "Medium" ? "bg-pastel-peach text-foreground" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">{o.org} · {o.stipend}</div>
+                </div>
+              ))}
+            </div>
+          </Panel>
+        </div>
+
+        {/* Row 2: Summary (now below) */}
+        <div className="mt-4">
+          <Panel title="Summary" tone="blue" emoji="💫">
+            <p className="font-display text-xl md:text-2xl font-semibold text-balance">{r.summary?.headline}</p>
+            <ul className="mt-4 grid md:grid-cols-3 gap-3">
+              {(r.summary?.bullets ?? []).map((b, i) => (
+                <li key={i} className="rounded-xl bg-white/70 p-3 text-sm">{b}</li>
+              ))}
+            </ul>
+          </Panel>
+        </div>
+
+        {/* Row 3: Roadmap + Podcasts */}
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Panel title="Roadmap" tone="peach" emoji="🛤️">
             <ol className="space-y-3">
               {(r.roadmap ?? []).map((m, i) => (
-                <li key={i} className="text-sm">
-                  <div className="text-xs font-mono uppercase tracking-widest text-primary">{m.horizon}</div>
-                  <div className="mt-0.5">{m.action}</div>
+                <li key={i} className="rounded-xl bg-white/70 p-3">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-primary">{m.horizon}</div>
+                  <div className="mt-0.5 text-sm">{m.action}</div>
                 </li>
               ))}
             </ol>
           </Panel>
 
-          {/* Role Models */}
-          <Panel title="Role Models" span="md:col-span-2">
-            <div className="space-y-3">
-              {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i}>
-                  <div className="font-semibold text-sm">{rm.name}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{rm.why}</div>
-                </div>
-              ))}
-            </div>
-          </Panel>
-
-          {/* Opportunities */}
-          <Panel title="Opportunities" span="md:col-span-2">
-            <div className="space-y-3">
-              {(r.opportunities ?? []).map((o, i) => (
-                <div key={i}>
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="font-semibold text-sm">{o.title}</div>
-                    <span className={`text-[10px] font-mono uppercase px-1.5 py-0.5 rounded ${o.confidence === "High" ? "bg-primary/10 text-primary" : o.confidence === "Medium" ? "bg-muted text-foreground" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">{o.org} · {o.stipend}</div>
-                </div>
-              ))}
-            </div>
-          </Panel>
-
-          {/* Podcasts */}
-          <Panel title="Podcasts" span="md:col-span-2">
+          <Panel title="Podcasts" tone="lemon" emoji="🎧">
             <div className="space-y-3">
               {(r.podcasts ?? []).map((p, i) => (
-                <div key={i}>
+                <div key={i} className="rounded-xl bg-white/70 p-3">
                   <div className="font-semibold text-sm">{p.title}</div>
                   <div className="text-xs text-muted-foreground">by {p.host}</div>
-                  <div className="text-xs mt-0.5">{p.pitch}</div>
+                  <div className="text-xs mt-1">{p.pitch}</div>
                 </div>
               ))}
             </div>
@@ -106,11 +115,22 @@ function Dashboard() {
   );
 }
 
-function Panel({ title, span, children }: { title: string; span: string; children: React.ReactNode }) {
+const TONE_BG: Record<string, string> = {
+  blue: "bg-pastel-blue",
+  mint: "bg-pastel-mint",
+  peach: "bg-pastel-peach",
+  lilac: "bg-pastel-lilac",
+  lemon: "bg-pastel-lemon",
+};
+
+function Panel({ title, tone, emoji, children }: { title: string; tone: keyof typeof TONE_BG; emoji?: string; children: React.ReactNode }) {
   return (
-    <section className={`${span} rounded-2xl border border-border bg-card p-5`}>
-      <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground">{title}</div>
-      <div className="mt-3">{children}</div>
+    <section className={`${TONE_BG[tone]} rounded-3xl border border-border p-5 shadow-[0_10px_40px_-20px_rgba(30,58,138,0.25)] transition-transform hover:-translate-y-0.5`}>
+      <div className="flex items-center gap-2">
+        <span className="text-lg leading-none">{emoji}</span>
+        <div className="text-xs font-mono uppercase tracking-widest text-foreground/70">{title}</div>
+      </div>
+      <div className="mt-4">{children}</div>
     </section>
   );
 }
