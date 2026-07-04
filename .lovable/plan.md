@@ -1,65 +1,62 @@
-# Complete MYFLOW to PRD v1.0
+# Reframe MyFlow — No-Auth Guided Journey
 
-Scope: the 32-page PRD. I'll close every functional gap between what exists and what the PRD requires, in one build pass. No design overhaul — the "Precision editorial" direction stays.
+## New user flow (single-session, no login)
 
-## What already exists (keep)
-- Auth (email + Google), 9 assessment modules + 90 questions in DB, per-question weighted trait vectors, `ai_prompts` table with 15 prompts, `ai_results` per module, dashboard, per-module `results/$id` page, Recommendations page with 4 tabs, Roadmap milestone page, Power Stats page, Profile page.
+```text
+/ (Intro)          → Name + Age form
+/pick              → "What do you want to know about you?"
+                     10 assessment checkboxes (multi-select)
+/questions         → Renders questions ONLY for selected assessments,
+                     stacked in one scrollable page with progress bar.
+                     Final button: [ Analyze ]
+/dashboard         → 5 segments:
+                     1. Summary        2. Role Models
+                     3. Roadmap        4. Opportunities
+                     5. Suggested Podcasts
+```
 
-## Gaps vs PRD (what I'll build)
+No sign-in / sign-up / Google / email anywhere. Session lives in `localStorage` (name, age, selected slugs, answers, generated results).
 
-### 1. Assessment reliability (§6, §8)
-- Verify the recent fix (answersRef, submittingRef, per-run error toast) makes the Submit / auto-advance path reliable on the last question.
-- Add "low-confidence" flag when a user picks the same letter for all 10 answers (§6.1 Edge Cases). Store on `ai_results.confidence`.
-- Loading overlay stays; on failure surface the underlying error instead of "Submission failed".
+## Screens
 
-### 2. Registration profile fields (§5, §7.2)
-PRD requires age, education level, location, preferred work mode as prompt context. Currently only `age_band`, `display_name`, `goals` exist.
-- Migration: add `education_level`, `country`, `work_mode`, `experience_level` to `profiles` (nullable, backfill-safe).
-- One-time onboarding step after signup + editable on `/profile`.
-- Include all fields in every prompt context builder (`gatherProfileContext`).
+**1. `/` Intro** — hero + a card with `Name` and `Age` inputs and a "Continue" button. Stores `{ name, age }` in localStorage, routes to `/pick`.
 
-### 3. Opportunity Engine (§10, §13.1)
-Align schema, prompt, and UI to the PRD output format.
-- Migration: add `posted_date`, `deadline`, `stipend`, `required_skills text[]`, `confidence` (High/Medium/Low) to `opportunities`.
-- Update the `internship-opportunities` prompt in DB to force JSON with all §10.7 fields + the "never fabricate" clause verbatim.
-- Update `generateOpportunities` mapper + Opportunities tab card to show all fields (Company · Location · Posted · Deadline · Stipend · Confidence badge · Why-it-matches · Apply link).
-- Empty-state copy: "No verified recent opportunities right now — check back in a few days." (per §10.6).
+**2. `/pick` Feature picker** — heading "What do you want to know about you?"; grid of 10 checkboxes, one per assessment (pulled from `assessments` table). "Continue" enabled when ≥1 checked. Stores selected slugs.
 
-### 4. Recommendations reliability (§9, §13.3, §13.4)
-- Split generation into 4 independent server fns (already done for Opportunities; do the same for Careers, Learning, Role Models) so per-tab "Refresh" works and one failure doesn't kill the others.
-- Learning card shows Title · Creator · Duration · Skill tag · Why. Role Models show Name · Field · Story · Why.
+**3. `/questions` Combined questionnaire** — loads all questions + options for the selected assessments in one page, grouped by module with a sticky progress indicator. Radio group per question. Bottom "Analyze" button; disabled until every question answered. On click: calls one new server fn `analyzeGuest` that runs each selected assessment's prompt + the recommendations/roadmap/stats prompts, returns a bundled result object, stored in localStorage under `myflow.result`.
 
-### 5. Growth Roadmap — full §12.3 output
-Roadmap page today only shows milestone buckets. PRD requires the whole synthesized document.
-- New server fn `generateFullRoadmap` that runs after ≥1 assessment is complete (warn if <9), calls a single "growth-roadmap" prompt with all `ai_results` + profile, and stores structured JSON.
-- Migration: extend `roadmaps` with a `report jsonb` column (Overall Profile, Top Strengths, Areas to Improve, Career Recs, Skills to Learn, Learning Resources, Success Stories, 30-Day Plan, One-Year Roadmap, Motivation Summary).
-- `roadmap.tsx` renders the report in ordered sections; milestones (30/90/180/365) stay under "Tracking" with checkboxes.
-- Banner when <9 modules complete: "Report generated from partial data — complete the remaining N assessments for the full picture."
+**4. `/dashboard` 5-panel** — reads `myflow.result` from localStorage. Grid:
+- **Summary** — top-line headline + 3-bullet insights synthesized across modules.
+- **Role Models** — 3 cards (name, why they match).
+- **Roadmap** — 4 milestones (30d / 3m / 6m / 1y), one line each.
+- **Opportunities** — 3 cards (title, org, stipend, confidence).
+- **Podcasts** — 3 cards (title, host, one-line pitch, link if any).
 
-### 6. Power Statistics (§11)
-- Update `power-statistics` prompt to force labeled estimates and cite a source per stat (UN/UNESCO/World Bank/ILO/ITU/WHO/Ethnologue).
-- Migration: add `source`, `is_estimate` to `power_stats`.
-- Stats page: each stat card shows big-number + comparison line + small "Estimate · source" footer. Confidence-building tone header (§11.2 quote).
+## Technical changes
 
-### 7. Progress tracking (§12.3.11, §6.8)
-- Career Compass retake: allow re-taking any assessment; new `ai_results` row per attempt, `results/$id` shows the latest.
-- Dashboard "Growth Snapshot" strip pulls Career Readiness Score from the latest Career Compass result and Self-Awareness Score from the latest Self Identity result.
+### Routes
+- Delete or bypass `/auth`, `/_authenticated/*` gating on the new user path. Keep the files, but remove nav links; add redirect from `/` to new flow.
+- Add: `src/routes/index.tsx` (rewritten intro), `src/routes/pick.tsx`, `src/routes/questions.tsx`, `src/routes/dashboard.tsx` (public, reads localStorage).
 
-### 8. Housekeeping
-- Remove console `inputValidator` deprecation warning by switching to `.validator()` in the 3 files that use it.
-- Add `.env`-driven site title/description already; add per-route `head()` for Recommendations/Roadmap/Stats/Profile.
-- Verify RLS + GRANTs for the new columns (columns inherit table policies, no new policies needed).
+### Server functions (public, no auth middleware)
+- `src/lib/guest.functions.ts`:
+  - `listAssessments()` → returns 10 assessments + categories.
+  - `loadQuestions({ slugs })` → returns questions & options for chosen slugs.
+  - `analyzeGuest({ name, age, answers, slugs })` → runs prompts via existing `runPrompt` / `loadPrompt`, returns `{ summary, roleModels, roadmap, opportunities, podcasts }`. No DB writes — pure compute. Uses `supabaseAdmin` only to read prompts/questions.
 
-## Technical notes
-- All new AI calls use `google/gemini-3-flash-preview` via the existing Lovable AI gateway helper; system prompts include the PRD's "never fabricate / honesty over fabrication" clause.
-- All server fns keep `requireSupabaseAuth`; `ai_prompts` loaded via `supabaseAdmin` (existing pattern).
-- Migrations run in order: profile fields → opportunities fields → roadmaps.report → power_stats source. All `GRANT` blocks re-issued per Lovable rules.
-- No new external services, no new secrets.
+### Removed from client UX (kept in code but unlinked)
+- Auth page, protected dashboard, per-assessment page, results detail page.
 
-## Out of scope (call out explicitly)
-- Real live scraping of LinkedIn/Internshala (PRD §10.4) — the model returns best-effort recent listings; a real crawler is a separate project.
-- Push/email notifications, SAML SSO, mobile app, screen-time integration, admin dashboard — all listed under §16 Future Features.
+### State
+- `localStorage['myflow.session']` = `{ name, age, slugs, answers, result }`.
+- No profiles / user_responses / ai_results writes on the guest path.
 
-## Deliverables
-- 4 migrations, ~6 edited server fn files, ~5 edited route files, 1 new onboarding route, updated DB prompts for `internship-opportunities`, `power-statistics`, and a new `growth-roadmap` prompt.
-- Typecheck passes; one manual pass through: sign up → onboarding → complete 1 assessment → generate recs → generate opportunities → generate roadmap.
+### Landing metadata
+- `head()` on `/`: title "MyFlow — Discover who you are", description matches new flow.
+
+## Out of scope
+- Persisting results server-side.
+- Sharing / permalinks for dashboard (localStorage only).
+- Editing the underlying prompt table.
+
+Approve to build.
