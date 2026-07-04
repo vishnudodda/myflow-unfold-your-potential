@@ -91,14 +91,11 @@ export const generateRecommendations = createServerFn({ method: "POST" })
 
     // Clear old rows only for sections we regenerated successfully.
     const errors: string[] = [];
-    let careerRows: Array<Record<string, unknown>> = [];
-    let learningRows: Array<Record<string, unknown>> = [];
-    let roleRows: Array<Record<string, unknown>> = [];
-    let oppRows: Array<Record<string, unknown>> = [];
+    const counts = { careers: 0, learning: 0, role_models: 0, opportunities: 0 };
 
     if (careerOut) {
       const careers = asArray((careerOut as Obj).careers ?? (careerOut as Obj).matches ?? careerOut).slice(0, 8);
-    careerRows = careers
+    const careerRows = careers
       .map((c) => ({
         user_id: userId,
         title: asStr(c.title) ?? asStr(c.name) ?? "Career",
@@ -110,11 +107,12 @@ export const generateRecommendations = createServerFn({ method: "POST" })
       .filter((r) => r.title !== "Career" || r.reasoning);
       await supabase.from("career_matches").delete().eq("user_id", userId);
       if (careerRows.length) await supabase.from("career_matches").insert(careerRows);
+      counts.careers = careerRows.length;
     } else errors.push("careers");
 
     if (learningOut) {
       const learning = asArray((learningOut as Obj).resources ?? (learningOut as Obj).learning ?? learningOut).slice(0, 12);
-      learningRows = learning
+      const learningRows = learning
       .map((l) => ({
         user_id: userId,
         kind: asStr(l.kind) ?? asStr(l.type) ?? "course",
@@ -127,11 +125,12 @@ export const generateRecommendations = createServerFn({ method: "POST" })
       }));
       await supabase.from("learning_resources").delete().eq("user_id", userId);
       if (learningRows.length) await supabase.from("learning_resources").insert(learningRows);
+      counts.learning = learningRows.length;
     } else errors.push("learning");
 
     if (roleOut) {
       const roles = asArray((roleOut as Obj).role_models ?? (roleOut as Obj).people ?? roleOut).slice(0, 8);
-      roleRows = roles.map((r) => ({
+      const roleRows = roles.map((r) => ({
       user_id: userId,
       name: asStr(r.name) ?? "Role Model",
       title: asStr(r.title) ?? asStr(r.role),
@@ -141,11 +140,12 @@ export const generateRecommendations = createServerFn({ method: "POST" })
     }));
       await supabase.from("role_models").delete().eq("user_id", userId);
       if (roleRows.length) await supabase.from("role_models").insert(roleRows);
+      counts.role_models = roleRows.length;
     } else errors.push("role_models");
 
     if (oppOut) {
       const opps = asArray((oppOut as Obj).opportunities ?? (oppOut as Obj).internships ?? oppOut).slice(0, 12);
-      oppRows = opps.map((o) => ({
+      const oppRows = opps.map((o) => ({
       user_id: userId,
       kind: asStr(o.kind) ?? asStr(o.type) ?? "internship",
       title: asStr(o.title) ?? asStr(o.name) ?? "Opportunity",
@@ -159,13 +159,11 @@ export const generateRecommendations = createServerFn({ method: "POST" })
     }));
       await supabase.from("opportunities").delete().eq("user_id", userId);
       if (oppRows.length) await supabase.from("opportunities").insert(oppRows);
+      counts.opportunities = oppRows.length;
     } else errors.push("opportunities");
 
     return {
-      careers: careerRows.length,
-      learning: learningRows.length,
-      role_models: roleRows.length,
-      opportunities: oppRows.length,
+      ...counts,
       errors,
     };
   });
