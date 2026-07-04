@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as QuestionsRouteImport } from './routes/questions'
 import { Route as PickRouteImport } from './routes/pick'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 
 const QuestionsRoute = QuestionsRouteImport.update({
@@ -23,6 +24,11 @@ const PickRoute = PickRouteImport.update({
   path: '/pick',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,30 +37,34 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/pick': typeof PickRoute
   '/questions': typeof QuestionsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/pick': typeof PickRoute
   '/questions': typeof QuestionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/pick': typeof PickRoute
   '/questions': typeof QuestionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pick' | '/questions'
+  fullPaths: '/' | '/dashboard' | '/pick' | '/questions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pick' | '/questions'
-  id: '__root__' | '/' | '/pick' | '/questions'
+  to: '/' | '/dashboard' | '/pick' | '/questions'
+  id: '__root__' | '/' | '/dashboard' | '/pick' | '/questions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   PickRoute: typeof PickRoute
   QuestionsRoute: typeof QuestionsRoute
 }
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PickRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   PickRoute: PickRoute,
   QuestionsRoute: QuestionsRoute,
 }
