@@ -62,6 +62,11 @@
   --color-paper: var(--paper);
   --color-amber: var(--amber);
   --color-stone-ink: var(--stone-ink);
+  --color-pastel-blue: var(--pastel-blue);
+  --color-pastel-mint: var(--pastel-mint);
+  --color-pastel-peach: var(--pastel-peach);
+  --color-pastel-lilac: var(--pastel-lilac);
+  --color-pastel-lemon: var(--pastel-lemon);
 }
 
 :root {
