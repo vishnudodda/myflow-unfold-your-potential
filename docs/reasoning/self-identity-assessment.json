@@ -1,0 +1,982 @@
+{
+  "new_traits": [
+    {
+      "slug": "dependability",
+      "name": "Dependability",
+      "description": "The tendency to be reliable, fulfill obligations, and act consistently over time.",
+      "is_new": true
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "2468049d-8e35-4fd6-9f56-b2cba85ba348",
+      "question_text": "Which statement describes you best?",
+      "primary_trait": "decision_making",
+      "secondary_traits": [
+        "reflectiveness",
+        "risk_taking",
+        "adaptability"
+      ],
+      "options": [
+        {
+          "option_id": "8dd5a4ca-3986-426d-8cb4-59700d35dec7",
+          "letter": "A",
+          "label": "I think before I act",
+          "mappings": [
+            {
+              "trait": "reflectiveness",
+              "weight": 3,
+              "reason": "Reflecting before acting shows cognitive pause and deliberation."
+            },
+            {
+              "trait": "risk_taking",
+              "weight": -1,
+              "reason": "Deliberating naturally curtails impulsive, high-risk actions."
+            }
+          ]
+        },
+        {
+          "option_id": "c37d73ca-cf86-44fe-8341-411a7cf57c4c",
+          "letter": "B",
+          "label": "I act quickly and learn later",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": 3,
+              "reason": "Acting rapidly without prior analysis is a core marker of risk tolerance."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": -2,
+              "reason": "Learning later explicitly opposes proactive reflection."
+            }
+          ]
+        },
+        {
+          "option_id": "f85826dd-d061-440d-b07a-d10adbbf673d",
+          "letter": "C",
+          "label": "It depends on the situation",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 3,
+              "reason": "Adjusting behavior conditionally demonstrates high situational flexibility."
+            }
+          ]
+        },
+        {
+          "option_id": "e5ebe518-6081-4f2c-a687-bc17f435a84b",
+          "letter": "D",
+          "label": "I ask others before deciding",
+          "mappings": [
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Consulting others reveals a collaborative bias in processing."
+            },
+            {
+              "trait": "confidence",
+              "weight": -1,
+              "reason": "Relying on external consensus can indicate lower independent conviction."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Decision Making",
+        "Self-Management",
+        "Cognitive Style"
+      ],
+      "frameworks": [
+        {
+          "name": "SWOT",
+          "relevance": "Identifies operational strengths versus potential weaknesses in impulsivity or indecision."
+        }
+      ],
+      "confidence_logic": "Requires at least 2 distinct behavioral questions assessing reaction times to validate the primary trait; scaling linearly as independent vs. collaborative decision reports align.",
+      "contributions": {
+        "personality": "Defines whether the user's core operational tempo is impulsive, deliberate, or consensus-driven.",
+        "strengths": "Highlights capacity for either rapid execution or thorough risk mitigation.",
+        "weaknesses": "Flags potential analysis paralysis or reckless action depending on the choice.",
+        "behavior_patterns": "Establishes an anchor metric for how the user initiates tasks and navigates ambiguity.",
+        "career": "Directs users toward fast-paced startup environments vs. highly structured analytical roles.",
+        "learning": "Shows a preference for experiential trial-and-error versus theory-first study.",
+        "roadmap": "Suggests implementing either 'bias for action' frameworks or 'measured planning' templates.",
+        "podcasts": "Recommends content focused on executive functioning, cognitive biases, or agile execution.",
+        "books": "Points to literature on decision sciences, habit formation, or calculated risk.",
+        "role_models": "Connects to leaders known for either visionary leaps or methodical strategy.",
+        "opportunities": "Identifies situations where the user's specific pace of decision-making is a competitive advantage."
+      },
+      "suggested_improvements": "The options are somewhat simplistic; adding context (e.g., 'in a crisis' vs. 'daily tasks') would yield higher psychometric fidelity."
+    },
+    {
+      "question_id": "2452eb9c-2bcd-4c31-8706-7f277f90e254",
+      "question_text": "What gives you the greatest sense of satisfaction?",
+      "primary_trait": "achievement_drive",
+      "secondary_traits": [
+        "problem_solving",
+        "altruism",
+        "creativity"
+      ],
+      "options": [
+        {
+          "option_id": "539ee485-5861-4f61-b03c-ff2a17c47d34",
+          "letter": "A",
+          "label": "Solving difficult problems",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Finding joy in complexity strongly flags a solution-oriented mindset."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Tackling difficulty implies robust analytical engagement."
+            }
+          ]
+        },
+        {
+          "option_id": "60f630e7-627a-4aef-9ac4-abf700e1899b",
+          "letter": "B",
+          "label": "Helping other people",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Deriving satisfaction from assisting others directly measures selflessness."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Being motivated by others' welfare requires an empathetic baseline."
+            }
+          ]
+        },
+        {
+          "option_id": "b093e8fb-2c22-467a-86dc-4280ea12f447",
+          "letter": "C",
+          "label": "Creating something new",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Being energized by generation indicates strong imaginative and innovative drive."
+            }
+          ]
+        },
+        {
+          "option_id": "e42366fb-abbf-4032-aacf-63683c44d650",
+          "letter": "D",
+          "label": "Achieving recognition",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Seeking external validation and status highlights a profound desire for visible accomplishments."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Motivation",
+        "Values Alignment",
+        "Career Anchors"
+      ],
+      "frameworks": [
+        {
+          "name": "Ikigai",
+          "relevance": "Maps intrinsic motivators to potential vocational paths and life purpose."
+        }
+      ],
+      "confidence_logic": "Requires 3 mapping points in the values category to confirm intrinsic vs. extrinsic balance; confidence scales highly when aligned with subsequent career-interest questions.",
+      "contributions": {
+        "personality": "Classifies the user into builder, helper, thinker, or striver archetypes.",
+        "strengths": "Identifies the core motivational fuel that sustains the user through difficult challenges.",
+        "weaknesses": "Flags vulnerabilities like burnout from over-helping or frustration from lack of praise.",
+        "behavior_patterns": "Predicts what types of tasks the user will naturally volunteer for or prioritize.",
+        "career": "Directs users to specific disciplines like social work, engineering, arts, or competitive enterprise.",
+        "learning": "Informs whether gamified, collaborative, or project-based learning is most engaging.",
+        "roadmap": "Aligns phase goals with the specific reward mechanism the user craves.",
+        "podcasts": "Matches with shows featuring social impact leaders, innovators, or high-performance executives.",
+        "books": "Recommends biographies or methodologies corresponding to their chosen source of satisfaction.",
+        "role_models": "Connects to public figures who share similar core motivational drivers.",
+        "opportunities": "Highlights environments (e.g., non-profits vs. hyper-growth startups) where their drive thrives."
+      },
+      "suggested_improvements": "Options mix intrinsic and extrinsic drivers unevenly; standardizing the locus of control across options would yield clearer data."
+    },
+    {
+      "question_id": "9fd14192-4a0a-4c2f-86e7-77fd3ca94690",
+      "question_text": "How do you usually spend your free time?",
+      "primary_trait": "curiosity",
+      "secondary_traits": [
+        "sociability",
+        "creativity",
+        "initiative"
+      ],
+      "options": [
+        {
+          "option_id": "407aa056-9c5e-4889-9424-f896723416dc",
+          "letter": "A",
+          "label": "Reading or learning",
+          "mappings": [
+            {
+              "trait": "curiosity",
+              "weight": 3,
+              "reason": "Choosing intellectual engagement in downtime is a direct behavioral marker of inquisitiveness."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 2,
+              "reason": "Self-directed learning builds the foundational muscles for rapid adaptability."
+            }
+          ]
+        },
+        {
+          "option_id": "32bacb46-a40a-45fc-b7d5-a29974d91d7b",
+          "letter": "B",
+          "label": "Watching movies or videos",
+          "mappings": [
+            {
+              "trait": "initiative",
+              "weight": -1,
+              "reason": "Passive entertainment consumption reflects a baseline behavior requiring low proactive energy."
+            }
+          ]
+        },
+        {
+          "option_id": "88cd59ed-9ebb-4274-a2d1-c1f6f74a3a7d",
+          "letter": "C",
+          "label": "Meeting friends",
+          "mappings": [
+            {
+              "trait": "sociability",
+              "weight": 3,
+              "reason": "Defaulting to social interaction indicates a high need for affiliation and extraversion."
+            }
+          ]
+        },
+        {
+          "option_id": "c8b44143-0a0e-4f51-a094-bf2c3c207a79",
+          "letter": "D",
+          "label": "Building or creating something",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Electing to spend free time on constructive projects highlights generative energy."
+            },
+            {
+              "trait": "initiative",
+              "weight": 2,
+              "reason": "Self-starting independent projects demonstrates high personal drive."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Lifestyle Preferences",
+        "Personal Interests"
+      ],
+      "frameworks": [
+        {
+          "name": "Personal Development Plan",
+          "relevance": "Uses resting-state habits as raw material for building sustainable developmental routines."
+        }
+      ],
+      "confidence_logic": "Since this is behavioral rather than hypothetical, it requires only 1 corroborating trait measurement in another category to establish 80% confidence.",
+      "contributions": {
+        "personality": "Indicates whether the user leans toward introverted consumption, introverted creation, or extraversion.",
+        "strengths": "Highlights unprompted dedication to knowledge, networking, or asset creation.",
+        "weaknesses": "Flags potential over-consumption of media lacking active generative output.",
+        "behavior_patterns": "Maps the user's default resting state, predicting how they will decompress under stress.",
+        "career": "Correlates with roles heavily reliant on continuous self-education, networking, or technical creation.",
+        "learning": "Suggests whether leaning on community, solo-study, or hands-on projects works best.",
+        "roadmap": "Integrates desired habits into existing free-time blocks for frictionless adoption.",
+        "podcasts": "Provides the medium and subject matter most likely to hold their attention during downtime.",
+        "books": "Connects book recommendations to their stated preference for theoretical vs. practical application.",
+        "role_models": "Highlights figures who utilized their spare time to build compounding lifestyle advantages.",
+        "opportunities": "Identifies networking, portfolio building, or self-education as low-barrier entry points for growth."
+      },
+      "suggested_improvements": ""
+    },
+    {
+      "question_id": "484d4856-0bcb-4ca0-935a-95ef18300b54",
+      "question_text": "Which best describes your personality?",
+      "primary_trait": "confidence",
+      "secondary_traits": [
+        "resilience",
+        "curiosity",
+        "creativity"
+      ],
+      "options": [
+        {
+          "option_id": "c10dd685-e827-485d-8ce5-88a4fef512a8",
+          "letter": "A",
+          "label": "Calm",
+          "mappings": [
+            {
+              "trait": "resilience",
+              "weight": 2,
+              "reason": "Self-identifying as calm implies a robust ability to weather stressors without dysregulation."
+            },
+            {
+              "trait": "emotional_intelligence",
+              "weight": 1,
+              "reason": "Maintaining composure is a key facet of emotional self-regulation."
+            }
+          ]
+        },
+        {
+          "option_id": "18f85411-3fb8-45ac-82fd-5101dc528c24",
+          "letter": "B",
+          "label": "Curious",
+          "mappings": [
+            {
+              "trait": "curiosity",
+              "weight": 3,
+              "reason": "Direct self-identification with inquisitiveness."
+            }
+          ]
+        },
+        {
+          "option_id": "84d461bf-0b1f-4581-b807-9b9ba46fb910",
+          "letter": "C",
+          "label": "Confident",
+          "mappings": [
+            {
+              "trait": "confidence",
+              "weight": 3,
+              "reason": "Direct self-identification with self-assurance."
+            }
+          ]
+        },
+        {
+          "option_id": "386d1767-7725-4d2d-94b8-42dae707035e",
+          "letter": "D",
+          "label": "Creative",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Direct self-identification with generative output."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Core Personality",
+        "Self-Perception"
+      ],
+      "frameworks": [
+        {
+          "name": "Johari Window",
+          "relevance": "Provides the 'Open Area' baseline of how the individual explicitly defines themselves to the world."
+        }
+      ],
+      "confidence_logic": "Because these are single-adjective self-reports, confidence is low (minimum 4 external corroborations needed) unless supported by behavioral evidence.",
+      "contributions": {
+        "personality": "Captures the primary label the user attaches to their identity construct.",
+        "strengths": "Highlights the trait they likely lean on most heavily when introducing themselves or facing challenges.",
+        "weaknesses": "May indicate blind spots if their chosen adjective masks underlying deficiencies in the unchosen traits.",
+        "behavior_patterns": "Provides a lens through which they justify their actions to themselves.",
+        "career": "Acts as a quick filter for cultures that prioritize composure, innovation, or boldness.",
+        "learning": "Informs the tone and style of developmental feedback that will resonate.",
+        "roadmap": "Allows framing of subsequent developmental goals using their preferred self-identifier.",
+        "podcasts": "Points to content focusing on mindfulness, innovation, courage, or discovery.",
+        "books": "Matches titles that reinforce or constructively challenge their core self-perception.",
+        "role_models": "Aligns with archetypal figures reflecting their chosen descriptor.",
+        "opportunities": "Clarifies which broad domains (e.g., leadership, design, research) they inherently feel suited for."
+      },
+      "suggested_improvements": "Single-word options limit psychometric validity; expand to situational descriptions (e.g., 'I remain calm in stressful situations')."
+    },
+    {
+      "question_id": "fbf98b07-d87a-419a-b132-cb9627cdabf8",
+      "question_text": "How would your close friends describe you?",
+      "primary_trait": "empathy",
+      "secondary_traits": [
+        "dependability",
+        "sociability",
+        "analytical_thinking"
+      ],
+      "options": [
+        {
+          "option_id": "6f928915-4f99-4009-8407-b8bc59746a51",
+          "letter": "A",
+          "label": "Reliable",
+          "mappings": [
+            {
+              "trait": "dependability",
+              "weight": 3,
+              "reason": "Being viewed as reliable directly indicates consistent obligation fulfillment."
+            },
+            {
+              "trait": "discipline",
+              "weight": 1,
+              "reason": "Reliability typically requires underlying personal discipline."
+            }
+          ]
+        },
+        {
+          "option_id": "14776cf1-c9e7-41ee-b797-05a7e7965b9c",
+          "letter": "B",
+          "label": "Funny",
+          "mappings": [
+            {
+              "trait": "sociability",
+              "weight": 2,
+              "reason": "Humor is a strong social lubricant and indicates comfort in interpersonal dynamics."
+            }
+          ]
+        },
+        {
+          "option_id": "26146cc8-6c6d-44c3-a6e2-cef4f69ec27b",
+          "letter": "C",
+          "label": "Intelligent",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Peers noting intelligence typically responds to visible problem-solving or knowledge display."
+            }
+          ]
+        },
+        {
+          "option_id": "f2c7dfe7-803c-418f-905e-5ce6a33a3d1f",
+          "letter": "D",
+          "label": "Caring",
+          "mappings": [
+            {
+              "trait": "empathy",
+              "weight": 3,
+              "reason": "Being described as caring is a direct external reflection of empathetic behavior."
+            },
+            {
+              "trait": "altruism",
+              "weight": 2,
+              "reason": "Caring typically manifests as unselfish actions toward peers."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Social Perception",
+        "Interpersonal Relationships"
+      ],
+      "frameworks": [
+        {
+          "name": "Johari Window",
+          "relevance": "Contrasts self-perception with alleged peer perception to explore the 'Blind Spot' or 'Open Area'."
+        }
+      ],
+      "confidence_logic": "Confidence remains provisional (requiring 2 actual interpersonal peer reviews if available) as this is perceived external feedback, not actual peer feedback.",
+      "contributions": {
+        "personality": "Identifies the core value the user believes they provide to their immediate social circle.",
+        "strengths": "Highlights the interpersonal asset they have likely developed most strongly.",
+        "weaknesses": "May reveal a lack of perceived depth if options like 'Reliable' mask an inability to connect emotionally.",
+        "behavior_patterns": "Predicts the relational role they take on in group dynamics (the rock, the joker, the brain, the heart).",
+        "career": "Indicates fitness for roles demanding steadfastness, charisma, intellect, or bedside manner.",
+        "learning": "Informs peer-learning dynamics and how they contribute to study groups.",
+        "roadmap": "Suggests leveraging their social role as a foundation for building wider professional networks.",
+        "podcasts": "Recommends content centering on communication, emotional intelligence, or logic.",
+        "books": "Points toward relationship management guides or deep intellectual explorations based on their perceived social identity.",
+        "role_models": "Connects with leaders known for distinctive team dynamics.",
+        "opportunities": "Identifies pathways to formalize their natural role, such as mentoring or organizing teams."
+      },
+      "suggested_improvements": "Replace single adjectives with behavioral patterns observed by others to reduce ambiguity."
+    },
+    {
+      "question_id": "34d1c914-325a-4b42-aaee-a933a1af989d",
+      "question_text": "Which compliment makes you happiest?",
+      "primary_trait": "self_awareness",
+      "secondary_traits": [
+        "analytical_thinking",
+        "altruism",
+        "creativity",
+        "leadership"
+      ],
+      "options": [
+        {
+          "option_id": "bbf578af-84c6-4532-ad12-8d9e3c61276a",
+          "letter": "A",
+          "label": "You're smart",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Valuing recognition for intellect underscores a reliance on cognitive capability."
+            }
+          ]
+        },
+        {
+          "option_id": "9a7963a6-5a86-4338-89d1-cbb32dfaa54d",
+          "letter": "B",
+          "label": "You're kind",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Cherishing compliments on kindness highlights an emotional, other-oriented value system."
+            }
+          ]
+        },
+        {
+          "option_id": "dced84ba-8dff-481a-a9a7-c743ff111764",
+          "letter": "C",
+          "label": "You're talented",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 2,
+              "reason": "Valuing talent validation often links to creative, athletic, or specialized skill outputs."
+            }
+          ]
+        },
+        {
+          "option_id": "c461b32b-b330-4668-8787-be2d7cdc9af6",
+          "letter": "D",
+          "label": "You're inspiring",
+          "mappings": [
+            {
+              "trait": "leadership",
+              "weight": 3,
+              "reason": "Seeking to be a source of inspiration points directly to influential and leadership aspirations."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Intrinsic Motivation",
+        "Validation Seeking"
+      ],
+      "frameworks": [
+        {
+          "name": "Johari Window",
+          "relevance": "Highlights the external feedback loops that most effectively motivate the individual."
+        }
+      ],
+      "confidence_logic": "Requires synthesis with the 'What gives you satisfaction' question; if aligned, confidence in core drivers scales to 90%.",
+      "contributions": {
+        "personality": "Maps the primary love language of validation the user operates within.",
+        "strengths": "Pinpoints the trait the user feels most proud of embodying.",
+        "weaknesses": "Exposes vulnerability to manipulation via flattery in their chosen dimension.",
+        "behavior_patterns": "Dictates what kind of positive reinforcement will most effectively alter their behavior.",
+        "career": "Directs users to management, technical, creative, or caretaking roles where their preferred feedback is common.",
+        "learning": "Informs how tutors or mentors should deliver praise to maximize engagement.",
+        "roadmap": "Embeds specific congratulatory milestones suited to their psychological preferences.",
+        "podcasts": "Recommends highly motivational, intellectual, or humanistic content.",
+        "books": "Aligns with narratives of genius, philanthropy, mastery, or visionary change.",
+        "role_models": "Connects with individuals who command respect, affection, awe, or following.",
+        "opportunities": "Highlights arenas where their unique craving for specific recognition can be monetized or operationalized."
+      },
+      "suggested_improvements": "The options relate to disparate traits; it forces a choice among fundamentally different psychological domains rather than measuring a unified spectrum."
+    },
+    {
+      "question_id": "0933d602-3587-4796-b852-fac2b2e2e9c7",
+      "question_text": "Which best describes your learning style?",
+      "primary_trait": "learning_agility",
+      "secondary_traits": [
+        "reflectiveness",
+        "analytical_thinking",
+        "initiative",
+        "communication"
+      ],
+      "options": [
+        {
+          "option_id": "d69dbc63-4f1a-43dc-8078-3d476acf317b",
+          "letter": "A",
+          "label": "Watching",
+          "mappings": [
+            {
+              "trait": "reflectiveness",
+              "weight": 2,
+              "reason": "Observational learning requires internalizing before acting, characteristic of high reflectiveness."
+            }
+          ]
+        },
+        {
+          "option_id": "c9677fa5-87a4-4298-9a44-78d39d865968",
+          "letter": "B",
+          "label": "Reading",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Textual learning necessitates strong cognitive processing and analytical digestion."
+            }
+          ]
+        },
+        {
+          "option_id": "a00096d1-4556-4bfa-8cd0-a77bba7346e7",
+          "letter": "C",
+          "label": "Doing",
+          "mappings": [
+            {
+              "trait": "initiative",
+              "weight": 2,
+              "reason": "Kinesthetic learning implies a bias for action and hands-on experimentation."
+            },
+            {
+              "trait": "risk_taking",
+              "weight": 1,
+              "reason": "Learning by doing involves accepting the risk of immediate failure."
+            }
+          ]
+        },
+        {
+          "option_id": "f75d9b44-9739-4e44-b9d9-c3c93f4bc624",
+          "letter": "D",
+          "label": "Listening",
+          "mappings": [
+            {
+              "trait": "communication",
+              "weight": 2,
+              "reason": "Auditory learning relies heavily on oral communication frameworks."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Information Processing",
+        "Learning Mechanics"
+      ],
+      "frameworks": [
+        {
+          "name": "Skill Gap Analysis",
+          "relevance": "Determines the most efficient methodology for the individual to acquire missing competencies."
+        }
+      ],
+      "confidence_logic": "As a self-reported learning preference, confidence in application is high (requires only 1 data point) to shape immediate downstream recommendations.",
+      "contributions": {
+        "personality": "Reflects how the user natively interfaces with new environments.",
+        "strengths": "Identifies the pathway through which they can upskill fastest.",
+        "weaknesses": "Flags potential struggles in environments that mismatch their style (e.g., heavy reading for a 'doer').",
+        "behavior_patterns": "Predicts their initial reaction to new instructions or software.",
+        "career": "Aligns with roles offering suitable training forms (apprenticeships vs. academic tracks).",
+        "learning": "Directly filters the format of educational materials presented to the user.",
+        "roadmap": "Structures action plans around their preferred consumption method.",
+        "podcasts": "Highly prioritizes audio formats for 'Listening' and 'Watching' profiles.",
+        "books": "Pushes written resources heavily toward 'Reading' profiles.",
+        "role_models": "Matches mentors who teach in compatible modalities.",
+        "opportunities": "Identifies specific courses or bootcamps optimized for their cognitive intake."
+      },
+      "suggested_improvements": "This attempts to map VARK learning styles which have weak empirical validity and overlap poorly with personality traits. Consider replacing with questions about how one approaches new information or feedback."
+    },
+    {
+      "question_id": "cf59a209-e1ed-4e6b-ad8e-c4ceec62a966",
+      "question_text": "How do you make important decisions?",
+      "primary_trait": "decision_making",
+      "secondary_traits": [
+        "analytical_thinking",
+        "authenticity",
+        "reflectiveness",
+        "teamwork"
+      ],
+      "options": [
+        {
+          "option_id": "7397145c-5c61-422b-9f82-b6544421e914",
+          "letter": "A",
+          "label": "Logic",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Relying on logic indicates a structured, rational approach to variables."
+            },
+            {
+              "trait": "decision_making",
+              "weight": 2,
+              "reason": "Systematic evaluation improves baseline decision reliability."
+            }
+          ]
+        },
+        {
+          "option_id": "d7440a9d-184a-4b4f-831b-db4cd64cad95",
+          "letter": "B",
+          "label": "Feelings",
+          "mappings": [
+            {
+              "trait": "authenticity",
+              "weight": 2,
+              "reason": "Making decisions based on internal alignment requires being true to one's emotional state."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": -2,
+              "reason": "Prioritizing emotion deprioritizes detached, objective variable analysis."
+            }
+          ]
+        },
+        {
+          "option_id": "b89995aa-8335-456d-b2fe-808e6e2835f5",
+          "letter": "C",
+          "label": "Advice from others",
+          "mappings": [
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Sourcing external input highlights reliance on collective wisdom."
+            },
+            {
+              "trait": "confidence",
+              "weight": -1,
+              "reason": "Outsourcing final say implies a hesitation to trust one's own unilateral judgment."
+            }
+          ]
+        },
+        {
+          "option_id": "e00a6eb8-7644-4ee9-b07a-16b90b0bbd6b",
+          "letter": "D",
+          "label": "Experience",
+          "mappings": [
+            {
+              "trait": "reflectiveness",
+              "weight": 3,
+              "reason": "Leveraging past experience requires prior introspective cataloging of outcomes."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 2,
+              "reason": "Applying historical data to present choices is the essence of experiential learning."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Decision Making",
+        "Cognitive Style"
+      ],
+      "frameworks": [
+        {
+          "name": "Career Pathway Mapping",
+          "relevance": "Aligns the user's navigational mechanics with industries honoring empirical, intuitive, or consensus-based progression."
+        }
+      ],
+      "confidence_logic": "Provides a crucial cross-reference to earlier decision-making queries; consistency here bumps trait confidence by 25%.",
+      "contributions": {
+        "personality": "Reveals whether the user's primary operating system is empirical, intuitive, social, or historical.",
+        "strengths": "Outlines their mechanism for avoiding catastrophic error.",
+        "weaknesses": "Showcases potential traps (e.g., logic ignoring human factors, feelings clouding reality).",
+        "behavior_patterns": "Predicts the exact methodology they will deploy when cornered.",
+        "career": "Directs focus toward data science, creative arts, HR/management, or seasoned operational roles respectively.",
+        "learning": "Informs how case studies should be positioned to convince them.",
+        "roadmap": "Designs goal-setting frameworks tailored to their epistemological bias.",
+        "podcasts": "Recommends quantitative analysis, intuitive living, roundtable discussions, or historical retrospectives.",
+        "books": "Pairs with literature matching their cognitive bias (e.g., behavioral economics vs. emotional intelligence).",
+        "role_models": "Links to leaders known for cold calculation, gut instinct, team building, or seasoned wisdom.",
+        "opportunities": "Identifies specific problem types they are uniquely equipped to arbitrate."
+      },
+      "suggested_improvements": ""
+    },
+    {
+      "question_id": "70dcfbb5-628e-46e9-acf3-7b3f2aff01cc",
+      "question_text": "When nobody is watching, who are you?",
+      "primary_trait": "authenticity",
+      "secondary_traits": [
+        "resilience",
+        "emotional_intelligence",
+        "risk_taking"
+      ],
+      "options": [
+        {
+          "option_id": "da414c83-4a78-407b-8ced-59c06488ffb1",
+          "letter": "A",
+          "label": "The same person",
+          "mappings": [
+            {
+              "trait": "authenticity",
+              "weight": 3,
+              "reason": "Behaving identically in private and public is the defining characteristic of high core congruence."
+            }
+          ]
+        },
+        {
+          "option_id": "22264ddd-fff7-4876-a519-67986b79f63f",
+          "letter": "B",
+          "label": "More relaxed",
+          "mappings": [
+            {
+              "trait": "resilience",
+              "weight": -1,
+              "reason": "Significant shifts to relaxation in private suggest public life causes chronic tension."
+            },
+            {
+              "trait": "authenticity",
+              "weight": -1,
+              "reason": "Indicates a level of performative stress in public."
+            }
+          ]
+        },
+        {
+          "option_id": "e7d51219-6fd9-4cb6-b2b1-05fb1eaba30f",
+          "letter": "C",
+          "label": "More emotional",
+          "mappings": [
+            {
+              "trait": "emotional_intelligence",
+              "weight": -1,
+              "reason": "Suppressing emotions in public only to release them privately denotes constrained emotional regulation."
+            },
+            {
+              "trait": "authenticity",
+              "weight": -1,
+              "reason": "Implies masking true feelings during social interactions."
+            }
+          ]
+        },
+        {
+          "option_id": "c07102f7-c02c-4f34-9e89-ff7fc581a467",
+          "letter": "D",
+          "label": "More adventurous",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": 2,
+              "reason": "Being adventurous only out of sight suggests high innate risk tolerance constrained by social fear."
+            },
+            {
+              "trait": "authenticity",
+              "weight": -1,
+              "reason": "Implies a repression of adventurousness in public."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Authenticity",
+        "Social Masking"
+      ],
+      "frameworks": [
+        {
+          "name": "Johari Window",
+          "relevance": "Directly probes the 'Hidden Area'—facets known to the self but kept from others."
+        }
+      ],
+      "confidence_logic": "Measures a highly subjective internal state; requires normalization against peer-feedback questions to build a reliable authenticity score.",
+      "contributions": {
+        "personality": "Estimates the gap between the user's public persona and private reality.",
+        "strengths": "Identifies capacity for deep integrity or ability to compartmentalize.",
+        "weaknesses": "Highlights potential for burnout due to chronic social masking.",
+        "behavior_patterns": "Predicts isolation behaviors used for decompression.",
+        "career": "Indicates whether highly visible or solitary roles are more sustainable long-term.",
+        "learning": "Shows hidden capacities that might be unlocked in private study environments.",
+        "roadmap": "Suggests goals centered on merging private passions with public endeavors.",
+        "podcasts": "Recommends deeply introspective and psychological content.",
+        "books": "Points to memoirs on vulnerability, imposter syndrome, or authentic leadership.",
+        "role_models": "Highlights figures who successfully integrated their shadow selves.",
+        "opportunities": "Identifies safe spaces for the user to practice expressing their private traits publicly."
+      },
+      "suggested_improvements": "Vague options. 'More relaxed' could imply high stress in daily life rather than a specific identity trait. Clarify behavioral context."
+    },
+    {
+      "question_id": "58696b3f-c17a-433f-9810-d739a1ba7d69",
+      "question_text": "If you could change one thing about yourself, what would it be?",
+      "primary_trait": "self_awareness",
+      "secondary_traits": [
+        "confidence",
+        "discipline",
+        "creativity",
+        "communication"
+      ],
+      "options": [
+        {
+          "option_id": "f89093fa-5cfc-49fb-8917-40b47dd1a9db",
+          "letter": "A",
+          "label": "Confidence",
+          "mappings": [
+            {
+              "trait": "confidence",
+              "weight": -2,
+              "reason": "Desiring to change confidence explicitly identifies a perceived current deficit in self-assurance."
+            },
+            {
+              "trait": "self_awareness",
+              "weight": 2,
+              "reason": "Accurately identifying a core emotional gap demonstrates introspection."
+            }
+          ]
+        },
+        {
+          "option_id": "4dd287d5-349c-418b-a1a9-c242250bf9ae",
+          "letter": "B",
+          "label": "Discipline",
+          "mappings": [
+            {
+              "trait": "discipline",
+              "weight": -2,
+              "reason": "Wishing for more discipline highlights a self-reported current struggle with consistency and focus."
+            },
+            {
+              "trait": "self_awareness",
+              "weight": 2,
+              "reason": "Accurately identifying execution failure demonstrates strong introspection."
+            }
+          ]
+        },
+        {
+          "option_id": "8584b371-b0fd-47d9-b971-c424db64e90d",
+          "letter": "C",
+          "label": "Creativity",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": -2,
+              "reason": "Identifying creativity as a gap implies feeling currently constrained or conventional in thinking."
+            },
+            {
+              "trait": "self_awareness",
+              "weight": 2,
+              "reason": "Recognizing a lack of generative capacity demonstrates self-evaluative clarity."
+            }
+          ]
+        },
+        {
+          "option_id": "2fb581c1-e309-4220-b143-9cdf911f3b45",
+          "letter": "D",
+          "label": "Communication",
+          "mappings": [
+            {
+              "trait": "communication",
+              "weight": -2,
+              "reason": "Singling out communication for improvement shows a recognized current weakness in expressing ideas."
+            },
+            {
+              "trait": "self_awareness",
+              "weight": 2,
+              "reason": "Spotting friction in interpersonal dynamics reflects relational awareness."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Self-Development",
+        "Growth Areas"
+      ],
+      "frameworks": [
+        {
+          "name": "SWOT",
+          "relevance": "Directly populates the 'Weaknesses' quadrant based on targeted self-diagnosis."
+        },
+        {
+          "name": "SMART Goals",
+          "relevance": "Provides the raw material for formulating actionable, targeted self-improvement goals."
+        }
+      ],
+      "confidence_logic": "Acts as an inverted verification mechanism; if they score high mechanically on a trait but select it here as a weakness, system triggers an 'Imposter Syndrome' or 'Misalignment' flag.",
+      "contributions": {
+        "personality": "Reveals the shadow side of their personality that they actively wish to mitigate.",
+        "strengths": "Validates self-awareness by proving the user is willing to confront personal inadequacies.",
+        "weaknesses": "Explicitly names their most pressing developmental bottleneck.",
+        "behavior_patterns": "Highlights where they are likely to self-sabotage due to perceived inadequacy.",
+        "career": "Cautions against immediately pursuing roles heavily reliant on the identified gap without prior upskilling.",
+        "learning": "Determines the priority modules required in their educational queue.",
+        "roadmap": "Dictates the immediate focus of Phase 1 in their Personal Development Plan.",
+        "podcasts": "Recommends highly tactical resources specifically engineered to repair the identified deficit.",
+        "books": "Suggests definitive bedside reading aimed at resolving the chosen gap.",
+        "role_models": "Highlights leaders who notoriously struggled with and overcame the exact same deficit.",
+        "opportunities": "Identifies safe, low-stakes environments to begin practicing the deficient skill."
+      },
+      "suggested_improvements": ""
+    }
+  ]
+}
