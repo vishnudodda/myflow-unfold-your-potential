@@ -95,6 +95,21 @@ function Dashboard() {
                 </Link>
               );
             })}
+            <Link
+              to="/roadmap"
+              className="bg-background p-8 hover:bg-muted transition-colors group flex flex-col"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-mono text-muted-foreground">10</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full bg-primary/10 text-primary">
+                  Roadmap
+                </span>
+              </div>
+              <h3 className="font-display text-xl font-bold group-hover:text-primary transition-colors">Growth Roadmap</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                Your personalized 30-day, 3-month, 6-month, and 1-year plan — unlocked as you complete assessments.
+              </p>
+            </Link>
           </div>
         </section>
       </main>
