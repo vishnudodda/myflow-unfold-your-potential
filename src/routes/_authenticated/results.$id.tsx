@@ -63,15 +63,7 @@ function ResultPage() {
             </ul>
           </section>
         )}
-        {typeof o.reasoning === "string" && (
-          <section>
-            <h2 className="font-display text-xl font-bold mb-3">Reasoning</h2>
-            <p className="text-muted-foreground text-pretty leading-relaxed">{o.reasoning}</p>
-          </section>
-        )}
-        <pre className="text-xs text-muted-foreground/60 whitespace-pre-wrap font-mono p-4 bg-muted/30 rounded-xl overflow-auto">
-          {JSON.stringify(o, null, 2)}
-        </pre>
+        
 
         <section className="pt-8 border-t border-border">
           <h2 className="font-display text-2xl font-bold">Next steps</h2>
