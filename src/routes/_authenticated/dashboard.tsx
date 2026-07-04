@@ -96,23 +96,34 @@ function Dashboard() {
           <section>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border ring-1 ring-border">
               {/* Summary */}
-              <Link
-                to={summary.resultId ? "/results/$id" : "/dashboard"}
-                params={summary.resultId ? { id: summary.resultId } : undefined}
-                className="bg-background p-8 hover:bg-muted transition-colors group flex flex-col lg:col-span-2"
-              >
+              {summary.resultId ? (
+                <Link
+                  to="/results/$id"
+                  params={{ id: summary.resultId }}
+                  className="bg-background p-8 hover:bg-muted transition-colors group flex flex-col lg:col-span-2"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Summary</span>
+                    <span className="text-xs font-mono text-muted-foreground">Latest analysis</span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold group-hover:text-primary transition-colors">
+                    {summary.headline ?? "Your latest analysis"}
+                  </h3>
+                  {summary.body && (
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-4">{summary.body}</p>
+                  )}
+                  <span className="mt-4 text-xs font-semibold text-primary">Open full result →</span>
+                </Link>
+              ) : (
+                <div className="bg-background p-8 flex flex-col lg:col-span-2">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Summary</span>
-                  <span className="text-xs font-mono text-muted-foreground">Latest analysis</span>
+                    <span className="text-xs font-mono text-muted-foreground">Pending</span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold">Your latest analysis will appear here</h3>
+                  <p className="mt-3 text-sm text-muted-foreground">Complete an assessment to see your personalized summary.</p>
                 </div>
-                <h3 className="font-display text-2xl font-bold group-hover:text-primary transition-colors">
-                  {summary.headline ?? "Your latest analysis"}
-                </h3>
-                {summary.body && (
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-4">{summary.body}</p>
-                )}
-                <span className="mt-4 text-xs font-semibold text-primary">Open full result →</span>
-              </Link>
+              )}
 
               {/* Role Models */}
               <Link to="/recommendations" className="bg-background p-8 hover:bg-muted transition-colors group flex flex-col">
