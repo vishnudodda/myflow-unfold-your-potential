@@ -82,6 +82,12 @@ function Dashboard() {
                 <li key={i} className="rounded-xl bg-white/70 p-3 text-sm">{b}</li>
               ))}
             </ul>
+            {r.summary?.motivation && (
+              <div className="mt-4 rounded-xl bg-primary/10 border border-primary/20 p-4">
+                <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1">A note for you ✧</div>
+                <p className="text-sm italic text-foreground/90">{r.summary.motivation}</p>
+              </div>
+            )}
           </Panel>
         </div>
 
@@ -102,7 +108,12 @@ function Dashboard() {
             <div className="space-y-3">
               {(r.podcasts ?? []).map((p, i) => (
                 <div key={i} className="rounded-xl bg-white/70 p-3">
-                  <div className="font-semibold text-sm">{p.title}</div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="font-semibold text-sm">{p.title}</div>
+                    {p.url && (
+                      <a href={p.url} target="_blank" rel="noreferrer" className="text-[10px] font-mono uppercase text-primary hover:underline shrink-0">Listen ↗</a>
+                    )}
+                  </div>
                   <div className="text-xs text-muted-foreground">by {p.host}</div>
                   <div className="text-xs mt-1">{p.pitch}</div>
                 </div>
