@@ -17,7 +17,11 @@ export const Route = createFileRoute("/_authenticated/roadmap")({
 });
 
 type Milestone = { id: string; title: string; description: string | null; horizon: string; completed_at: string | null };
-type Roadmap = { id: string; title: string; summary: string | null; target_career: string | null; created_at: string };
+type Roadmap = { id: string; title: string; summary: string | null; target_career: string | null; created_at: string; content: Record<string, unknown> | null };
+
+type Obj = Record<string, unknown>;
+const asArr = <T = Obj>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : []);
+const asStr = (v: unknown): string | null => (typeof v === "string" && v.trim() ? v : null);
 
 const HORIZONS: { key: string; label: string }[] = [
   { key: "30_day", label: "Next 30 days" },
@@ -64,6 +68,25 @@ function RoadmapPage() {
   }
 
   const done = milestones.filter((m) => m.completed_at).length;
+  const c = (roadmap?.content ?? {}) as Obj;
+  const overall = (c.overall_profile ?? c.profile ?? {}) as Obj;
+  const strengths = asArr<string | Obj>(c.top_strengths ?? c.strengths);
+  const improveAreas = asArr<string | Obj>(c.areas_to_improve ?? c.improvements ?? c.growth_areas);
+  const careerRecs = asArr<string | Obj>(c.career_recommendations ?? c.careers);
+  const skillsToLearn = asArr<string | Obj>(c.skills_to_learn ?? c.skills);
+  const learningRes = (c.learning_resources ?? {}) as Obj;
+  const successStories = asArr<Obj>(c.success_stories ?? c.role_models);
+  const motivation = asStr(c.motivation_summary ?? c.motivation);
+  const oneYear = asArr<Obj>(c.one_year_roadmap ?? c.year_plan);
+  const asLine = (item: string | Obj): { title: string; description?: string } => {
+    if (typeof item === "string") return { title: item };
+    return {
+      title: asStr(item.title) ?? asStr(item.name) ?? asStr(item.skill) ?? asStr(item.career) ?? "—",
+      description: asStr(item.description) ?? asStr(item.reason) ?? asStr(item.why) ?? asStr(item.detail) ?? undefined,
+    };
+  };
+  const listItems = (raw: unknown): { title: string; description?: string }[] =>
+    asArr<string | Obj>(raw).map(asLine).filter((x) => x.title !== "—");
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,14 +118,144 @@ function RoadmapPage() {
             {roadmap.summary && <p className="mt-4 text-muted-foreground text-pretty leading-relaxed">{roadmap.summary}</p>}
             <p className="mt-4 text-xs font-mono text-muted-foreground">{done} of {milestones.length} milestones complete</p>
 
-            <div className="mt-12 space-y-12">
+            {/* Overall profile */}
+            {Object.keys(overall).length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">Overall profile</h2>
+                <dl className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {Object.entries(overall).map(([k, v]) => (
+                    <div key={k}>
+                      <dt className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground">{k.replaceAll("_", " ")}</dt>
+                      <dd className="mt-1 font-display text-lg font-bold">{typeof v === "number" || typeof v === "string" ? String(v) : JSON.stringify(v)}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
+
+            {strengths.length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">Top strengths</h2>
+                <ul className="mt-4 grid gap-3 md:grid-cols-2">
+                  {strengths.map(asLine).map((s, i) => (
+                    <li key={i} className="p-4 rounded-xl border border-border">
+                      <p className="font-medium">{s.title}</p>
+                      {s.description && <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {improveAreas.length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">Areas to improve</h2>
+                <ul className="mt-4 grid gap-3 md:grid-cols-2">
+                  {improveAreas.map(asLine).map((s, i) => (
+                    <li key={i} className="p-4 rounded-xl border border-border">
+                      <p className="font-medium">{s.title}</p>
+                      {s.description && <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {careerRecs.length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">Career recommendations</h2>
+                <ul className="mt-4 grid gap-3 md:grid-cols-2">
+                  {careerRecs.map(asLine).map((s, i) => (
+                    <li key={i} className="p-4 rounded-xl border border-border">
+                      <p className="font-medium">{s.title}</p>
+                      {s.description && <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {skillsToLearn.length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">Skills to learn</h2>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {skillsToLearn.map(asLine).map((s, i) => (
+                    <span key={i} className="text-sm px-3 py-1.5 rounded-full bg-muted font-medium">{s.title}</span>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {Object.keys(learningRes).length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">Learning resources</h2>
+                <div className="mt-4 space-y-6">
+                  {Object.entries(learningRes).map(([k, v]) => {
+                    const items = listItems(v);
+                    if (items.length === 0) return null;
+                    return (
+                      <div key={k}>
+                        <h3 className="text-sm font-mono uppercase tracking-widest text-primary">{k.replaceAll("_", " ")}</h3>
+                        <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+                          {items.map((i, idx) => <li key={idx}>• {i.title}{i.description ? ` — ${i.description}` : ""}</li>)}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
+            {successStories.length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">Success stories</h2>
+                <ul className="mt-4 grid gap-3 md:grid-cols-2">
+                  {successStories.map((r, i) => (
+                    <li key={i} className="p-4 rounded-xl border border-border">
+                      <p className="font-medium">{asStr(r.name) ?? asStr(r.person) ?? "Role model"}</p>
+                      {asStr(r.title) && <p className="text-xs text-muted-foreground">{asStr(r.title)}</p>}
+                      {(asStr(r.story) ?? asStr(r.bio)) && <p className="mt-2 text-sm text-muted-foreground italic">"{asStr(r.story) ?? asStr(r.bio)}"</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {oneYear.length > 0 && (
+              <section className="mt-12">
+                <h2 className="font-display text-2xl font-bold border-b border-border pb-3">One-year roadmap</h2>
+                <ul className="mt-4 space-y-2">
+                  {oneYear.map((m, i) => (
+                    <li key={i} className="p-4 rounded-xl border border-border">
+                      <p className="font-medium">{asStr(m.period) ?? asStr(m.months) ?? `Phase ${i + 1}`}</p>
+                      {asStr(m.focus) && <p className="mt-1 text-sm text-muted-foreground">{asStr(m.focus)}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {motivation && (
+              <section className="mt-12 p-8 rounded-2xl bg-primary/5 border border-primary/20">
+                <h2 className="font-display text-2xl font-bold">Keep going</h2>
+                <p className="mt-3 text-pretty leading-relaxed">{motivation}</p>
+              </section>
+            )}
+
+            {/* Milestone tracking */}
+            <section className="mt-16">
+              <div className="border-b border-border pb-3 flex items-baseline justify-between">
+                <h2 className="font-display text-2xl font-bold">Milestone tracker</h2>
+                <span className="text-xs font-mono text-muted-foreground">{done}/{milestones.length}</span>
+              </div>
+              <div className="mt-6 space-y-10">
               {HORIZONS.map((h) => {
                 const items = milestones.filter((m) => m.horizon === h.key);
                 if (items.length === 0) return null;
                 return (
-                  <section key={h.key}>
-                    <div className="flex items-baseline justify-between border-b border-border pb-3">
-                      <h2 className="font-display text-2xl font-bold">{h.label}</h2>
+                  <div key={h.key}>
+                    <div className="flex items-baseline justify-between">
+                      <h3 className="font-display text-lg font-bold">{h.label}</h3>
                       <span className="text-xs font-mono text-muted-foreground">{items.filter((i) => i.completed_at).length} / {items.length}</span>
                     </div>
                     <ul className="mt-4 space-y-2">
@@ -116,10 +269,11 @@ function RoadmapPage() {
                         </li>
                       ))}
                     </ul>
-                  </section>
+                  </div>
                 );
               })}
-            </div>
+              </div>
+            </section>
           </>
         )}
       </main>
