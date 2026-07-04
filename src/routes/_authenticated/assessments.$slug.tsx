@@ -103,7 +103,12 @@ function AssessmentPage() {
             return (
               <button
                 key={o.id}
-                onClick={() => setAnswers((a) => ({ ...a, [current.id]: o.id }))}
+                onClick={() => {
+                  setAnswers((a) => ({ ...a, [current.id]: o.id }));
+                  if (idx < questions.length - 1) {
+                    setTimeout(() => setIdx((i) => i + 1), 220);
+                  }
+                }}
                 className={`w-full text-left p-5 rounded-2xl border transition-all ${
                   selected
                     ? "border-primary bg-primary/5 ring-2 ring-primary/20"
