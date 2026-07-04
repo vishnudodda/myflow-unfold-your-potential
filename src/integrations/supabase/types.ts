@@ -456,6 +456,45 @@ export type Database = {
         }
         Relationships: []
       }
+      question_option_traits: {
+        Row: {
+          created_at: string
+          option_id: string
+          reason: string | null
+          trait_slug: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          option_id: string
+          reason?: string | null
+          trait_slug: string
+          weight: number
+        }
+        Update: {
+          created_at?: string
+          option_id?: string
+          reason?: string | null
+          trait_slug?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_option_traits_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "question_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_option_traits_trait_slug_fkey"
+            columns: ["trait_slug"]
+            isOneToOne: false
+            referencedRelation: "traits"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       question_options: {
         Row: {
           id: string
@@ -486,6 +525,63 @@ export type Database = {
             foreignKeyName: "question_options_question_id_fkey"
             columns: ["question_id"]
             isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      question_reasoning: {
+        Row: {
+          confidence_note: string | null
+          contributions: Json
+          created_at: string
+          dimensions: string[]
+          frameworks: Json
+          primary_trait: string | null
+          question_id: string
+          raw: Json | null
+          secondary_traits: string[]
+          suggested_improvements: string | null
+          updated_at: string
+        }
+        Insert: {
+          confidence_note?: string | null
+          contributions?: Json
+          created_at?: string
+          dimensions?: string[]
+          frameworks?: Json
+          primary_trait?: string | null
+          question_id: string
+          raw?: Json | null
+          secondary_traits?: string[]
+          suggested_improvements?: string | null
+          updated_at?: string
+        }
+        Update: {
+          confidence_note?: string | null
+          contributions?: Json
+          created_at?: string
+          dimensions?: string[]
+          frameworks?: Json
+          primary_trait?: string | null
+          question_id?: string
+          raw?: Json | null
+          secondary_traits?: string[]
+          suggested_improvements?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_reasoning_primary_trait_fkey"
+            columns: ["primary_trait"]
+            isOneToOne: false
+            referencedRelation: "traits"
+            referencedColumns: ["slug"]
+          },
+          {
+            foreignKeyName: "question_reasoning_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: true
             referencedRelation: "questions"
             referencedColumns: ["id"]
           },
@@ -639,6 +735,30 @@ export type Database = {
           story?: string | null
           title?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      traits: {
+        Row: {
+          created_at: string
+          description: string | null
+          is_seed: boolean
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          is_seed?: boolean
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          is_seed?: boolean
+          name?: string
+          slug?: string
         }
         Relationships: []
       }
