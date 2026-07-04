@@ -21,6 +21,7 @@ function Questions() {
   const [session, setSession] = useState<Session | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     const raw = localStorage.getItem("myflow.session");
@@ -36,12 +37,27 @@ function Questions() {
     enabled: !!session,
   });
 
-  const totalQs = useMemo(
-    () => (data?.modules ?? []).reduce((s, m) => s + m.questions.length, 0),
-    [data],
-  );
+  const flatQs = useMemo(() => {
+    const out: Array<{ moduleSlug: string; moduleTitle: string; id: string; text: string; options: Array<{ id: string; label: string }> }> = [];
+    for (const m of data?.modules ?? []) {
+      for (const q of m.questions) {
+        out.push({ moduleSlug: m.slug, moduleTitle: m.title, id: q.id, text: q.text, options: q.options });
+      }
+    }
+    return out;
+  }, [data]);
+  const totalQs = flatQs.length;
   const answeredCount = Object.keys(answers).length;
   const complete = totalQs > 0 && answeredCount === totalQs;
+  const q = flatQs[current];
+  const isLast = current === totalQs - 1;
+
+  function pick(qid: string, oid: string) {
+    setAnswers((prev) => ({ ...prev, [qid]: oid }));
+    if (!isLast) {
+      setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 220);
+    }
+  }
 
   async function onAnalyze() {
     if (!complete || !session || !data) return;
@@ -72,56 +88,62 @@ function Questions() {
     <main className="min-h-screen bg-background text-foreground px-6 py-12">
       <div className="mx-auto max-w-2xl">
         <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
-        <h1 className="mt-8 font-display text-3xl md:text-4xl font-bold tracking-tight">A few questions.</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Answered {answeredCount} of {totalQs}</p>
-        <div className="mt-3 h-1.5 w-full bg-muted rounded-full overflow-hidden">
-          <div className="h-full bg-primary transition-all" style={{ width: totalQs ? `${(answeredCount / totalQs) * 100}%` : "0%" }} />
-        </div>
 
-        {isLoading ? (
-          <p className="mt-12 text-muted-foreground">Loading questions…</p>
+        {isLoading || !q ? (
+          <p className="mt-16 text-muted-foreground">Loading questions…</p>
         ) : (
-          <div className="mt-10 space-y-10">
-            {(data?.modules ?? []).map((m) => (
-              <section key={m.slug}>
-                <h2 className="font-display text-xl font-bold border-b border-border pb-2">{m.title}</h2>
-                <div className="mt-6 space-y-8">
-                  {m.questions.map((q, i) => (
-                    <div key={q.id}>
-                      <div className="font-medium">{i + 1}. {q.text}</div>
-                      <div className="mt-3 grid gap-2">
-                        {q.options.map((o) => {
-                          const on = answers[q.id] === o.id;
-                          return (
-                            <label
-                              key={o.id}
-                              className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${on ? "border-primary bg-primary/5" : "border-border hover:bg-muted"}`}
-                            >
-                              <input
-                                type="radio"
-                                className="accent-primary"
-                                name={q.id}
-                                checked={on}
-                                onChange={() => setAnswers((prev) => ({ ...prev, [q.id]: o.id }))}
-                              />
-                              <span className="text-sm">{o.label}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-        )}
+          <>
+            <div className="mt-8 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-muted-foreground">
+              <span>{q.moduleTitle}</span>
+              <span>{current + 1} / {totalQs}</span>
+            </div>
+            <div className="mt-3 h-1.5 w-full bg-muted rounded-full overflow-hidden">
+              <div className="h-full bg-primary transition-all" style={{ width: `${((current + (answers[q.id] ? 1 : 0)) / totalQs) * 100}%` }} />
+            </div>
 
-        <div className="mt-12 flex justify-end">
-          <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
-            {submitting ? "Analyzing…" : "Analyze"}
-          </Button>
-        </div>
+            <div key={q.id} className="mt-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">{q.text}</h2>
+              <div className="mt-6 grid gap-3">
+                {q.options.map((o) => {
+                  const on = answers[q.id] === o.id;
+                  return (
+                    <button
+                      key={o.id}
+                      type="button"
+                      onClick={() => pick(q.id, o.id)}
+                      className={`text-left p-4 rounded-xl border transition-all ${on ? "border-primary bg-primary/10 scale-[1.01]" : "border-border hover:bg-muted hover:border-primary/40"}`}
+                    >
+                      <span className="text-sm">{o.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-8 flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  disabled={current === 0}
+                  onClick={() => setCurrent((c) => Math.max(0, c - 1))}
+                >
+                  ← Back
+                </Button>
+                {isLast ? (
+                  <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
+                    {submitting ? "Analyzing…" : "Analyze"}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    disabled={!answers[q.id]}
+                    onClick={() => setCurrent((c) => Math.min(totalQs - 1, c + 1))}
+                  >
+                    Next →
+                  </Button>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </main>
   );
