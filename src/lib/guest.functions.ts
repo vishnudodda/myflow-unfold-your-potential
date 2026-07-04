@@ -34,6 +34,14 @@ export const loadQuestions = createServerFn({ method: "POST" })
     return { modules };
   });
 
+export type DashboardResult = {
+  summary: { headline: string; bullets: string[] };
+  roleModels: Array<{ name: string; why: string }>;
+  roadmap: Array<{ horizon: string; action: string }>;
+  opportunities: Array<{ title: string; org: string; stipend: string; confidence: string }>;
+  podcasts: Array<{ title: string; host: string; pitch: string }>;
+};
+
 const AnalyzeSchema = z.object({
   name: z.string().min(1),
   age: z.number().int().min(8).max(99),
@@ -73,11 +81,10 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       prompt: userMsg,
     });
     const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/, "").trim();
-    let result: Record<string, unknown>;
     try {
-      result = JSON.parse(cleaned) as Record<string, unknown>;
+      const parsed = JSON.parse(cleaned) as DashboardResult;
+      return { result: parsed };
     } catch {
       throw new Error("AI returned an invalid response. Please try again.");
     }
-    return { result };
   });
