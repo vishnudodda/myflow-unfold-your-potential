@@ -10,6 +10,7 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ assessmentSlug: z.string() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    try {
 
     const { data: asmt, error: aErr } = await supabase
       .from("assessments")
@@ -108,4 +109,8 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
     );
 
     return { resultId: saved.id as string };
+    } catch (err) {
+      console.error("[analyzeAssessment]", err);
+      throw err instanceof Error ? err : new Error("Analysis failed");
+    }
   });

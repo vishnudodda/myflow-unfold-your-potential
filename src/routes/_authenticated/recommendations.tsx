@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { generateRecommendations, getRecommendations } from "@/lib/recommendations.functions";
+import { generateRecommendations, generateOpportunities, getRecommendations } from "@/lib/recommendations.functions";
 
 export const Route = createFileRoute("/_authenticated/recommendations")({
   head: () => ({
@@ -24,8 +24,10 @@ type Opportunity = { id: string; kind: string; title: string; organization: stri
 function RecsPage() {
   const get = useServerFn(getRecommendations);
   const gen = useServerFn(generateRecommendations);
+  const genOpps = useServerFn(generateOpportunities);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [genOppsLoading, setGenOppsLoading] = useState(false);
   const [data, setData] = useState<{ careers: Career[]; learning: Learning[]; role_models: RoleModel[]; opportunities: Opportunity[] }>({
     careers: [], learning: [], role_models: [], opportunities: [],
   });
@@ -44,12 +46,25 @@ function RecsPage() {
     setGenerating(true);
     try {
       toast.info("Generating your recommendations with AI…");
-      const r = (await gen()) as { careers: number; learning: number; role_models: number; opportunities: number };
+      const r = (await gen()) as { careers: number; learning: number; role_models: number; opportunities: number; errors: string[] };
       toast.success(`Generated ${r.careers} careers, ${r.learning} resources, ${r.role_models} role models, ${r.opportunities} opportunities.`);
+      if (r.errors?.length) toast.error(`Some sections failed: ${r.errors.join(", ")}`);
       await refresh();
     } catch (e: unknown) {
       toast.error(e instanceof Error ? e.message : "Generation failed");
     } finally { setGenerating(false); }
+  }
+
+  async function generateOpps() {
+    setGenOppsLoading(true);
+    try {
+      toast.info("Finding opportunities matched to you…");
+      const r = (await genOpps()) as { inserted: number };
+      toast.success(`Added ${r.inserted} opportunities.`);
+      await refresh();
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Opportunity generation failed");
+    } finally { setGenOppsLoading(false); }
   }
 
   const empty = !loading && data.careers.length + data.learning.length + data.role_models.length + data.opportunities.length === 0;
@@ -127,6 +142,17 @@ function RecsPage() {
             </TabsContent>
 
             <TabsContent value="opportunities" className="mt-6 grid gap-4 md:grid-cols-2">
+              <div className="md:col-span-2 flex items-center justify-between p-4 rounded-xl bg-muted/40 border border-border">
+                <p className="text-sm text-muted-foreground">Refresh opportunities without regenerating everything.</p>
+                <Button size="sm" variant="outline" onClick={generateOpps} disabled={genOppsLoading}>
+                  {genOppsLoading ? "Refreshing…" : "Refresh opportunities"}
+                </Button>
+              </div>
+              {data.opportunities.length === 0 && (
+                <div className="md:col-span-2 p-8 rounded-2xl border border-dashed border-border text-center">
+                  <p className="text-sm text-muted-foreground">No opportunities yet — click "Refresh opportunities" above.</p>
+                </div>
+              )}
               {data.opportunities.map((o) => (
                 <article key={o.id} className="p-6 rounded-2xl border border-border">
                   <div className="flex items-start justify-between gap-4">

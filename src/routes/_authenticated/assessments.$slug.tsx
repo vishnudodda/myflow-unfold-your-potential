@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -30,6 +30,10 @@ function AssessmentPage() {
   const [idx, setIdx] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [autoSubmitted, setAutoSubmitted] = useState(false);
+  const answersRef = useRef<Record<string, string>>({});
+  const submittingRef = useRef(false);
+  useEffect(() => { answersRef.current = answers; }, [answers]);
+  useEffect(() => { submittingRef.current = submitting; }, [submitting]);
 
   useEffect(() => {
     (async () => {
@@ -53,28 +57,35 @@ function AssessmentPage() {
   const current = questions[idx];
   const pct = questions.length ? ((idx + 1) / questions.length) * 100 : 0;
 
-  async function submit() {
-    if (!assessmentId) return;
+  async function submit(overrideAnswers?: Record<string, string>) {
+    if (!assessmentId || submittingRef.current) return;
     setSubmitting(true);
+    submittingRef.current = true;
     try {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("Not signed in");
-      const rows = Object.entries(answers).map(([question_id, option_id]) => ({
+      const src = overrideAnswers ?? answersRef.current;
+      const rows = Object.entries(src).map(([question_id, option_id]) => ({
         user_id: userData.user!.id,
         assessment_id: assessmentId,
         question_id,
         option_id,
       }));
+      if (rows.length < questions.length) {
+        throw new Error(`Please answer all ${questions.length} questions (got ${rows.length}).`);
+      }
       const { error } = await supabase.from("user_responses").upsert(rows, { onConflict: "user_id,question_id" });
       if (error) throw error;
       toast.info("Analyzing your answers with AI…");
       const result = (await analyze({ data: { assessmentSlug: slug } })) as { resultId: string };
       navigate({ to: "/results/$id", params: { id: result.resultId } });
     } catch (err: unknown) {
+      console.error("[assessment submit]", err);
       toast.error(err instanceof Error ? err.message : "Submission failed");
       setAutoSubmitted(false);
     } finally {
       setSubmitting(false);
+      submittingRef.current = false;
     }
   }
 
@@ -106,15 +117,15 @@ function AssessmentPage() {
               <button
                 key={o.id}
                 onClick={() => {
-                  setAnswers((a) => ({ ...a, [current.id]: o.id }));
+                  const next = { ...answersRef.current, [current.id]: o.id };
+                  answersRef.current = next;
+                  setAnswers(next);
                   if (idx < questions.length - 1) {
                     setTimeout(() => setIdx((i) => i + 1), 220);
-                  } else if (!autoSubmitted && !submitting) {
+                  } else if (!autoSubmitted && !submittingRef.current) {
                     setAutoSubmitted(true);
                     setTimeout(() => {
-                      // ensure state updated
-                      const next = { ...answers, [current.id]: o.id };
-                      if (questions.every((q) => next[q.id])) submit();
+                      if (questions.every((q) => next[q.id])) submit(next);
                     }, 350);
                   }
                 }}
@@ -149,7 +160,7 @@ function AssessmentPage() {
               Continue
             </Button>
           ) : (
-            <Button disabled={!allAnswered || submitting} onClick={submit}>
+            <Button disabled={!allAnswered || submitting} onClick={() => submit()}>
               {submitting ? "Analyzing…" : "Submit & analyze"}
             </Button>
           )}
