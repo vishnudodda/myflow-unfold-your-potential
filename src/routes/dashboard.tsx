@@ -41,8 +41,35 @@ function Dashboard() {
         </h1>
 
         <div className="mt-10 grid grid-cols-1 md:grid-cols-6 gap-4">
+          {/* Role Models */}
+          <Panel title="Role Models" span="md:col-span-4" tone="sky">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {(r.roleModels ?? []).map((rm, i) => (
+                <div key={i} className="rounded-xl bg-white/60 p-3">
+                  <div className="font-semibold text-sm">{rm.name}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
+                </div>
+              ))}
+            </div>
+          </Panel>
+
+          {/* Opportunities */}
+          <Panel title="Opportunities" span="md:col-span-2" tone="mint">
+            <div className="space-y-3">
+              {(r.opportunities ?? []).map((o, i) => (
+                <div key={i}>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="font-semibold text-sm">{o.title}</div>
+                    <span className={`text-[10px] font-mono uppercase px-1.5 py-0.5 rounded ${o.confidence === "High" ? "bg-primary/15 text-primary" : o.confidence === "Medium" ? "bg-white/70 text-foreground" : "bg-white/50 text-muted-foreground"}`}>{o.confidence}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">{o.org} · {o.stipend}</div>
+                </div>
+              ))}
+            </div>
+          </Panel>
+
           {/* Summary */}
-          <Panel title="Summary" span="md:col-span-4">
+          <Panel title="Summary" span="md:col-span-4" tone="lavender">
             <p className="font-display text-lg font-semibold">{r.summary?.headline}</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground list-disc pl-5">
               {(r.summary?.bullets ?? []).map((b, i) => <li key={i}>{b}</li>)}
@@ -50,7 +77,7 @@ function Dashboard() {
           </Panel>
 
           {/* Roadmap */}
-          <Panel title="Roadmap" span="md:col-span-2">
+          <Panel title="Roadmap" span="md:col-span-2" tone="peach">
             <ol className="space-y-3">
               {(r.roadmap ?? []).map((m, i) => (
                 <li key={i} className="text-sm">
@@ -61,38 +88,11 @@ function Dashboard() {
             </ol>
           </Panel>
 
-          {/* Role Models */}
-          <Panel title="Role Models" span="md:col-span-2">
-            <div className="space-y-3">
-              {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i}>
-                  <div className="font-semibold text-sm">{rm.name}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{rm.why}</div>
-                </div>
-              ))}
-            </div>
-          </Panel>
-
-          {/* Opportunities */}
-          <Panel title="Opportunities" span="md:col-span-2">
-            <div className="space-y-3">
-              {(r.opportunities ?? []).map((o, i) => (
-                <div key={i}>
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="font-semibold text-sm">{o.title}</div>
-                    <span className={`text-[10px] font-mono uppercase px-1.5 py-0.5 rounded ${o.confidence === "High" ? "bg-primary/10 text-primary" : o.confidence === "Medium" ? "bg-muted text-foreground" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">{o.org} · {o.stipend}</div>
-                </div>
-              ))}
-            </div>
-          </Panel>
-
           {/* Podcasts */}
-          <Panel title="Podcasts" span="md:col-span-2">
-            <div className="space-y-3">
+          <Panel title="Podcasts" span="md:col-span-6" tone="butter">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {(r.podcasts ?? []).map((p, i) => (
-                <div key={i}>
+                <div key={i} className="rounded-xl bg-white/60 p-3">
                   <div className="font-semibold text-sm">{p.title}</div>
                   <div className="text-xs text-muted-foreground">by {p.host}</div>
                   <div className="text-xs mt-0.5">{p.pitch}</div>
@@ -106,9 +106,17 @@ function Dashboard() {
   );
 }
 
-function Panel({ title, span, children }: { title: string; span: string; children: React.ReactNode }) {
+const TONES: Record<string, string> = {
+  sky: "bg-sky-100/70 border-sky-200",
+  mint: "bg-emerald-100/70 border-emerald-200",
+  lavender: "bg-indigo-100/70 border-indigo-200",
+  peach: "bg-rose-100/70 border-rose-200",
+  butter: "bg-amber-100/70 border-amber-200",
+};
+
+function Panel({ title, span, tone = "sky", children }: { title: string; span: string; tone?: keyof typeof TONES; children: React.ReactNode }) {
   return (
-    <section className={`${span} rounded-2xl border border-border bg-card p-5`}>
+    <section className={`${span} rounded-2xl border ${TONES[tone]} p-5`}>
       <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground">{title}</div>
       <div className="mt-3">{children}</div>
     </section>
