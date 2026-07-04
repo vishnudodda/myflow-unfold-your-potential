@@ -1,0 +1,1121 @@
+{
+  "new_traits": [
+    {
+      "slug": "optimism",
+      "name": "Optimism",
+      "description": "A proactive expectation that good outcomes will occur and challenges can be successfully resolved."
+    },
+    {
+      "slug": "integrity",
+      "name": "Integrity",
+      "description": "Uncompromising adherence to strong moral and ethical principles, especially when unobserved."
+    },
+    {
+      "slug": "accountability",
+      "name": "Accountability",
+      "description": "The willingness to accept full responsibility for one's actions, decisions, and their resulting consequences."
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "121fdfe0-3eec-45b2-a824-cb13e42184e2",
+      "question_text": "Which quality do you value the most?",
+      "primary_trait": "self_awareness",
+      "secondary_traits": [
+        "authenticity",
+        "altruism",
+        "analytical_thinking"
+      ],
+      "options": [
+        {
+          "option_id": "6f0cd3fc-ff7a-47ee-95cf-4a39efb6b205",
+          "letter": "A",
+          "label": "Honesty",
+          "mappings": [
+            {
+              "trait": "authenticity",
+              "weight": 3,
+              "reason": "Demonstrates a prioritization of truthfulness and transparent relationships."
+            },
+            {
+              "trait": "integrity",
+              "weight": 2,
+              "reason": "Links directly to an ethical baseline of not deceiving others."
+            }
+          ]
+        },
+        {
+          "option_id": "36c25774-6344-4eb7-9a5f-c03151b7a8ab",
+          "letter": "B",
+          "label": "Kindness",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Indicates a deep care for the emotional well-being of others above other metrics."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Suggests an attunement to others' feelings and a desire to be supportive."
+            }
+          ]
+        },
+        {
+          "option_id": "97a178df-6158-4be1-8e2f-604026f2567f",
+          "letter": "C",
+          "label": "Intelligence",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Shows a primary reliance on cognition, logic, and capability in navigating the world."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 1,
+              "reason": "Values the accumulation and application of knowledge."
+            }
+          ]
+        },
+        {
+          "option_id": "49446c31-8835-4fd8-8c57-e8beef7d8c4e",
+          "letter": "D",
+          "label": "Courage",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": 2,
+              "reason": "Reveals a readiness to face fear and take necessary leaps despite uncertainty."
+            },
+            {
+              "trait": "resilience",
+              "weight": 1,
+              "reason": "Implies the internal strength required to withstand adversity."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Core Values",
+        "Moral Framework",
+        "Personal Identity"
+      ],
+      "frameworks": [
+        {
+          "name": "VIA Strengths",
+          "relevance": "Directly maps to cardinal virtues like Honesty, Kindness, and Bravery."
+        }
+      ],
+      "confidence_logic": "Because this question forces a mutually exclusive choice among highly desirable traits, it yields high confidence regarding the user's primary psychological anchor.",
+      "contributions": {
+        "personality": "Defines the central moral lens through which the individual evaluates themselves and others.",
+        "swot": "Establishes a core personal strength that serves as the foundation for their interpersonal reliability.",
+        "4w1h": "Answers the 'Why' underlying their most critical identity-based decisions.",
+        "strengths": "Pinpoints the exact cardinal virtue the user relies on during moral dilemmas.",
+        "weaknesses": "May expose vulnerabilities if this single value is rigidly over-applied to the detriment of flexibility.",
+        "career": "Aligns the user with organizational cultures that prioritize their selected virtue (e.g., rigorous analytical fields vs. care-based sectors).",
+        "learning": "Indicates how the individual prefers to absorb wisdom\u2014via intellectual pursuit, human connection, or challenging experiences.",
+        "roadmap": "Provides an anchor point for long-term personal branding and life-goal alignment.",
+        "opportunities": "Highlights potential for leadership roles that uniquely demand transparency, empathy, intellect, or bravery.",
+        "podcasts": "Recommends philosophical content tailored to their primary worldview and ethical framework.",
+        "books": "Points toward biographies or theoretical works championing their selected cardinal trait.",
+        "role_models": "Connects the user to historical figures who embodied their chosen value at the highest level.",
+        "motivation": "Frames internal alignment with this core value as the ultimate driver of their intrinsic motivation."
+      },
+      "suggested_improvements": "Could introduce context, such as 'In difficult times, which quality...' to test values under pressure."
+    },
+    {
+      "question_id": "bd12d640-94ec-4451-b753-5cbe8bbe6e8b",
+      "question_text": "If you had to choose between an uncomfortable truth and a comfortable lie, what would you choose?",
+      "primary_trait": "integrity",
+      "secondary_traits": [
+        "authenticity",
+        "empathy",
+        "decision_making"
+      ],
+      "options": [
+        {
+          "option_id": "770185d5-cbdb-4da7-88a2-15c09e383df6",
+          "letter": "A",
+          "label": "Truth, no matter what",
+          "mappings": [
+            {
+              "trait": "authenticity",
+              "weight": 3,
+              "reason": "Indicates uncompromising dedication to reality and transparency."
+            },
+            {
+              "trait": "integrity",
+              "weight": 3,
+              "reason": "Reflects a rigid ethical stance prioritizing objective truth above emotional comfort."
+            }
+          ]
+        },
+        {
+          "option_id": "09098d2c-6b09-4970-a6e7-af7382753f73",
+          "letter": "B",
+          "label": "Lie, if it protects someone",
+          "mappings": [
+            {
+              "trait": "empathy",
+              "weight": 3,
+              "reason": "Highlights a prioritization of others' emotional safety over objective facts."
+            },
+            {
+              "trait": "authenticity",
+              "weight": -2,
+              "reason": "Suggests a willingness to distort reality to manage social friction."
+            }
+          ]
+        },
+        {
+          "option_id": "357c2c75-f79c-45c0-8e19-2c2c8f066194",
+          "letter": "C",
+          "label": "It depends on the situation",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 2,
+              "reason": "Shows a situational and flexible approach to ethical dilemmas."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 1,
+              "reason": "Requires cognitive processing to weigh the pros and cons of truth vs. deception in context."
+            }
+          ]
+        },
+        {
+          "option_id": "971361a0-9149-4178-9756-3932020cb638",
+          "letter": "D",
+          "label": "I'd avoid choosing",
+          "mappings": [
+            {
+              "trait": "decision_making",
+              "weight": -3,
+              "reason": "Reflects paralysis or avoidance when confronted with moral ambiguity."
+            },
+            {
+              "trait": "risk_taking",
+              "weight": -2,
+              "reason": "Indicates a reluctance to bear the emotional or social consequences of making a tough call."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Ethical Reasoning",
+        "Social Priorities",
+        "Conflict Handling"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Differentiates high Agreeableness (protecting feelings) from low Agreeableness (blunt truth)."
+        },
+        {
+          "name": "4W1H",
+          "relevance": "Clarifies 'How' the individual navigates socially fraught or morally complex exchanges."
+        }
+      ],
+      "confidence_logic": "By presenting a classic ethical dilemma with clear trade-offs, this question reliably distinguishes truth-oriented vs. relationship-oriented personalities.",
+      "contributions": {
+        "personality": "Maps the balance between blunt authenticity and compassionate diplomacy in communication.",
+        "swot": "Reveals strengths in honesty or tact, while warning of potentials for harshness or enabling deception.",
+        "4w1h": "Explains 'How' they deliver difficult news in high-stakes environments.",
+        "strengths": "Highlights either a strong moral compass or high emotional sensitivity to group morale.",
+        "weaknesses": "May indicate either dangerous rigidity (bluntness) or moral flexibility (deceptiveness).",
+        "career": "Informs suitability for roles demanding absolute transparency (e.g., auditing, safety) vs. delicate stakeholder management (e.g., PR, HR).",
+        "learning": "Shows how they process negative feedback\u2014either preferring it unfiltered or softly couched.",
+        "roadmap": "Guides behavioral development toward balancing honesty with appropriate tact.",
+        "opportunities": "Unlocks avenues where mediating between hard facts and human feelings is required.",
+        "podcasts": "Suggests podcasts dealing with difficult conversations, ethics, and leadership communication.",
+        "books": "Recommends reading on 'radical candor' or emotional intelligence.",
+        "role_models": "Provides examples of leaders known for walking the line between profound empathy and strict adherence to reality.",
+        "motivation": "Demonstrates whether avoiding harm or preserving truth drives their core decision-making engine."
+      },
+      "suggested_improvements": "Could specify the magnitude of the lie to differentiate minor white lies from systemic deception."
+    },
+    {
+      "question_id": "f551c832-b729-40d7-8fe2-71fd8cdfcdff",
+      "question_text": "When you fail at something, what's your first reaction?",
+      "primary_trait": "resilience",
+      "secondary_traits": [
+        "growth_mindset",
+        "problem_solving",
+        "reflectiveness"
+      ],
+      "options": [
+        {
+          "option_id": "81f0cebd-52cd-4650-88a0-7f1469b7e6f8",
+          "letter": "A",
+          "label": "I give up",
+          "mappings": [
+            {
+              "trait": "resilience",
+              "weight": -3,
+              "reason": "Demonstrates a very low tolerance for setbacks and an immediate withdrawal of effort."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": -3,
+              "reason": "Indicates a fixed mindset, equating failure with permanent inability."
+            }
+          ]
+        },
+        {
+          "option_id": "23df2e50-02ea-4fc2-86d1-99d1ea58e6e6",
+          "letter": "B",
+          "label": "I try again after some time",
+          "mappings": [
+            {
+              "trait": "resilience",
+              "weight": 1,
+              "reason": "Shows eventual persistence but requires an emotional recovery period first."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 1,
+              "reason": "Suggests taking a pause to process the event before jumping back in."
+            }
+          ]
+        },
+        {
+          "option_id": "d754841b-26b7-4240-be96-6e25ae9c9f36",
+          "letter": "C",
+          "label": "I immediately look for another solution",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Reflects a highly proactive, solution-oriented approach immediately upon failing."
+            },
+            {
+              "trait": "adaptability",
+              "weight": 2,
+              "reason": "Indicates quick pivoting rather than getting stuck on the failure."
+            }
+          ]
+        },
+        {
+          "option_id": "dccc6710-99f3-4160-a6f0-63aa03fb23f1",
+          "letter": "D",
+          "label": "I try to understand why I failed",
+          "mappings": [
+            {
+              "trait": "reflectiveness",
+              "weight": 3,
+              "reason": "Prioritizes root-cause analysis and self-correction over mere repetition."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": 3,
+              "reason": "Views failure structurally as immediate data for learning and improvement."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Failure Tolerance",
+        "Response to Adversity",
+        "Cognitive Flexibility"
+      ],
+      "frameworks": [
+        {
+          "name": "Growth Mindset",
+          "relevance": "Directly measures the core tenet of responding to failure as learning versus an indictment of capability."
+        },
+        {
+          "name": "SDT",
+          "relevance": "Reveals whether competence needs are thwarted by failure, reducing autonomous motivation."
+        }
+      ],
+      "confidence_logic": "Because 'first reaction to failure' is a textbook psychological indicator of resilience and mindset, these distinct behavioral responses provide highly accurate trait mapping.",
+      "contributions": {
+        "personality": "Illustrates the individual's emotional and operational stability when facing defeat.",
+        "swot": "Showcases resilience and analytical recovery as strengths, or defeatism as a critical threat.",
+        "4w1h": "Solves for 'What' the user does in the immediate aftermath of a failed project.",
+        "strengths": "Highlights persistence, cognitive adaptability, and a healthy relationship with setbacks.",
+        "weaknesses": "Identifies lack of perseverance or an overly emotional response to making mistakes.",
+        "career": "Signals readiness for high-variance, high-failure-rate roles like entrepreneurship or iterative R&D.",
+        "learning": "Suggests a preference for iterative learning models like trial-and-error versus safe, graded environments.",
+        "roadmap": "Guides the building of emotional regulation matrices to reduce the sting of failure.",
+        "opportunities": "Highlights potential for rapid advancement by mastering iterative prototyping and failing fast.",
+        "podcasts": "Recommends content on startup post-mortems, overcoming adversity, and mindset shifts.",
+        "books": "Suggests pivotal materials like Carol Dweck's 'Mindset' or books on mental toughness.",
+        "role_models": "Elevates figures known for notable early failures preceding massive eventual success.",
+        "motivation": "Demonstrates that learning and mastery, rather than just winning, are the engines of ongoing effort."
+      },
+      "suggested_improvements": "Could add a distinction between minor daily failures versus major life setbacks to test scale."
+    },
+    {
+      "question_id": "18014951-0fd2-4af1-b9e3-7fe948eb1967",
+      "question_text": "How do you usually react to criticism?",
+      "primary_trait": "growth_mindset",
+      "secondary_traits": [
+        "openness",
+        "emotional_intelligence",
+        "reflectiveness"
+      ],
+      "options": [
+        {
+          "option_id": "b83b9b80-1a38-41eb-8a5b-5d108de7c5ff",
+          "letter": "A",
+          "label": "I learn from it",
+          "mappings": [
+            {
+              "trait": "growth_mindset",
+              "weight": 3,
+              "reason": "Embraces critical feedback as a necessary tool for personal evolution."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Shows receptivity to external perspectives countering one's own."
+            }
+          ]
+        },
+        {
+          "option_id": "5ef15d1d-0824-48a5-9b1c-18da2ec9009b",
+          "letter": "B",
+          "label": "I feel hurt but think about it later",
+          "mappings": [
+            {
+              "trait": "reflectiveness",
+              "weight": 2,
+              "reason": "Acknowledges an emotional hit but commits to subsequent cognitive processing."
+            },
+            {
+              "trait": "emotional_intelligence",
+              "weight": 1,
+              "reason": "Displays self-awareness regarding emotional vulnerability while maintaining rationality."
+            }
+          ]
+        },
+        {
+          "option_id": "3b1194ac-ea94-4e4e-a120-3b0ed2933ab4",
+          "letter": "C",
+          "label": "I defend myself",
+          "mappings": [
+            {
+              "trait": "openness",
+              "weight": -2,
+              "reason": "Indicates an immediate defensive posture that blocks incoming perspectives."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": -2,
+              "reason": "Manifests a fixed mindset that perceives criticism as a personal attack to be repelled."
+            }
+          ]
+        },
+        {
+          "option_id": "d5a247b3-cbfb-4fbf-9e2a-ecb9183eb361",
+          "letter": "D",
+          "label": "I ignore it completely",
+          "mappings": [
+            {
+              "trait": "openness",
+              "weight": -3,
+              "reason": "Shows a total shutdown of feedback channels, maintaining rigid self-views."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": -3,
+              "reason": "Refuses to evaluate external data for potential self-improvement."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Receptivity to Feedback",
+        "Ego Management",
+        "Continual Learning"
+      ],
+      "frameworks": [
+        {
+          "name": "Growth Mindset",
+          "relevance": "Reaction to criticism is a primary pillar of Dweck's mindset framework."
+        },
+        {
+          "name": "Big Five",
+          "relevance": "Low Openness and high Neuroticism often correlate with defensive or avoidant reactions."
+        }
+      ],
+      "confidence_logic": "Since how individuals handle critique sits at the nexus of emotional regulation and mindset, clear divergence in the options creates high fidelity in assessing openness to development.",
+      "contributions": {
+        "personality": "Reveals the permeability of the individual's ego when confronted with external judgments.",
+        "swot": "Positioning receptivity as a massive developmental strength, and defensiveness as a severe career bottleneck.",
+        "4w1h": "Describes 'How' they interact with mentors, peers, and managers in review settings.",
+        "strengths": "Showcases coachability, humility, and the ability to course-correct based on external input.",
+        "weaknesses": "Flags emotional fragility or arrogance that actively prevents skill acquisition.",
+        "career": "Highly predictive of success in collaborative, agile, or creative environments that require constant iteration.",
+        "learning": "Points to a need for structured, objective feedback vs. gentle, strengths-based coaching.",
+        "roadmap": "Lays out steps for detaching personal identity from work output to better process critique.",
+        "opportunities": "Identifies readiness for managing up and handling 360-degree performance reviews effectively.",
+        "podcasts": "Recommends active listening and management podcasts that reframe feedback as a gift.",
+        "books": "Points to literature on radical candor, crucial conversations, or transforming inner dialogue.",
+        "role_models": "Highlights leaders who publicly embrace their flaws and utilize critics as consultants.",
+        "motivation": "Suggests they are motivated by mastery if they accept critique, whereas validation drives those who defend or ignore."
+      },
+      "suggested_improvements": "Differentiating between 'fair' and 'unfair' criticism might add another layer of diagnostic precision."
+    },
+    {
+      "question_id": "9817dd2b-df0a-4401-899c-ba6ff1594a13",
+      "question_text": "When facing a difficult challenge, you usually\u2026",
+      "primary_trait": "problem_solving",
+      "secondary_traits": [
+        "analytical_thinking",
+        "initiative",
+        "teamwork"
+      ],
+      "options": [
+        {
+          "option_id": "afab1189-8a3e-46c5-9cc7-cd15cc81f659",
+          "letter": "A",
+          "label": "Make a detailed plan",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Indicates a preference for structuring chaos into actionable, logical steps before acting."
+            },
+            {
+              "trait": "discipline",
+              "weight": 2,
+              "reason": "Requires delayed gratification to formulate strategy before jumping into execution."
+            }
+          ]
+        },
+        {
+          "option_id": "4320ad36-9eb9-4d7f-923b-0b0a33d74834",
+          "letter": "B",
+          "label": "Jump in and figure it out",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 3,
+              "reason": "Shows comfort with ambiguity and resolving problems dynamically on the fly."
+            },
+            {
+              "trait": "initiative",
+              "weight": 2,
+              "reason": "Demonstrates bias for action over prolonged deliberation."
+            }
+          ]
+        },
+        {
+          "option_id": "7f5209c4-df30-4faf-8ccf-7148a12a2987",
+          "letter": "C",
+          "label": "Ask someone for advice",
+          "mappings": [
+            {
+              "trait": "teamwork",
+              "weight": 3,
+              "reason": "Reflects a collaborative instinctively, leveraging broader networks over solitary effort."
+            },
+            {
+              "trait": "openness",
+              "weight": 1,
+              "reason": "Shows willingness to adopt external perspectives to solve problems faster."
+            }
+          ]
+        },
+        {
+          "option_id": "1b0e7630-c963-44bd-834f-50293ddd1f0f",
+          "letter": "D",
+          "label": "Avoid it for a while",
+          "mappings": [
+            {
+              "trait": "initiative",
+              "weight": -3,
+              "reason": "Displays procrastination and avoidance when confronted with stress or difficulty."
+            },
+            {
+              "trait": "problem_solving",
+              "weight": -2,
+              "reason": "Demonstrates a hesitation to engage in resolution behaviors."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Action Orientation",
+        "Stress Response",
+        "Strategic Execution"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Contrasts high Conscientiousness (planning) with high Extraversion/Agreeableness (asking advice) and low Conscientiousness (avoidance)."
+        }
+      ],
+      "confidence_logic": "By outlining the four main archetypal approaches to friction\u2014planning, acting, collaborating, or avoiding\u2014the question effectively triages broad operational styles.",
+      "contributions": {
+        "personality": "Maps the individual's baseline mechanism for reducing environmental anxiety and resolving operational friction.",
+        "swot": "Highlights strengths in strategy, agility, or collaboration, while spotlighting procrastination as a core threat.",
+        "4w1h": "Pinpoints 'How' they initiate the very first steps of a complex or daunting project.",
+        "strengths": "Identifies distinct superpowers like meticulous organization, fearless execution, or resourceful networking.",
+        "weaknesses": "May reveal analysis paralysis (over-planning) or a tendency to bury one's head in the sand (avoidance).",
+        "career": "Categorizes the user for roles needing deep strategic roadmapping vs. rapid triage and firefighting.",
+        "learning": "Informs whether they need structured syllabi, immediate hands-on labs, or robust study groups.",
+        "roadmap": "Guides actionable steps from initial overwhelm to confident mastery through their preferred avenue.",
+        "opportunities": "Suggests project management, rapid-response crisis leadership, or collaborative task-force roles based on their choice.",
+        "podcasts": "Recommends process-oriented, startup-oriented, or community-management oriented audio content.",
+        "books": "Points to literature on strategic thinking, bias-to-action habits, or building mastermind groups.",
+        "role_models": "Connects them to iconic architects, agile founders, or incredible networkers.",
+        "motivation": "Shows that either order, momentum, or human connection provides the energy needed to overcome challenges."
+      },
+      "suggested_improvements": "Could qualify 'difficult challenge' to specify if it is interpersonal versus technical, as that often changes the approach."
+    },
+    {
+      "question_id": "b3fa8afc-ddf2-4bf2-b4d0-ba543087b85a",
+      "question_text": "Which statement feels most like you?",
+      "primary_trait": "optimism",
+      "secondary_traits": [
+        "problem_solving",
+        "resilience",
+        "analytical_thinking"
+      ],
+      "options": [
+        {
+          "option_id": "1fbd2040-da8d-402e-a117-e7ffd43ee568",
+          "letter": "A",
+          "label": "Every problem has a solution",
+          "mappings": [
+            {
+              "trait": "optimism",
+              "weight": 3,
+              "reason": "Demonstrates an inherent belief in positive, resolvable outcomes."
+            },
+            {
+              "trait": "problem_solving",
+              "weight": 2,
+              "reason": "Implies an active, solution-focused cognitive stance."
+            }
+          ]
+        },
+        {
+          "option_id": "3d6017d1-2c10-4cbd-b65a-87dd8ca61c82",
+          "letter": "B",
+          "label": "Things usually work out with time",
+          "mappings": [
+            {
+              "trait": "optimism",
+              "weight": 1,
+              "reason": "Shows a passive form of optimism that trusts time or fate over active effort."
+            },
+            {
+              "trait": "initiative",
+              "weight": -2,
+              "reason": "Indicates a lack of urgency in forging one's own outcomes."
+            }
+          ]
+        },
+        {
+          "option_id": "7df159e5-ba60-4954-84f3-b2d7decf8490",
+          "letter": "C",
+          "label": "I worry about what might go wrong",
+          "mappings": [
+            {
+              "trait": "optimism",
+              "weight": -3,
+              "reason": "Reflects a pessimistic or highly cautious mindset preoccupied with failure."
+            },
+            {
+              "trait": "resilience",
+              "weight": -1,
+              "reason": "Suggests underlying anxiety that might hinder bold action."
+            }
+          ]
+        },
+        {
+          "option_id": "e6f1c8a0-1cc8-4ff2-880e-9ef7907c0ed7",
+          "letter": "D",
+          "label": "I only believe what I can see",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Requires empirical, tangible proof over faith or intuition."
+            },
+            {
+              "trait": "openness",
+              "weight": -2,
+              "reason": "Indicates extreme pragmatism that restricts visionary or abstract thinking."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "General Worldview",
+        "Future Orientation",
+        "Risk Perception"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Contrasts Neuroticism (worrying) against high Openness/Intellect (empiricism) or high Extraversion (optimism)."
+        }
+      ],
+      "confidence_logic": "Because these generalized statements reflect deeply ingrained schemas about the nature of reality, they act as strong proxies for the user's broader emotional and cognitive baselines.",
+      "contributions": {
+        "personality": "Identifies if the user operates from a baseline of hope, fatalism, anxiety, or strict empiricism.",
+        "swot": "Highlights intrinsic drive or caution as strengths, while flagging passive complacency or neuroticism as threats.",
+        "4w1h": "Contextualizes 'Why' they might hesitate or rapidly greenlight new initiatives.",
+        "strengths": "Signals an unbreakable positive spirit, patient calm, or stringent adherence to data.",
+        "weaknesses": "May expose an inability to foresee genuine risks, or conversely, a crippling fear of failure.",
+        "career": "Directs optimistic go-getters toward sales or entrepreneurship, and empirical skeptics toward auditing or science.",
+        "learning": "Informs whether they learn best via inspiring vision-casting or strict data-driven case studies.",
+        "roadmap": "Helps balance their natural worldview with complementary perspectives to avoid blind spots.",
+        "opportunities": "Points out leadership tracks where high morale injection or rigorous risk-management is paramount.",
+        "podcasts": "Recommends visionary futurist discussions vs. grounded, skeptical scientific breakdowns.",
+        "books": "Suggests books on rational optimism, risk analytics, or navigating uncertainty.",
+        "role_models": "Profiles leaders who transformed their industries through either relentless optimism or brilliant skepticism.",
+        "motivation": "Uncovers whether they are driven by the promise of the future or the safety of the present."
+      },
+      "suggested_improvements": "Could be rephrased slightly to avoid the ambiguity between 'worry as preparation' vs. 'worry as paralysis'."
+    },
+    {
+      "question_id": "5728c70d-15bb-4535-a950-1222ee9c55ba",
+      "question_text": "If no one was watching, what would you do?",
+      "primary_trait": "integrity",
+      "secondary_traits": [
+        "authenticity",
+        "adaptability",
+        "self_awareness"
+      ],
+      "options": [
+        {
+          "option_id": "919c67d8-399c-4de1-8060-e5ccab6d0133",
+          "letter": "A",
+          "label": "Do the right thing",
+          "mappings": [
+            {
+              "trait": "integrity",
+              "weight": 3,
+              "reason": "Shows behavior governed by internal moral compass rather than external enforcement."
+            },
+            {
+              "trait": "authenticity",
+              "weight": 2,
+              "reason": "Maintains consistency of character regardless of the audience."
+            }
+          ]
+        },
+        {
+          "option_id": "61d4d56d-5a38-4c60-815d-bcf45929b498",
+          "letter": "B",
+          "label": "Do what's convenient",
+          "mappings": [
+            {
+              "trait": "integrity",
+              "weight": -3,
+              "reason": "Reveals that moral behavior is contingent on being observed, defaulting to self-interest otherwise."
+            },
+            {
+              "trait": "discipline",
+              "weight": -2,
+              "reason": "Chooses the path of least resistance over adherence to standards."
+            }
+          ]
+        },
+        {
+          "option_id": "fe43239b-38fe-4379-9121-ce02670f14d0",
+          "letter": "C",
+          "label": "Depends on the situation",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 1,
+              "reason": "Exercises situational ethics depending on the gravity of the choice."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 1,
+              "reason": "Weighs risk vs. reward on a case-by-case basis when unmonitored."
+            }
+          ]
+        },
+        {
+          "option_id": "30938b90-1d37-4399-825b-3869173f4315",
+          "letter": "D",
+          "label": "I haven't thought about it",
+          "mappings": [
+            {
+              "trait": "self_awareness",
+              "weight": -3,
+              "reason": "Indicates a lack of introspection regarding one's own ethical baseline."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": -2,
+              "reason": "Shows little to no engagement in philosophical or moral contemplation."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Ethical Consistency",
+        "Locus of Control",
+        "Moral Character"
+      ],
+      "frameworks": [
+        {
+          "name": "SDT",
+          "relevance": "Assesses whether behavior is driven by internal regulation (autonomy) or external regulation (being watched)."
+        }
+      ],
+      "confidence_logic": "This classic test of true character effectively separates intrinsically motivated moral behavior from expedient compliance, offering a high-confidence map to integrity.",
+      "contributions": {
+        "personality": "Reflects the degree to which an individual's private actions match their public persona.",
+        "swot": "Positions deep trustworthiness as a premium asset, or flags expediency as a severe risk for compliance.",
+        "4w1h": "Explores the 'Who' they truly are when devoid of external societal pressures.",
+        "strengths": "Highlights unshakeable principles or high operational pragmatism.",
+        "weaknesses": "May warn of corner-cutting tendencies or a dangerous lack of self-reflection.",
+        "career": "Highly decisive for fields demanding fiduciary duty, security clearances, or autonomous remote work.",
+        "learning": "Shows if they require strict proctoring to complete work, or if they can thrive in self-guided study.",
+        "roadmap": "Encourages the cultivation of discipline and internal alignment to succeed in high-trust roles.",
+        "opportunities": "Identifies readiness for positions involving massive unmonitored budgets or sensitive data.",
+        "podcasts": "Recommends deep-dives into compliance, personal accountability, and ethical philosophy.",
+        "books": "Points toward stoic philosophy or memoirs of individuals who stood by their principles in secret.",
+        "role_models": "Highlights whistleblowers or leaders famous for maintaining ethics at significant personal cost.",
+        "motivation": "Reveals whether they are motivated by genuine internal virtue or the social benefits of appearing virtuous."
+      },
+      "suggested_improvements": "Could substitute a specific vignette (e.g., finding a lost wallet) to make the moral choice less abstract."
+    },
+    {
+      "question_id": "8f2698d8-5dbc-46d1-b78b-9c6371e7c114",
+      "question_text": "When something goes wrong, who do you usually blame first?",
+      "primary_trait": "accountability",
+      "secondary_traits": [
+        "growth_mindset",
+        "analytical_thinking",
+        "reflectiveness"
+      ],
+      "options": [
+        {
+          "option_id": "6b8033e3-a1e5-4010-9c97-0358c4cf058f",
+          "letter": "A",
+          "label": "Myself \u2014 I look for what I could improve",
+          "mappings": [
+            {
+              "trait": "accountability",
+              "weight": 3,
+              "reason": "Shows an immediate internalization of responsibility and a desire to self-correct."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": 2,
+              "reason": "Uses failure as a mirror to find areas for personal skill development."
+            }
+          ]
+        },
+        {
+          "option_id": "6f2c284e-7fbd-493e-a0f8-51a923f8c1ec",
+          "letter": "B",
+          "label": "Circumstances",
+          "mappings": [
+            {
+              "trait": "accountability",
+              "weight": -2,
+              "reason": "Deflects responsibility outward to environmental factors outside their control."
+            },
+            {
+              "trait": "self_awareness",
+              "weight": -1,
+              "reason": "Fails to recognize their own agency in generating the outcome."
+            }
+          ]
+        },
+        {
+          "option_id": "a19f296d-ac07-480f-bca8-afb149494bc2",
+          "letter": "C",
+          "label": "Other people",
+          "mappings": [
+            {
+              "trait": "accountability",
+              "weight": -3,
+              "reason": "Aggressively shifts blame to peers, protecting ego at the expense of reality."
+            },
+            {
+              "trait": "agreeableness",
+              "weight": -2,
+              "reason": "Creates interpersonal friction by scapegoating others in crisis governance."
+            }
+          ]
+        },
+        {
+          "option_id": "ed4ae120-f3ca-4bee-ba96-15de45b70bad",
+          "letter": "D",
+          "label": "I first try to understand what happened",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Suspends judgment and blame in favor of objective data gathering."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 2,
+              "reason": "Employs root-cause analysis rather than emotional reactivity when things break."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Locus of Control",
+        "Emotional Maturity",
+        "Conflict Resolution"
+      ],
+      "frameworks": [
+        {
+          "name": "Growth Mindset",
+          "relevance": "Measures the capacity to accept one's role in failure without ego defense."
+        }
+      ],
+      "confidence_logic": "Blame orientation is a primary psychological marker of locus of control; the options cleanly distinguish between extreme internal locus, external locus, and objective analysis.",
+      "contributions": {
+        "personality": "Maps the structure of their ego defense mechanisms during stressful, failed scenarios.",
+        "swot": "Establishes extreme ownership or objective analysis as stellar strengths, and scapegoating as a toxic weakness.",
+        "4w1h": "Defines 'Who' they hold responsible in the critical moments following a failure.",
+        "strengths": "Identifies individuals capable of taking the heat for their team or pausing to assess reality calmly.",
+        "weaknesses": "Flags a potentially toxic team member who will consistently throw colleagues under the bus.",
+        "career": "Highly informative for management selection, as great leaders assume blame and distribute credit.",
+        "learning": "Indicates a need for post-mortem structures that remove fear, allowing blame-shifters to learn accountability safely.",
+        "roadmap": "Builds a pathway from instinctual defensiveness toward practiced, systemic autopsy of failures.",
+        "opportunities": "Signals readiness for roles that require 'buck stops here' authority.",
+        "podcasts": "Recommends content on 'Extreme Ownership' (Jocko Willink) or blameless post-mortems in tech.",
+        "books": "Suggests reading leadership manuals focused on responsibility, humility, and systemic process design.",
+        "role_models": "Profiles military or corporate leaders who publicly took the fall for systemic errors.",
+        "motivation": "Reveals whether they are motivated by preserving their self-image or by genuinely solving the puzzle of the failure."
+      },
+      "suggested_improvements": "Option D could be tweaked to 'I analyze the process before assigning blame' to clarify it still includes accountability."
+    },
+    {
+      "question_id": "8b0a0b89-2b1f-4e9f-897d-d1d7c305c336",
+      "question_text": "Which sentence describes you best?",
+      "primary_trait": "risk_taking",
+      "secondary_traits": [
+        "openness",
+        "achievement_drive",
+        "adaptability"
+      ],
+      "options": [
+        {
+          "option_id": "c9fbb134-d935-41e8-9664-8219c20f7b29",
+          "letter": "A",
+          "label": "I like stability",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": -2,
+              "reason": "Shows a strong preference for predictable, safe, and governed environments."
+            },
+            {
+              "trait": "adaptability",
+              "weight": -1,
+              "reason": "Implies discomfort with sudden shifts or chaotic changes in routine."
+            }
+          ]
+        },
+        {
+          "option_id": "0cdb0a36-c086-4f68-9863-dfc51ff1a417",
+          "letter": "B",
+          "label": "I like adventure",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": 3,
+              "reason": "Indicates excitement toward the unknown and a willingness to embrace novelty over security."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Thrives on new experiences, diverse inputs, and uncharted territory."
+            }
+          ]
+        },
+        {
+          "option_id": "1b5bf9f6-c344-4945-873b-ad13fdcd9456",
+          "letter": "C",
+          "label": "I enjoy taking challenges",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Reflects a motivation to conquer difficult hurdles resulting in personal or professional gain."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": 2,
+              "reason": "Actively seeks out friction as a mechanism to build capability."
+            }
+          ]
+        },
+        {
+          "option_id": "b5a22a96-e4c6-420f-96db-a0c6f4bdbdbf",
+          "letter": "D",
+          "label": "I prefer staying in my comfort zone",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": -3,
+              "reason": "Actively avoids variables that might introduce stress or demand new skills."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": -2,
+              "reason": "Reflects a static approach to personal development, choosing comfort over capability."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Comfort with Ambiguity",
+        "Sensation Seeking",
+        "Drive for Mastery"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Maps directly to the spectrum of Openness to Experience (adventure/challenges) vs. need for routine."
+        },
+        {
+          "name": "RIASEC",
+          "relevance": "Differentiates Conventional (stability) from Enterprising or Investigative (adventure/challenge) profiles."
+        }
+      ],
+      "confidence_logic": "Because these statements are classic, overarching self-concept summaries, they tightly correlate with an individual's macro-level appetite for risk and growth.",
+      "contributions": {
+        "personality": "Defines the core operational tempo\u2014ranging from conservative and steady to aggressive and pioneering.",
+        "swot": "Translates to strengths in reliability or innovation, with corresponding weaknesses in rigidity or recklessness.",
+        "4w1h": "Identifies 'Where' this person should be deployed within an organization's lifecycle (maintenance vs. disruption).",
+        "strengths": "Spotlights a steady hand in crisis, a fearless pioneer spirit, or an unyielding drive for mastery.",
+        "weaknesses": "Notes a potential for stagnation (comfort zone) or chaotic lack of focus (pure adventure).",
+        "career": "Signals a fit for bureaucratic, stable institutions versus hyper-growth startups or volatile markets.",
+        "learning": "Dictates whether learning should be self-paced and structured, or highly experiential and sink-or-swim.",
+        "roadmap": "Helps users gently stretch their comfort zones or, conversely, learn to establish healthy boundaries to avoid burnout.",
+        "opportunities": "Identifies who is ready to lead an experimental R&D wing versus managing core legacy operations.",
+        "podcasts": "Recommends content ranging from personal finance (stability) to extreme sports or startup scaling (adventure).",
+        "books": "Suggests literature on continuous improvement, navigating chaos, or mastering one's craft.",
+        "role_models": "Connects them with figures spanning from steadfast institutional leaders to maverick explorers.",
+        "motivation": "Shows if peace of mind, adrenaline, or hard-won competence is their deepest psychological fuel."
+      },
+      "suggested_improvements": "Could add context like 'In your career...' to separate professional risk from physical/personal risk."
+    },
+    {
+      "question_id": "d1a5f156-4033-4e7f-8a6e-ef10343c49da",
+      "question_text": "When life doesn't go as planned, what do you usually do?",
+      "primary_trait": "adaptability",
+      "secondary_traits": [
+        "resilience",
+        "creativity",
+        "emotional_intelligence"
+      ],
+      "options": [
+        {
+          "option_id": "01a4b4e9-3ad8-40bf-a9bc-b551ae1d3f46",
+          "letter": "A",
+          "label": "Adjust my plans and move forward",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 3,
+              "reason": "Demonstrates fluid mental flexibility to rewrite the playbook immediately upon disruption."
+            },
+            {
+              "trait": "resilience",
+              "weight": 2,
+              "reason": "Maintains forward momentum despite changing or adverse circumstances."
+            }
+          ]
+        },
+        {
+          "option_id": "d731834e-ebc1-4f05-b1c9-915007e6352e",
+          "letter": "B",
+          "label": "Stay patient and wait for the right time",
+          "mappings": [
+            {
+              "trait": "discipline",
+              "weight": 2,
+              "reason": "Exhibits long-term thinking and impulse control to ride out the turbulence."
+            },
+            {
+              "trait": "initiative",
+              "weight": -1,
+              "reason": "May verge into passivity if 'waiting' turns into an excuse for inaction."
+            }
+          ]
+        },
+        {
+          "option_id": "68584044-9343-47f0-b338-e90624e6e3b7",
+          "letter": "C",
+          "label": "Feel frustrated before trying again",
+          "mappings": [
+            {
+              "trait": "emotional_intelligence",
+              "weight": -1,
+              "reason": "Acknowledges a slight delay in emotional regulation when expectations are violated."
+            },
+            {
+              "trait": "resilience",
+              "weight": 1,
+              "reason": "Ultimately commits to continuing the effort after an emotional processing period."
+            }
+          ]
+        },
+        {
+          "option_id": "1db808a0-0a91-486f-9baf-1e8c6e7e0d7a",
+          "letter": "D",
+          "label": "Look for a completely different path",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 2,
+              "reason": "Shows a willingness to abandon sunk costs and pivot entirely."
+            },
+            {
+              "trait": "creativity",
+              "weight": 2,
+              "reason": "Engages lateral thinking to invent a new approach when the standard route is blocked."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Cognitive Flexibility",
+        "Frustration Tolerance",
+        "Strategic Pivoting"
+      ],
+      "frameworks": [
+        {
+          "name": "4W1H",
+          "relevance": "Answers 'How' they maneuver when the initial blueprint fails."
+        },
+        {
+          "name": "Growth Mindset",
+          "relevance": "Reveals whether unexpected friction is met with rigid frustration or agile problem-solving."
+        }
+      ],
+      "confidence_logic": "Since a deviation from plans forces a stress response, the options capture the precise mixture of emotional control, strategic pivoting, and perseverance, allowing for nuanced multi-trait mapping.",
+      "contributions": {
+        "personality": "Highlights how strictly the individual clings to original structures versus embracing fluid realities.",
+        "swot": "Agility and creative pivoting represent major strengths, while severe frustration showcases a liability under pressure.",
+        "4w1h": "Explains 'When' and 'How' they deploy secondary strategies during a project breakdown.",
+        "strengths": "Identifies highly adaptable thinkers, patient strategists, or lateral innovators.",
+        "weaknesses": "May reveal a tendency to sulk or give up too quickly when the perfect scenario disappears.",
+        "career": "Critical for selecting individuals for dynamic roles (event management, emergency response) vs. highly structured roles (manufacturing).",
+        "learning": "Informs if they can handle fluid, open-ended assignments or if they require heavily rubricked coursework.",
+        "roadmap": "Provides coaching vectors on improving emotional regulation speeds to shorten the gap between failure and the next attempt.",
+        "opportunities": "Suggests environments where 'Plan B' is heavily utilized and rewarded, like logistics or startup ops.",
+        "podcasts": "Recommends listening to pivot stories in business and accounts of profound resilience.",
+        "books": "Points toward literature on agility, stoic acceptance, or lateral thinking puzzles.",
+        "role_models": "Highlights leaders who masterfully navigated public pivots when early strategies collapsed.",
+        "motivation": "Demonstrates that achieving the goal\u2014by any route\u2014matters more than adhering strictly to the original plan."
+      },
+      "suggested_improvements": "Could specify whether they are adjusting a minor daily plan or a major life goal, as magnitude alters behavior significantly."
+    }
+  ]
+}

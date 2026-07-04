@@ -1,0 +1,1152 @@
+{
+  "new_traits": [
+    {
+      "slug": "intrinsic_motivation",
+      "name": "Intrinsic Motivation",
+      "description": "The drive to engage in activities for their inherent satisfaction and alignment with personal interests rather than external rewards."
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "c799923e-abe8-4919-a1a3-f2d521b50b1d",
+      "question_text": "Which activity comes naturally to you without much effort?",
+      "primary_trait": "self_awareness",
+      "secondary_traits": [
+        "problem_solving",
+        "creativity",
+        "leadership"
+      ],
+      "options": [
+        {
+          "option_id": "b2929359-8c13-4108-8ac9-9cb7a11484f0",
+          "letter": "A",
+          "label": "Solving complex problems",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Indicates a high tolerance for cognitive load and a natural inclination toward analytical deconstruction."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Reflects a systematic approach to identifying variables and resolving ambiguities."
+            }
+          ]
+        },
+        {
+          "option_id": "a05d46b1-111f-4f4e-b5d5-102f547944e4",
+          "letter": "B",
+          "label": "Connecting and helping people",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Demonstrates prosocial behavior driven by an innate desire to assist and uplift others."
+            },
+            {
+              "trait": "sociability",
+              "weight": 2,
+              "reason": "Shows comfort and energy derived from interpersonal interactions."
+            }
+          ]
+        },
+        {
+          "option_id": "b6c5e626-476b-4a71-96a3-a4526b37bdc2",
+          "letter": "C",
+          "label": "Creating new ideas or designs",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Highlights a baseline operational state focused on generative, divergent thinking."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Correlates with an appreciation for aesthetics, novelty, and unbound imagination."
+            }
+          ]
+        },
+        {
+          "option_id": "8dbb08a4-9d45-433d-b119-79f1778c5401",
+          "letter": "D",
+          "label": "Organizing and leading tasks",
+          "mappings": [
+            {
+              "trait": "leadership",
+              "weight": 3,
+              "reason": "Reveals an inherent propensity to structure chaos and direct group efforts."
+            },
+            {
+              "trait": "time_management",
+              "weight": 2,
+              "reason": "Implies an underlying organizational capability that makes structuring tasks seem effortless."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Vocational Interests",
+        "Cognitive Style"
+      ],
+      "frameworks": [
+        {
+          "name": "RIASEC",
+          "relevance": "Directly maps to Investigative (A), Social (B), Artistic (C), and Enterprising (D) vocational themes."
+        },
+        {
+          "name": "Ikigai",
+          "relevance": "Helps identify the 'What you are good at' circle by highlighting low-friction, high-output behaviors."
+        }
+      ],
+      "confidence_logic": "Confidence is moderate, as self-reported ease is a strong proxy for trait presence but can be skewed by the Dunning-Kruger effect; corroborated by downstream domain-specific choices.",
+      "contributions": {
+        "personality": "Reflects the individual's dominant cognitive and behavioral default state.",
+        "swot": "Establishes the core 'Strengths' quadrant by identifying activities that require minimal energy.",
+        "4w1h": "Answers 'What' the user naturally gravitates towards during unstructured scenarios.",
+        "strengths": "Pinpoints innate competencies, defining the foundation of the user's value proposition.",
+        "weaknesses": "Suggests blind spots in opposing domains, like a lack of structure in highly creative individuals.",
+        "career": "Aligns the user's natural cadence with macro career paths like engineering, counseling, design, or management.",
+        "learning": "Indicates the most frictionless modality for absorbing and applying new concepts.",
+        "roadmap": "Serves as the starting point for development by leaning hard into existing neural pathways.",
+        "opportunities": "Identifies low-effort, high-reward side projects that match intrinsic operational modes.",
+        "podcasts": "Recommends domain-specific audio content matching their inclination (e.g., leadership vs. design).",
+        "books": "Points to foundational literature that deepens their existing core competency.",
+        "role_models": "Connects them with archetypal figures who excel in their naturally chosen domain.",
+        "motivation": "Frames task execution through the lens of psychological flow, ensuring sustainable engagement."
+      },
+      "suggested_improvements": "Could separate 'Organizing' and 'Leading' into two options to differentiate between pure trait conscientiousness and active extraversion."
+    },
+    {
+      "question_id": "1d9c02e2-a865-4294-99ed-e65893233849",
+      "question_text": "When given complete freedom to create something, what would you enjoy the most?",
+      "primary_trait": "creativity",
+      "secondary_traits": [
+        "openness",
+        "problem_solving",
+        "analytical_thinking"
+      ],
+      "options": [
+        {
+          "option_id": "800ad301-d796-4335-88c2-02aceb75deba",
+          "letter": "A",
+          "label": "Designing something unique",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Strong preference for divergent, aesthetic, and novel outputs over conventional utility."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Indicates a high drive for experiencing and producing original concepts."
+            }
+          ]
+        },
+        {
+          "option_id": "80b53797-89d8-485f-a17c-977092ad512a",
+          "letter": "B",
+          "label": "Writing or storytelling",
+          "mappings": [
+            {
+              "trait": "communication",
+              "weight": 3,
+              "reason": "Demonstrates a focus on linguistic expression, narrative construction, and meaning-making."
+            },
+            {
+              "trait": "empathy",
+              "weight": 1,
+              "reason": "Storytelling typically requires perspective-taking and understanding human emotion."
+            }
+          ]
+        },
+        {
+          "option_id": "3be1708f-2e26-46f4-8100-7ccbdf0204ab",
+          "letter": "C",
+          "label": "Building a practical solution",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Grounds creative energy in pragmatic, functional outcomes rather than purely artistic endeavors."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Requires structural logic to build something functionally viable."
+            }
+          ]
+        },
+        {
+          "option_id": "57a12971-4ea6-4d29-b981-f244768dc70e",
+          "letter": "D",
+          "label": "Creating digital content",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 2,
+              "reason": "Shows a propensity to leverage modern tools and mediums for expression."
+            },
+            {
+              "trait": "sociability",
+              "weight": 1,
+              "reason": "Digital content creation often implies a desire for audience engagement and sharing."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Expressive Style",
+        "Cognitive Flexibility"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Assesses facets of Openness to Experience, specifically distinguishing aesthetic interests from intellectual or practical curiosity."
+        },
+        {
+          "name": "VIA Strengths",
+          "relevance": "Maps to the character strength of Creativity and Ingenuity by examining the preferred mechanism of creation."
+        }
+      ],
+      "confidence_logic": "By stripping away constraints ('complete freedom'), this question isolates intrinsic preferences, providing high confidence for identifying the user's primary creative modality.",
+      "contributions": {
+        "personality": "Reveals the structural manifestation of the user's Openness to Experience.",
+        "swot": "Translates preferred creative mediums into specific market-ready opportunities.",
+        "4w1h": "Addresses 'How' the user prefers to manifest their ideas into the physical or digital world.",
+        "strengths": "Defines the specific flavor of ingenuity\u2014whether narrative, aesthetic, or functional.",
+        "weaknesses": "Highlights potential disinterest in opposing modalities (e.g., pure creators struggling with practical utility).",
+        "career": "Directs focus toward specific maker roles (UI/UX, engineering, copywriting, content strategy).",
+        "learning": "Suggests project-based learning outputs that keep the user highly engaged.",
+        "roadmap": "Integrates unstructured creative sandbox time into the broader personal development plan.",
+        "opportunities": "Identifies niche passion projects that can serve as portfolio pieces.",
+        "podcasts": "Recommends creator-focused discussions relevant to their medium.",
+        "books": "Points to literature on mastering specific crafts (e.g., 'On Writing' or 'The Design of Everyday Things').",
+        "role_models": "Highlights successful creators, inventors, or storytellers whose paths mirror the user's preference.",
+        "motivation": "Frames growth goals around the creation of tangible artifacts to foster sustained enthusiasm."
+      },
+      "suggested_improvements": "Option D implies a medium rather than an outcome; abstracting it to 'Developing interactive experiences' might level the playing field."
+    },
+    {
+      "question_id": "b7b90c81-159a-4851-99ba-fcd973b67cda",
+      "question_text": "During a team project, what role do you naturally take?",
+      "primary_trait": "teamwork",
+      "secondary_traits": [
+        "leadership",
+        "dependability",
+        "altruism"
+      ],
+      "options": [
+        {
+          "option_id": "e26632f1-6dbb-4290-b5a7-7dd282f41fdc",
+          "letter": "A",
+          "label": "Lead and guide the team",
+          "mappings": [
+            {
+              "trait": "leadership",
+              "weight": 3,
+              "reason": "Indicates comfort with assuming direct authority, setting vision, and driving group consensus."
+            },
+            {
+              "trait": "initiative",
+              "weight": 2,
+              "reason": "Requires stepping forward proactively into a position of responsibility."
+            }
+          ]
+        },
+        {
+          "option_id": "8ba3f116-6b16-42cc-9bed-f492f944a2c5",
+          "letter": "B",
+          "label": "Organize tasks and resources",
+          "mappings": [
+            {
+              "trait": "dependability",
+              "weight": 3,
+              "reason": "Focuses on the logistics, reliability, and structural execution of group objectives."
+            },
+            {
+              "trait": "time_management",
+              "weight": 2,
+              "reason": "Reflects a proactive approach to scheduling and resource allocation."
+            }
+          ]
+        },
+        {
+          "option_id": "0636feb9-b357-481d-8865-06e9aa6280cf",
+          "letter": "C",
+          "label": "Support others whenever needed",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Prioritizes team cohesion and the well-being of peers over personal spotlight."
+            },
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Displays strong collaborative instinct and willingness to adapt to the team's immediate needs."
+            },
+            {
+              "trait": "empathy",
+              "weight": 1,
+              "reason": "Implies an awareness of others' stress or workload levels."
+            }
+          ]
+        },
+        {
+          "option_id": "8b4dc120-3ec4-4a74-ba0c-6e2b849ade0a",
+          "letter": "D",
+          "label": "Contribute ideas and complete my work",
+          "mappings": [
+            {
+              "trait": "dependability",
+              "weight": 2,
+              "reason": "Shows a focus on individual accountability within a shared context."
+            },
+            {
+              "trait": "creativity",
+              "weight": 1,
+              "reason": "Mentions contributing ideas as a core part of their individual value add."
+            },
+            {
+              "trait": "leadership",
+              "weight": -1,
+              "reason": "Indicates a preference for staying within defined boundaries rather than managing group outcomes."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Interpersonal Dynamics",
+        "Execution Style"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Differentiates between Extraversion (leading), Conscientiousness (organizing/completing), and Agreeableness (supporting)."
+        },
+        {
+          "name": "Belbin Team Roles",
+          "relevance": "Directly identifies preferred functional roles in groups (Shaper vs Implementer vs Team Worker vs Plant)."
+        }
+      ],
+      "confidence_logic": "High confidence for identifying team dynamics; self-reported social roles usually align closely with observed behaviors in collaborative environments.",
+      "contributions": {
+        "personality": "Clarifies the user's social orientation and attitude toward authority and group structure.",
+        "swot": "Maps capabilities to coordinate (Strength) against potential discomfort with ambiguous group conflict (Weakness).",
+        "4w1h": "Explains 'Who' the user is within a social architecture.",
+        "strengths": "Defines their primary value-add in group settings, from operational backbone to emotional glue.",
+        "weaknesses": "Highlights over-reliance on preferred modes, like prioritizing harmony at the expense of necessary debate.",
+        "career": "Informs fitness for management, project management, individual contributor, or support roles.",
+        "learning": "Suggests group-based or autonomous study environments based on interpersonal preference.",
+        "roadmap": "Includes tactical steps for stretching into uncomfortable team roles for holistic leadership development.",
+        "opportunities": "Identifies cross-functional projects where their natural collaboration style is a bottleneck-breaker.",
+        "podcasts": "Recommends content on leadership dynamics, such as 'Coaching for Leaders' or 'WorkLife'.",
+        "books": "Points to frameworks like 'The Five Dysfunctions of a Team' or 'Radical Candor'.",
+        "role_models": "Connects them with iconic operators, visionary leaders, or famous wingmen/supporters.",
+        "motivation": "Frames team environments as either a primary driver or a secondary context for their goals."
+      },
+      "suggested_improvements": "Could add an option favoring 'challenging groupthink and playing devil's advocate' to capture more disagreeable but valuable team types."
+    },
+    {
+      "question_id": "ee4c1ccb-6e7d-421c-b627-5167e7608ae8",
+      "question_text": "When you notice a problem that others ignore, what do you usually do?",
+      "primary_trait": "initiative",
+      "secondary_traits": [
+        "problem_solving",
+        "leadership",
+        "communication"
+      ],
+      "options": [
+        {
+          "option_id": "e7423b67-2bda-4c12-8424-42108cafa66d",
+          "letter": "A",
+          "label": "Think of a new solution",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 2,
+              "reason": "Reacts to friction by generating novel, outside-the-box interventions."
+            },
+            {
+              "trait": "initiative",
+              "weight": 2,
+              "reason": "Takes proactive mental ownership of an orphaned problem."
+            }
+          ]
+        },
+        {
+          "option_id": "333aecd3-cb3d-4945-ba86-540ee53e6afc",
+          "letter": "B",
+          "label": "Improve an existing solution",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Demonstrates an optimization mindset, preferring iterative refinement over invention."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Relies on evaluating current systems to find efficiencies or correct flaws."
+            }
+          ]
+        },
+        {
+          "option_id": "038a35a9-99e6-4602-ba97-12fb7d09dcc8",
+          "letter": "C",
+          "label": "Discuss it with others",
+          "mappings": [
+            {
+              "trait": "communication",
+              "weight": 3,
+              "reason": "Initializes action through dialogue, seeking consensus or collaborative brainstorming."
+            },
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Views problem resolution as a shared, rather than isolated, responsibility."
+            }
+          ]
+        },
+        {
+          "option_id": "fd235897-b593-455c-a2b1-b201341e50e5",
+          "letter": "D",
+          "label": "Wait until someone takes action",
+          "mappings": [
+            {
+              "trait": "initiative",
+              "weight": -3,
+              "reason": "Displays diffusion of responsibility, actively deciding not to engage with an observed issue."
+            },
+            {
+              "trait": "leadership",
+              "weight": -2,
+              "reason": "Shows a reluctance to be the first mover in a stagnant environment."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Action Bias",
+        "Problem Resolution Strategy"
+      ],
+      "frameworks": [
+        {
+          "name": "Growth Mindset",
+          "relevance": "Differentiates between passive acceptance of the status quo (D) and proactive exertion to mold the environment (A/B)."
+        },
+        {
+          "name": "SDT",
+          "relevance": "Highlights locus of causality\u2014whether the person feels internally empowered to enact change or relies on external forces."
+        }
+      ],
+      "confidence_logic": "Measuring initial behavioral response to a bystander scenario provides a solid indicator of internal proactivity and locus of control.",
+      "contributions": {
+        "personality": "Maps the user's bias for action and willingness to disrupt the status quo.",
+        "swot": "Reveals a strategic 'Opportunity' detector vs. a passive threat-tolerator.",
+        "4w1h": "Defines 'When' the user intervenes in a failing process.",
+        "strengths": "Highlights capacity for independent thought, continuous improvement, or collaborative alignment.",
+        "weaknesses": "Flags passivity or bystander effect tendencies if action is continually deferred.",
+        "career": "Filters for entrepreneurial or continuous improvement roles (Lean/Six Sigma) versus standard operational compliance.",
+        "learning": "Suggests learning pathways focused on system optimization or persuasive communication.",
+        "roadmap": "Mandates goals targeting proactivity, moving from passive observation to active intervention.",
+        "opportunities": "Identifies untended organizational gaps as prime arenas for the user to step up.",
+        "podcasts": "Recommends content on systemic change, like 'Freakonomics' or 'Revisionist History'.",
+        "books": "Points to literature on extreme ownership or the innovator's dilemma.",
+        "role_models": "Profiles inventors and activists who refused to ignore dormant societal or technical issues.",
+        "motivation": "Activates drive by framing unaddressed problems as personal playgrounds for mastery and impact."
+      },
+      "suggested_improvements": "Could increase the stakes by specifying a 'frustrating problem' to better trigger latent initiative versus avoidance."
+    },
+    {
+      "question_id": "726139aa-6dff-440d-b65d-4eab6c552d2b",
+      "question_text": "If you face a completely unfamiliar problem, your first instinct is to\u2026",
+      "primary_trait": "learning_agility",
+      "secondary_traits": [
+        "analytical_thinking",
+        "risk_taking",
+        "curiosity"
+      ],
+      "options": [
+        {
+          "option_id": "ba8d176a-3107-408b-bdac-c70f2b631021",
+          "letter": "A",
+          "label": "Analyze the problem carefully",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Defaults to cognitive deconstruction and logical assessment before taking any action."
+            },
+            {
+              "trait": "critical_thinking",
+              "weight": 2,
+              "reason": "Implies a deliberate suspension of judgment to assess facts and variables."
+            }
+          ]
+        },
+        {
+          "option_id": "61b2a98e-0404-44ce-899f-4d043f19829e",
+          "letter": "B",
+          "label": "Experiment with different solutions",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": 2,
+              "reason": "Shows comfort with trial-and-error, accepting a high likelihood of initial failure."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 3,
+              "reason": "Indicates active, experiential learning via immediate interaction with the problem."
+            }
+          ]
+        },
+        {
+          "option_id": "da630cfa-7eb8-4077-8a99-3ef4782468cf",
+          "letter": "C",
+          "label": "Ask someone experienced",
+          "mappings": [
+            {
+              "trait": "sociability",
+              "weight": 2,
+              "reason": "Uses social networks as a primary tool for troubleshooting."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 1,
+              "reason": "Demonstrates self-awareness regarding one's own limitations in knowledge."
+            }
+          ]
+        },
+        {
+          "option_id": "04ea1ce5-0489-4a05-b029-c5a87a8b6b6d",
+          "letter": "D",
+          "label": "Research and learn before acting",
+          "mappings": [
+            {
+              "trait": "curiosity",
+              "weight": 3,
+              "reason": "Drives immediate information-seeking behavior to close knowledge gaps."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 2,
+              "reason": "Defaults to academic or structured assimilation of new domains."
+            },
+            {
+              "trait": "risk_taking",
+              "weight": -1,
+              "reason": "Displays risk aversion by ensuring theoretical safety before practical execution."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Epistemic Foraging",
+        "Response to Ambiguity"
+      ],
+      "frameworks": [
+        {
+          "name": "Bloom's taxonomy",
+          "relevance": "Maps to different levels of cognitive processing: Analyzing (A), Applying/Experimenting (B), and Remembering/Understanding via research (D)."
+        },
+        {
+          "name": "Growth Mindset",
+          "relevance": "Tests how the individual approaches the edge of their competence (seeking data vs acting vs asking)."
+        }
+      ],
+      "confidence_logic": "Multiple options map to different facets of learning and cognition, offering high precision in identifying the user's personal epistemology under ambiguity.",
+      "contributions": {
+        "personality": "Reflects the individual's psychological tolerance for the unknown and their preferred epistemic strategy.",
+        "swot": "Exposes strengths in rapid prototyping vs. deep analytical rigor, and threats involving analysis paralysis.",
+        "4w1h": "Describes 'How' the user navigates uncharted territory.",
+        "strengths": "Highlights core investigative traits\u2014be it empirical testing, deep research, or resourcefulness.",
+        "weaknesses": "Identifies delays in action due to over-researching or recklessness due to under-analyzing.",
+        "career": "Aligns with R&D, academia, fast-paced startups, or consultative roles based on the approach to the unknown.",
+        "learning": "Dictates exactly how new training material should be introduced (e.g., sandbox environment vs detailed manuals).",
+        "roadmap": "Builds milestones that train the underdeveloped epistemic muscles (e.g., forcing a researcher to run a live test).",
+        "opportunities": "Points toward complex, undefined industry problems as fertile ground for their specific approach.",
+        "podcasts": "Recommends problem-solving narratives, such as 'Planet Money' or deep-dive technical shows.",
+        "books": "Suggests epistemological frameworks like 'Superforecasting' or 'Range'.",
+        "role_models": "Highlights polymaths and autodidacts who mastered the art of rapid skill acquisition.",
+        "motivation": "Ties the thrill of the unknown to their favored method of sense-making, reducing anxiety and boosting flow."
+      },
+      "suggested_improvements": "Ensure 'analyze' and 'research' are clearly distinct; one implies logic on existing variables, the other seeking new data. The current phrasing does this well."
+    },
+    {
+      "question_id": "e9dfbaab-f40e-487b-a4b4-0660eb5a431a",
+      "question_text": "If your original plan suddenly fails, what do you do?",
+      "primary_trait": "adaptability",
+      "secondary_traits": [
+        "resilience",
+        "problem_solving",
+        "reflectiveness"
+      ],
+      "options": [
+        {
+          "option_id": "c79a1366-6dfe-49b6-b4c4-6ede84e03c44",
+          "letter": "A",
+          "label": "Quickly create another plan",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 3,
+              "reason": "Shows high fluid intelligence and the ability to rapidly pivot cognitive resources to a new structure."
+            },
+            {
+              "trait": "resilience",
+              "weight": 2,
+              "reason": "Bounces back immediately without prolonged dwelling on the failure."
+            }
+          ]
+        },
+        {
+          "option_id": "a0159b82-883c-4ef5-a76b-f2afeb5dcb75",
+          "letter": "B",
+          "label": "Change my approach and continue",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 2,
+              "reason": "Alters tactical execution while maintaining the original strategic objective."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 2,
+              "reason": "Demonstrates determination to reach the end state regardless of the blocked path."
+            }
+          ]
+        },
+        {
+          "option_id": "d6ada198-bbbc-470d-b4f0-8f6f2daa95b2",
+          "letter": "C",
+          "label": "Wait until I understand the situation",
+          "mappings": [
+            {
+              "trait": "reflectiveness",
+              "weight": 3,
+              "reason": "Prioritizes sense-making and post-mortem analysis over immediate, potentially erratic action."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Requires deconstructing the failure points before committing further resources."
+            },
+            {
+              "trait": "adaptability",
+              "weight": -1,
+              "reason": "Slight rigidity by hitting pause rather than dynamically adjusting on the fly."
+            }
+          ]
+        },
+        {
+          "option_id": "95688311-29a9-4f32-9d42-2703f653d54e",
+          "letter": "D",
+          "label": "Seek advice before moving forward",
+          "mappings": [
+            {
+              "trait": "communication",
+              "weight": 1,
+              "reason": "Uses external verbalization to process failure and chart a new course."
+            },
+            {
+              "trait": "confidence",
+              "weight": -1,
+              "reason": "May indicate a lack of self-trust in autonomous recovery following a misstep."
+            },
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Views recovery as a collaborative effort rather than a solo burden."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Stress Tolerance",
+        "Cognitive Rigidity vs Flexibility"
+      ],
+      "frameworks": [
+        {
+          "name": "Growth Mindset",
+          "relevance": "Directly evaluates response to failure\u2014whether it acts as a catalyst for new strategy or triggers hesitation."
+        },
+        {
+          "name": "Big Five",
+          "relevance": "Touches on Neuroticism (stress response) and Conscientiousness (reliance on plans)."
+        }
+      ],
+      "confidence_logic": "Robust indicators for resilience and adaptability, relying on a classic psychological scenario (plan failure) to trigger trait-specific coping mechanisms.",
+      "contributions": {
+        "personality": "Illuminates emotional regulation and cognitive elasticity under sudden stress.",
+        "swot": "Reveals dynamic agility (Strength) vs. susceptibility to cognitive freezing/shock (Weakness).",
+        "4w1h": "Answers 'How' the user manages operational disruption.",
+        "strengths": "Spotlights the ability to sustain momentum or conduct deep diagnostics when facing adversity.",
+        "weaknesses": "Flags potential impulsive pivoting without learning, or conversely, paralysis by analysis.",
+        "career": "Indicates suitability for high-volatility environments (crisis management, startups) vs stable operations.",
+        "learning": "Encourages incorporating failure-driven case studies into their learning architecture.",
+        "roadmap": "Sets objectives for balancing rapid execution with necessary reflection after setbacks.",
+        "opportunities": "Positions turn-around or distressed projects as ideal proving grounds for their resilience.",
+        "podcasts": "Recommends stories of perseverance and pivoting, like 'Masters of Scale'.",
+        "books": "Points to resilience literature such as 'Antifragile' or 'The Obstacle Is the Way'.",
+        "role_models": "Highlights leaders who successfully navigated massive public failures or corporate pivots.",
+        "motivation": "Reframes failure from a motivational drain into a predefined trigger for strategic reinvention."
+      },
+      "suggested_improvements": "Could increase nuance by differentiating between a micro-failure (tactical) and a macro-failure (strategic) in future iterations."
+    },
+    {
+      "question_id": "dd98230d-e8a4-4cca-ab16-eab68bf5dbc4",
+      "question_text": "Which skill would create the biggest positive change in your future?",
+      "primary_trait": "goal_orientation",
+      "secondary_traits": [
+        "self_awareness",
+        "achievement_drive"
+      ],
+      "options": [
+        {
+          "option_id": "12829a87-aa1b-4155-97fd-75a4d79f3ee2",
+          "letter": "A",
+          "label": "Communication",
+          "mappings": [
+            {
+              "trait": "communication",
+              "weight": 2,
+              "reason": "Recognizes that interpersonal articulation is currently a limiting factor or a high-leverage multiplier."
+            },
+            {
+              "trait": "sociability",
+              "weight": 1,
+              "reason": "Values social fluidity and connection as a pathway to success."
+            }
+          ]
+        },
+        {
+          "option_id": "0039ae33-aab3-4fa0-ad7c-97b1d35ab112",
+          "letter": "B",
+          "label": "Technical or professional skills",
+          "mappings": [
+            {
+              "trait": "learning_agility",
+              "weight": 2,
+              "reason": "Identifies hard capability and domain mastery as the primary driver of forward progress."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 2,
+              "reason": "Demonstrates a pragmatic focus on acquiring functional tools to achieve specific endpoints."
+            }
+          ]
+        },
+        {
+          "option_id": "1ac8d1cd-acac-490d-b910-4b52f4e93e89",
+          "letter": "C",
+          "label": "Leadership",
+          "mappings": [
+            {
+              "trait": "leadership",
+              "weight": 2,
+              "reason": "Aspires to manage, guide, or multiply impact through others rather than remaining an individual contributor."
+            },
+            {
+              "trait": "achievement_drive",
+              "weight": 2,
+              "reason": "Shows ambition to scale influence and command outcomes at a higher organizational level."
+            }
+          ]
+        },
+        {
+          "option_id": "9b1cc8e5-5610-4205-ac79-60672a0c8faf",
+          "letter": "D",
+          "label": "Critical thinking",
+          "mappings": [
+            {
+              "trait": "critical_thinking",
+              "weight": 3,
+              "reason": "Values cognitive clarity, decision quality, and the ability to parse complex realities above all else."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Acknowledges that structural reasoning is the bedrock of future advancements."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Self-Actualization Targets",
+        "Perceived Deficits"
+      ],
+      "frameworks": [
+        {
+          "name": "SWOT",
+          "relevance": "Directly asks the user to identify their highest-leverage Opportunity, often based on a perceived inner Weakness."
+        },
+        {
+          "name": "Ikigai",
+          "relevance": "Touches upon 'What the world needs' and 'What you can be paid for' by isolating high-value future skills."
+        }
+      ],
+      "confidence_logic": "Since this is aspirational rather than descriptive of past behavior, it perfectly captures the directionality of the user's growth mindset, offering solid signals for meta-traits.",
+      "contributions": {
+        "personality": "Indicates the overarching self-concept regarding what missing piece will unlock their potential.",
+        "swot": "Explicitly names the core strategic Opportunity the user wishes to capitalize on.",
+        "4w1h": "Answers 'What' macro meta-skill is prioritized for their next chapter.",
+        "strengths": "Validates their self-awareness regarding the gap between their current reality and their ceiling.",
+        "weaknesses": "Implies a current deficit in the chosen area that is throttling their progress.",
+        "career": "Informs whether they are targeting management tracks (Leadership/Comm) or deepening specialization (Technical/Critical).",
+        "learning": "Sets the absolute thematic priority for customized curriculum and upskilling efforts.",
+        "roadmap": "Provides the 'North Star' competency around which 12-to-18-month objectives are organized.",
+        "opportunities": "Highlights high-ROI training paradigms (bootcamps, toastmasters, etc.) that will yield outsized returns.",
+        "podcasts": "Recommends highly tactical shows related directly to the chosen meta-skill.",
+        "books": "Points to foundational primers like 'Crucial Conversations' for A, or 'Thinking in Systems' for D.",
+        "role_models": "Connects them to figures who mastered that specific capability to transcend their peers.",
+        "motivation": "Harnesses their self-diagnosed gap as the primary fuel for engaging in uncomfortable learning zones."
+      },
+      "suggested_improvements": "Could phrase as a trade-off ('If you could only upgrade one...') to force a harder prioritization."
+    },
+    {
+      "question_id": "14c5918e-19ce-4100-b565-e569a983ddb9",
+      "question_text": "When do you perform at your absolute best?",
+      "primary_trait": "intrinsic_motivation",
+      "secondary_traits": [
+        "resilience",
+        "teamwork",
+        "discipline"
+      ],
+      "options": [
+        {
+          "option_id": "a363688f-6ab4-4b87-93c8-0374ea3e4b0a",
+          "letter": "A",
+          "label": "Under challenging situations",
+          "mappings": [
+            {
+              "trait": "resilience",
+              "weight": 3,
+              "reason": "Demonstrates eustress\u2014the ability to convert high pressure into elevated cognitive and physical performance."
+            },
+            {
+              "trait": "achievement_drive",
+              "weight": 2,
+              "reason": "Thrives when the stakes are meaningful and the difficulty demands excellence."
+            }
+          ]
+        },
+        {
+          "option_id": "1fd98771-725a-4612-9c99-6ad063331b36",
+          "letter": "B",
+          "label": "When working independently",
+          "mappings": [
+            {
+              "trait": "discipline",
+              "weight": 2,
+              "reason": "Relies on internal locus of control and structure rather than external social pacing."
+            },
+            {
+              "trait": "teamwork",
+              "weight": -2,
+              "reason": "Suggests that social friction or group compromise detracts from their peak output."
+            }
+          ]
+        },
+        {
+          "option_id": "1d01ab66-e88c-4335-9cf1-1d31f326add5",
+          "letter": "C",
+          "label": "When collaborating with others",
+          "mappings": [
+            {
+              "trait": "teamwork",
+              "weight": 3,
+              "reason": "Requires the synergy, accountability, and energy of a group to reach flow states."
+            },
+            {
+              "trait": "sociability",
+              "weight": 2,
+              "reason": "Draws psychological stamina from interpersonal exchanges and co-creation."
+            }
+          ]
+        },
+        {
+          "option_id": "aca40c1a-046b-4ca1-a8e6-0dfa80c9497a",
+          "letter": "D",
+          "label": "When I'm genuinely interested in the task",
+          "mappings": [
+            {
+              "trait": "intrinsic_motivation",
+              "weight": 3,
+              "reason": "Performance is entirely contingent on internal alignment, passion, and personal valuation of the work."
+            },
+            {
+              "trait": "authenticity",
+              "weight": 1,
+              "reason": "Struggles to perform when actions are divorced from core values or authentic interests."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Optimal Performance Conditions",
+        "Environmental Catalysts"
+      ],
+      "frameworks": [
+        {
+          "name": "SDT",
+          "relevance": "Highlights the distinction between autonomous/intrinsic drive (D), relational drivers (C), and competence markers under pressure (A)."
+        },
+        {
+          "name": "Big Five",
+          "relevance": "Maps to Extraversion (C vs B) and Neuroticism (A - demonstrating low susceptibility to stress)."
+        }
+      ],
+      "confidence_logic": "Strong signal for environmental and motivational design; knowing when a user peaks heavily informs their operational roadmap.",
+      "contributions": {
+        "personality": "Defines the neurochemical triggers (adrenaline from challenge vs dopamine from interest) that induce their peak state.",
+        "swot": "Highlights optimal operating environments (Strengths) and reveals vulnerabilities to boredom or micromanagement (Threats).",
+        "4w1h": "Answers 'Where' and 'When' the user should be deployed for maximum return on effort.",
+        "strengths": "Codifies the context in which their baseline skills jump to an elite level.",
+        "weaknesses": "Flags a steep drop-off in performance when conditions fall outside this narrow optimal band.",
+        "career": "Informs culture fit: fast-paced crisis roles, isolated deep-work roles, heavily matrixed teams, or passion-driven non-profits.",
+        "learning": "Dictates course delivery preferences, from solitary self-paced study to high-pressure cohorts.",
+        "roadmap": "Focuses on explicitly designing their daily environment to trigger these specific flow states.",
+        "opportunities": "Identifies the types of projects they should aggressively volunteer for to stand out.",
+        "podcasts": "Recommends performance psychology insights like the 'Huberman Lab' or 'Flow Research Collective'.",
+        "books": "Points to 'Flow' by Mihaly Csikszentmihalyi or 'Drive' by Daniel Pink.",
+        "role_models": "Highlights athletes, artists, or executives who engineer their environments for identical triggers.",
+        "motivation": "Provides the blueprint for self-hack motivation: artificially creating constraints, meaning, or social pressure."
+      },
+      "suggested_improvements": "Could add a parameter about 'When under a strict deadline' to catch pure Conscientiousness/urgency-driven performers."
+    },
+    {
+      "question_id": "3a41b04c-87f9-49ce-9d7c-0867bbedc336",
+      "question_text": "What do people usually appreciate most about you?",
+      "primary_trait": "self_awareness",
+      "secondary_traits": [
+        "discipline",
+        "creativity",
+        "altruism",
+        "problem_solving"
+      ],
+      "options": [
+        {
+          "option_id": "5d866348-4fc7-4a4f-afa5-fb0e7a5640bf",
+          "letter": "A",
+          "label": "My discipline",
+          "mappings": [
+            {
+              "trait": "discipline",
+              "weight": 3,
+              "reason": "Reflects a highly regimented, dependable nature that others rely upon for consistency."
+            },
+            {
+              "trait": "dependability",
+              "weight": 2,
+              "reason": "Produces output that is trusted by the social or professional group without extensive oversight."
+            }
+          ]
+        },
+        {
+          "option_id": "1f64df90-2e99-47a3-b73a-cb8919da4c85",
+          "letter": "B",
+          "label": "My creativity",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Recognized externally for injecting novelty, aesthetics, or lateral thinking into the environment."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Perceived positively by peers for embracing non-traditional ideas."
+            }
+          ]
+        },
+        {
+          "option_id": "942b0fe7-ba81-4a0f-ab80-0e88e68bbe51",
+          "letter": "C",
+          "label": "My ability to solve problems",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Valued specifically for utility, critical intervention, and unblocking bottlenecks."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Assumes an external reputation for clear, rational deduction in the face of issues."
+            }
+          ]
+        },
+        {
+          "option_id": "8a40904a-7986-4b96-81bc-8d189d82447c",
+          "letter": "D",
+          "label": "My kindness and teamwork",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Apreciated primarily for emotional support, prosocial behavior, and fostering harmonious environments."
+            },
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Highlights a cohesive integration within group dynamics, elevating others' experiences."
+            },
+            {
+              "trait": "agreeableness",
+              "weight": 2,
+              "reason": "Directly maps to the perception of being warm, trusting, and helpful."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "External Reputation",
+        "Core Value Proposition"
+      ],
+      "frameworks": [
+        {
+          "name": "VIA Strengths",
+          "relevance": "Maps perfectly to the assessment of signature strengths (Self-Regulation, Creativity, Judgment, Kindness)."
+        },
+        {
+          "name": "Big Five",
+          "relevance": "Touches Conscientiousness (A), Openness (B), and Agreeableness (D) via a mirrored self-assessment."
+        }
+      ],
+      "confidence_logic": "Though subject to self-report bias, identifying the trait *others* appreciate forces the user to view themselves from a third-party perspective, heavily boosting insight into their social value add.",
+      "contributions": {
+        "personality": "Captures the intersection of their internal self-concept and external social reinforcement.",
+        "swot": "Defines their absolute anchor Strength\u2014the trait that already has established market value in their network.",
+        "4w1h": "Answers 'Who' the user is in the eyes of their community or organization.",
+        "strengths": "Solidifies their recognized superpower, whether it is functional execution, cognitive flexibility, or social glue.",
+        "weaknesses": "May indicate over-indexing on one trait to the detriment of others (e.g., being so kind that they struggle to enforce discipline).",
+        "career": "Clarifies the personal brand they should leverage in interviews, pitching, and team formation.",
+        "learning": "Encourages exploiting this recognized strength to master new, unrelated domains.",
+        "roadmap": "Suggests doubling down on this trait to move from 'good' to 'world-class' in their niche.",
+        "opportunities": "Identifies immediate networking or mentorship opportunities by leaning into what people already respect them for.",
+        "podcasts": "Recommends deep dives into their specific archetype, enhancing their dominant trait.",
+        "books": "Points to frameworks that optimize their recognized strength without letting it become a crutch.",
+        "role_models": "Highlights historical figures remembered precisely for this same dominant characteristic.",
+        "motivation": "Uses external validation as a loop to reinforce positive self-identity and fuel further effort."
+      },
+      "suggested_improvements": "Could add 'My adaptability' to cover those appreciated for their fluid response to chaos rather than strict problem-solving."
+    },
+    {
+      "question_id": "55ce4799-4c53-4223-83da-ed89d0a4b4ad",
+      "question_text": "If you continue improving yourself consistently for the next five years, where do you believe you'll be?",
+      "primary_trait": "achievement_drive",
+      "secondary_traits": [
+        "goal_orientation",
+        "leadership",
+        "risk_taking",
+        "altruism"
+      ],
+      "options": [
+        {
+          "option_id": "050e8d3a-a5a5-4960-a61e-e83bf4a8a882",
+          "letter": "A",
+          "label": "Leading meaningful projects or teams",
+          "mappings": [
+            {
+              "trait": "leadership",
+              "weight": 3,
+              "reason": "Projects growth directly into a paradigm of authority, influence, and group direction."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 2,
+              "reason": "Aims toward taking on greater scope and responsibility within a structured environment."
+            }
+          ]
+        },
+        {
+          "option_id": "30f76a4e-baab-42ca-a83b-58c4aaf09a2b",
+          "letter": "B",
+          "label": "Excelling in my chosen career",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Focuses on mastery, prestige, and vertical ascent within an established hierarchy or field."
+            },
+            {
+              "trait": "discipline",
+              "weight": 2,
+              "reason": "Understand that 'excelling' requires compounding interest via sustained personal industry."
+            }
+          ]
+        },
+        {
+          "option_id": "c52e23c4-87ea-4d84-bbe0-76dc32cc0531",
+          "letter": "C",
+          "label": "Starting my own venture or initiative",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": 3,
+              "reason": "Projects an entrepreneurial trajectory that inherently involves assuming high stakes and ambiguity."
+            },
+            {
+              "trait": "initiative",
+              "weight": 3,
+              "reason": "Desires total ownership from 0 to 1, completely circumventing existing structures."
+            }
+          ]
+        },
+        {
+          "option_id": "ac572a70-73e3-4f9e-91dd-0b10fe6d7cf9",
+          "letter": "D",
+          "label": "Making a positive impact on society",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Defines ultimate success by the breadth and depth of utility provided to the broader community."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Maintains a macroscopic view of societal pain points and desires to heal them."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Long-Term Vision",
+        "Motivational Locus"
+      ],
+      "frameworks": [
+        {
+          "name": "Ikigai",
+          "relevance": "Touches the 'What the world needs' (D) versus 'What you can be paid for/are good at' (B) spheres."
+        },
+        {
+          "name": "SDT",
+          "relevance": "Reflects basic psychological needs orientation: power/autonomy (C), competence (B), relatedness/impact (D)."
+        }
+      ],
+      "confidence_logic": "Vision-casting statements are highly predictive of latent drives; this provides a robust capstone measure of what 'potential unlocked' actually means to the individual.",
+      "contributions": {
+        "personality": "Unveils the apex ambition shaping their subconscious and conscious choices.",
+        "swot": "Aligns all current Strengths and Weaknesses against a definitive, targeted 'Opportunity' horizon.",
+        "4w1h": "Projects the 'Why' behind all of the user's daily grind and skill acquisition.",
+        "strengths": "Highlights vision, long-term planning, and intrinsic ideological alignment.",
+        "weaknesses": "May reveal a lack of specificity if the vision feels overly generic compared to their actual skills.",
+        "career": "Delineates pathways between corporate tracks, entrepreneurial jumps, management, or the nonprofit sector.",
+        "learning": "Frames all educational pursuits as stepping stones to this specific capstone outcome.",
+        "roadmap": "Reverse-engineers the 5-year goal into 1-year, 90-day, and immediate actionable milestones.",
+        "opportunities": "Identifies macro shifts in the market that the user can ride toward their ultimate vision.",
+        "podcasts": "Recommends visionary or industry-specific deep dives that align with their endgame.",
+        "books": "Points to seminal works on scaling businesses, building careers, or effecting social change.",
+        "role_models": "Connects them with legacy figures who achieved the precise end-state they desire.",
+        "motivation": "Acts as the ultimate anchor; connecting today's mundane tasks to this glowing 5-year outcome sustains elite drive."
+      },
+      "suggested_improvements": "Could add an option for 'achieving deep personal peace/balance' for highly competent individuals who reject hustle culture."
+    }
+  ]
+}

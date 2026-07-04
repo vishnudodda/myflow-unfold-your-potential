@@ -1,0 +1,1136 @@
+{
+  "new_traits": [
+    {
+      "slug": "introversion",
+      "name": "Introversion",
+      "description": "Tendency to derive energy from within and prefer solitary or low-stimulation environments."
+    },
+    {
+      "slug": "vulnerability",
+      "name": "Vulnerability",
+      "description": "Willingness to expose one's authentic feelings, struggles, and uncertainties to others."
+    },
+    {
+      "slug": "perfectionism",
+      "name": "Perfectionism",
+      "description": "Rejection of mistakes and a desire for flawless outcomes, often hindering timely action."
+    },
+    {
+      "slug": "need_for_approval",
+      "name": "Need for Approval",
+      "description": "Desire for external validation and recognition to feel secure in one's actions or identity."
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "f160d860-7d7b-4239-b70a-9fc7b81f1085",
+      "question_text": "What talent do people appreciate in you the most?",
+      "primary_trait": "self_awareness",
+      "secondary_traits": [
+        "problem_solving",
+        "altruism",
+        "leadership"
+      ],
+      "options": [
+        {
+          "option_id": "8cdbf3d5-785f-4daa-99e6-50b33f1a9408",
+          "letter": "A",
+          "label": "Solving problems",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Indicates a self-concept heavily rooted in analytical resolution and utility to others."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Demonstrates confidence in breaking down complex issues effectively."
+            }
+          ]
+        },
+        {
+          "option_id": "0ef216e4-cb80-4b41-921b-59ca2a04d95b",
+          "letter": "B",
+          "label": "Helping others",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Reveals a primary identity based on serving and lifting the collective."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Highlights an emotional capability to connect with and support those in need."
+            }
+          ]
+        },
+        {
+          "option_id": "98eebdff-b199-4fc2-8525-015c0c9bf65f",
+          "letter": "C",
+          "label": "Creativity",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Shows a core belief in one's ability to generate novel ideas and distinct perspectives."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Signifies a leaning toward abstract thinking and diverse experiences."
+            }
+          ]
+        },
+        {
+          "option_id": "842ce104-2a94-4b9e-9262-b286d9a2bc66",
+          "letter": "D",
+          "label": "Leadership",
+          "mappings": [
+            {
+              "trait": "leadership",
+              "weight": 3,
+              "reason": "Points to strong comfort in guiding groups and taking accountability."
+            },
+            {
+              "trait": "confidence",
+              "weight": 2,
+              "reason": "Demonstrates self-assurance in managing interpersonal power dynamics."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Interpersonal Value Proposition",
+        "Self-Concept"
+      ],
+      "frameworks": [
+        {
+          "name": "VIA Strengths",
+          "relevance": "Maps directly to core character strengths applied in community contexts."
+        },
+        {
+          "name": "SWOT",
+          "relevance": "Identifies the central 'Strength' the individual leans on."
+        }
+      ],
+      "confidence_logic": "Confidence is high because selecting a 'most appreciated' talent requires definitive self-reporting of perceived external feedback.",
+      "contributions": {
+        "personality": "Identifies the facet of personality the user considers their primary social currency.",
+        "swot": "Establishes a core personal strength easily monetizable or actionable.",
+        "4w1h": "Answers 'What' main value the individual brings to any team or relationship.",
+        "strengths": "Highlights a self-affirmed core capability ready for immediate deployment.",
+        "weaknesses": "May reveal blind spots if the individual over-relies on this single mode of operation.",
+        "career": "Steers the user toward specific role types (analytical, caring, creative, management).",
+        "learning": "Suggests the best lens through which to introduce new, challenging subjects.",
+        "roadmap": "Forms the basis for personal branding and core competency development.",
+        "opportunities": "Flags chances to mentor others or take lead roles based on this specific strength.",
+        "podcasts": "Recommends niche content directly relevant to enhancing this established talent.",
+        "books": "Points to deep-dive literature exploring the mechanics of their core competency.",
+        "role_models": "Connects the user to notable figures who built legacies on this same primary trait.",
+        "motivation": "Shows that internal drive is fueled by the successful execution of this core talent."
+      },
+      "suggested_improvements": "Could add a follow-up asking for a specific recent example to validate self-perception versus actual behavior."
+    },
+    {
+      "question_id": "55013416-b283-4b72-9db3-71b6cae2194a",
+      "question_text": "What are you secretly waiting for people to notice about you?",
+      "primary_trait": "vulnerability",
+      "secondary_traits": [
+        "need_for_approval",
+        "reflectiveness",
+        "achievement_drive"
+      ],
+      "options": [
+        {
+          "option_id": "e42a0729-967e-45b8-bef6-8c1d40b89b3f",
+          "letter": "A",
+          "label": "That I'm trying my best",
+          "mappings": [
+            {
+              "trait": "dependability",
+              "weight": 2,
+              "reason": "Indicates a strong effort-based work ethic seeking external validation."
+            },
+            {
+              "trait": "need_for_approval",
+              "weight": 2,
+              "reason": "Reveals reliance on external recognition to validate personal effort."
+            }
+          ]
+        },
+        {
+          "option_id": "0ba21f7b-a210-432f-965d-57ed5d94ff98",
+          "letter": "B",
+          "label": "That I've changed",
+          "mappings": [
+            {
+              "trait": "growth_mindset",
+              "weight": 2,
+              "reason": "Highlights internal focus on personal evolution and overcoming past limitations."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 2,
+              "reason": "Demonstrates introspection regarding personal timeline and behavioral shifts."
+            }
+          ]
+        },
+        {
+          "option_id": "44d10743-23f5-45b7-a746-6fb80114976d",
+          "letter": "C",
+          "label": "That I'm struggling silently",
+          "mappings": [
+            {
+              "trait": "vulnerability",
+              "weight": -2,
+              "reason": "Shows a desire for empathy while simultaneously withholding authentic communication of pain."
+            },
+            {
+              "trait": "resilience",
+              "weight": 1,
+              "reason": "Indicates ongoing endurance of hardship despite a lack of support."
+            }
+          ]
+        },
+        {
+          "option_id": "208c0e78-23db-4124-88a5-6c44f74ba8a6",
+          "letter": "D",
+          "label": "That I'm capable of much more",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Signifies high internal ambition that currently feels underutilized or unrecognized."
+            },
+            {
+              "trait": "confidence",
+              "weight": 1,
+              "reason": "Reveals an inner belief in untapped potential."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Internal Motivation",
+        "Self-Disclosure Dynamics"
+      ],
+      "frameworks": [
+        {
+          "name": "SDT",
+          "relevance": "Connects to the need for Competence and Relatedness through external mirroring."
+        },
+        {
+          "name": "Johari Window",
+          "relevance": "Explores the 'Hidden Area' that the user wants to transition into the 'Open Area'."
+        }
+      ],
+      "confidence_logic": "This question yields high confidence on emotional drivers because asking for 'secretly waiting' forces a bypass of standard socially acceptable responses.",
+      "contributions": {
+        "personality": "Highlights how the user bridges internal reality with external personas.",
+        "swot": "Exposes an underlying emotional vulnerability or unexpressed strength.",
+        "4w1h": "Answers 'Why' the individual might feel currently unfulfilled or frustrated.",
+        "strengths": "Identifies hidden reservoirs of grit, growth, or untapped capability.",
+        "weaknesses": "Reveals communication blockers where the user expects others to read their mind.",
+        "career": "Indicates whether the user needs a more supportive, challenging, or recognizing environment.",
+        "learning": "Suggests training in assertiveness and proactive communication of needs.",
+        "roadmap": "Highlights the exact emotional gap that the next 6 months of coaching should address.",
+        "opportunities": "Creates an immediate opening for mentors to acknowledge these hidden traits.",
+        "podcasts": "Recommends content on self-advocacy and emotional transparency.",
+        "books": "Points to memoirs or psychology books dealing with unseen struggles and ambition.",
+        "role_models": "Connects to icons who struggled with being misunderstood before breaking out.",
+        "motivation": "Reveals the precise kind of feedback that will instantly deeply engage the user."
+      },
+      "suggested_improvements": "Consider an option capturing a desire to be seen for one's unique quirks/authenticity."
+    },
+    {
+      "question_id": "cac99880-a5de-472a-ba17-6cc5f1449669",
+      "question_text": "Which emotion do you usually hide from others?",
+      "primary_trait": "emotional_intelligence",
+      "secondary_traits": [
+        "vulnerability",
+        "agreeableness",
+        "risk_taking"
+      ],
+      "options": [
+        {
+          "option_id": "abfda073-d6d1-4621-ac45-c019bdd76fcf",
+          "letter": "A",
+          "label": "Fear",
+          "mappings": [
+            {
+              "trait": "vulnerability",
+              "weight": -2,
+              "reason": "Hiding fear suggests a strong need to project invulnerability and control."
+            },
+            {
+              "trait": "risk_taking",
+              "weight": -1,
+              "reason": "Points to an underlying aversion to uncertainty that is being masked."
+            }
+          ]
+        },
+        {
+          "option_id": "cf894480-a798-42de-a80a-f859fe34a98e",
+          "letter": "B",
+          "label": "Sadness",
+          "mappings": [
+            {
+              "trait": "vulnerability",
+              "weight": -2,
+              "reason": "Indicates shielding one's depressive or lower-energy states to maintain social standing."
+            },
+            {
+              "trait": "emotional_intelligence",
+              "weight": -1,
+              "reason": "Suggests difficulty in co-regulating sadness with safe individuals."
+            }
+          ]
+        },
+        {
+          "option_id": "889c704a-9afe-406c-9991-b5bb7e501444",
+          "letter": "C",
+          "label": "Anger",
+          "mappings": [
+            {
+              "trait": "agreeableness",
+              "weight": 2,
+              "reason": "Suggests prioritizing group harmony over personal boundary assertion."
+            },
+            {
+              "trait": "communication",
+              "weight": -1,
+              "reason": "Reveals a reluctance to engage in necessary confrontational dialogue."
+            }
+          ]
+        },
+        {
+          "option_id": "93ab5ce8-95b0-4cf3-8215-63f285450be3",
+          "letter": "D",
+          "label": "Disappointment",
+          "mappings": [
+            {
+              "trait": "agreeableness",
+              "weight": 1,
+              "reason": "Shows a desire to avoid making others feel guilty or inadequate."
+            },
+            {
+              "trait": "authenticity",
+              "weight": -2,
+              "reason": "Highlights a gap between true internal expectations and external feedback provided."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Emotional Regulation",
+        "Shadow Self"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Relates strongly to Neuroticism and Agreeableness facets."
+        },
+        {
+          "name": "EI Framework",
+          "relevance": "Assesses emotional expression and suppression mechanisms."
+        }
+      ],
+      "confidence_logic": "Confidence in internal baseline formulation increases because identifying suppressed emotions cleanly maps to specific communication bottlenecks.",
+      "contributions": {
+        "personality": "Exposes the user's primary defense mechanism in interpersonal relationships.",
+        "swot": "Reveals a behavioral threat derived from suppressed emotional buildup.",
+        "4w1h": "Answers 'What' internal state requires careful management in high-stress times.",
+        "strengths": "Can reflect strong self-containment and situational appropriateness.",
+        "weaknesses": "Identifies the emotion most likely to cause sudden burnout if left unaddressed.",
+        "career": "Highlights potential friction points in team settings (e.g., hiding anger leads to resentment).",
+        "learning": "Suggests development in constructive feedback and emotional articulation.",
+        "roadmap": "Focuses on providing safe avenues for healthy emotional release and boundary setting.",
+        "opportunities": "Allows designing psychological safety interventions tailored to the specific hidden emotion.",
+        "podcasts": "Recommends psychological deep-dives into emotional processing and vulnerability.",
+        "books": "Points to literature on radical candor, overcoming fear, or processing grief.",
+        "role_models": "Connects to leaders who exhibit high Emotional Quotient by safely expressing difficult feelings.",
+        "motivation": "Highlights what demotivates the user when triggered, guiding preventative care."
+      },
+      "suggested_improvements": "Could pair with a question about *why* they hide it (e.g., fear of judgment vs. maintaining harmony)."
+    },
+    {
+      "question_id": "159adf3b-760a-427a-80b5-f9f2f25ba42e",
+      "question_text": "When you're stressed, what do you usually do?",
+      "primary_trait": "resilience",
+      "secondary_traits": [
+        "introversion",
+        "emotional_intelligence",
+        "discipline"
+      ],
+      "options": [
+        {
+          "option_id": "61cdac72-e87f-4391-b7b6-f52391a2c9a2",
+          "letter": "A",
+          "label": "Stay alone",
+          "mappings": [
+            {
+              "trait": "introversion",
+              "weight": 3,
+              "reason": "Indicates that the primary recovery mechanism requires low stimulation and isolation."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 1,
+              "reason": "Suggests a need to internally process stressors without external interference."
+            }
+          ]
+        },
+        {
+          "option_id": "ef85559b-5306-41c5-ad75-d04810afa3db",
+          "letter": "B",
+          "label": "Talk to someone I trust",
+          "mappings": [
+            {
+              "trait": "emotional_intelligence",
+              "weight": 2,
+              "reason": "Reveals healthy externalization and utilization of social support networks."
+            },
+            {
+              "trait": "vulnerability",
+              "weight": 2,
+              "reason": "Shows willingness to expose stress to others to find equilibrium."
+            }
+          ]
+        },
+        {
+          "option_id": "034584f3-35ee-40dd-8823-0492a385cbb3",
+          "letter": "C",
+          "label": "Distract myself with other activities",
+          "mappings": [
+            {
+              "trait": "self_awareness",
+              "weight": -1,
+              "reason": "Hints at experiential avoidance rather than addressing the root cause of stress."
+            },
+            {
+              "trait": "resilience",
+              "weight": -1,
+              "reason": "Suggests a coping mechanism based on evasion rather than integration."
+            }
+          ]
+        },
+        {
+          "option_id": "9d7b0e19-01c4-4ab2-9cd8-78d962579015",
+          "letter": "D",
+          "label": "Continue working until it's over",
+          "mappings": [
+            {
+              "trait": "resilience",
+              "weight": 2,
+              "reason": "Demonstrates high endurance and pain tolerance to complete required objectives."
+            },
+            {
+              "trait": "discipline",
+              "weight": 2,
+              "reason": "Highlights a prioritization of duty and task completion over immediate comfort."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Coping Mechanisms",
+        "Stress Response"
+      ],
+      "frameworks": [
+        {
+          "name": "MBTI",
+          "relevance": "Differentiates Extroverted external processing vs. Introverted internal processing."
+        },
+        {
+          "name": "Cognitive Behavioral Therapy (CBT)",
+          "relevance": "Maps behavioral responses to psychological triggers."
+        }
+      ],
+      "confidence_logic": "High reliability as behavior under pressure is one of the most accurate indicators of baseline psychological traits.",
+      "contributions": {
+        "personality": "Defines the user's default biological and psychological stress response profile.",
+        "swot": "Analyzes the sustainability of the individual's stress management tactics.",
+        "4w1h": "Answers 'How' the user regains equilibrium during crisis moments.",
+        "strengths": "Identifies reliable survival tactics when the environment becomes hostile.",
+        "weaknesses": "Highlights potential for isolation, burnout, or avoidance under continuous pressure.",
+        "career": "Suggests suitability for high-stakes roles based on healthy vs. destructive stress responses.",
+        "learning": "Recommends specific somatic or cognitive strategies to upgrade stress tolerance.",
+        "roadmap": "Aims to replace avoidant behaviors with proactive, restorative habits.",
+        "opportunities": "Pinpoints the best way a manager or partner can support the user during crunch times.",
+        "podcasts": "Recommends content on mental toughness, burnout prevention, or mindfulness.",
+        "books": "Points to neuroscience-backed books on stress cycles and peak performance.",
+        "role_models": "Connects to figures who modeled exceptional grace or grit under massive pressure.",
+        "motivation": "Shows that maintaining operational momentum requires specific environmental stress boundaries."
+      },
+      "suggested_improvements": "Could distinguish between physical distraction (exercise) and numbing distraction (scrolling)."
+    },
+    {
+      "question_id": "84047c49-1fc2-46aa-9cca-2e814a4a6680",
+      "question_text": "What fear affects your decisions the most?",
+      "primary_trait": "risk_taking",
+      "secondary_traits": [
+        "perfectionism",
+        "need_for_approval",
+        "decision_making"
+      ],
+      "options": [
+        {
+          "option_id": "b05b4438-34f1-49b1-9d61-ca6493100c4f",
+          "letter": "A",
+          "label": "Fear of failing",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": -2,
+              "reason": "Demonstrates an aversion to outcomes where success is not guaranteed."
+            },
+            {
+              "trait": "perfectionism",
+              "weight": 2,
+              "reason": "Indicates a high internal standard that paralyzes action when threatened."
+            }
+          ]
+        },
+        {
+          "option_id": "8b51e1f7-9e2b-4ae1-891e-0d1e611e5181",
+          "letter": "B",
+          "label": "Fear of being judged",
+          "mappings": [
+            {
+              "trait": "need_for_approval",
+              "weight": 3,
+              "reason": "Shows choices are heavily filtered through the anticipated perception of the tribe."
+            },
+            {
+              "trait": "authenticity",
+              "weight": -2,
+              "reason": "Suggests a willingness to alter true desires to prevent criticism."
+            }
+          ]
+        },
+        {
+          "option_id": "64133dbc-09a9-4174-bc89-225969800637",
+          "letter": "C",
+          "label": "Fear of making the wrong decision",
+          "mappings": [
+            {
+              "trait": "decision_making",
+              "weight": -2,
+              "reason": "Highlights choice paralysis derived from over-evaluating opportunity costs."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 1,
+              "reason": "May point to hyper-analysis leading to eventual decision fatigue."
+            }
+          ]
+        },
+        {
+          "option_id": "baf72e1d-24e8-4238-82e7-068f0d0b9880",
+          "letter": "D",
+          "label": "Fear of being left behind",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 2,
+              "reason": "Indicates high comparative ambition driven by fear of stagnation."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 1,
+              "reason": "Motivates constant forward momentum to match or exceed peers."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Loss Aversion",
+        "Motivational Drivers"
+      ],
+      "frameworks": [
+        {
+          "name": "Enneagram",
+          "relevance": "Touches closely on core fears (e.g., failure for Type 3, judgment for Type 4)."
+        },
+        {
+          "name": "Growth Mindset",
+          "relevance": "Highlights fixed mindset triggers (fear of failure vs. learning opportunity)."
+        }
+      ],
+      "confidence_logic": "Self-reporting on core fears yields reliable secondary markers for how an individual self-limits in professional and personal contexts.",
+      "contributions": {
+        "personality": "Exposes the shadow motivation driving the majority of the user's risk assessments.",
+        "swot": "Identifies the core internal threat that restricts optimal execution.",
+        "4w1h": "Answers 'Why' an individual might suddenly alter course or halt progress.",
+        "strengths": "Can translate into detail orientation (preventing failure) or high awareness (preventing judgment).",
+        "weaknesses": "Pinpoints the exact psychological lever that induces hesitation and anxiety.",
+        "career": "Highlights fields where the specific fear is either managed safely or dangerously triggered.",
+        "learning": "Prescribes exposure therapy or reframing tactics specifically for the core fear.",
+        "roadmap": "Focuses on building psychological safety buffers to mitigate these fears.",
+        "opportunities": "Opens discussions for redefining failure, judgment, or bad decisions as growth tools.",
+        "podcasts": "Recommends interviews breaking down the psychology of fear and courage.",
+        "books": "Points to stoic philosophy or psychology texts on overcoming specific cognitive distortions.",
+        "role_models": "Profiles leaders who openly conquered crippling fears to achieve greatness.",
+        "motivation": "Reveals that the user is highly motivated by environments that proactively neutralize these fears."
+      },
+      "suggested_improvements": "Could be followed by an inquiry on how often this fear is actually realized vs. imagined."
+    },
+    {
+      "question_id": "c7fd7f1c-2278-4cec-87b5-3e04f475a3da",
+      "question_text": "What usually stops you from taking the first step?",
+      "primary_trait": "initiative",
+      "secondary_traits": [
+        "analytical_thinking",
+        "perfectionism",
+        "goal_orientation"
+      ],
+      "options": [
+        {
+          "option_id": "33bcecab-a5b3-493c-bf02-7fc67d7fc971",
+          "letter": "A",
+          "label": "Overthinking",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Shows reliance on mental simulation that eventually delays behavioral execution."
+            },
+            {
+              "trait": "initiative",
+              "weight": -2,
+              "reason": "Directly inhibits immediate action due to excessive pre-planning."
+            }
+          ]
+        },
+        {
+          "option_id": "a0fea3c1-f83c-402b-b1b0-9537ade58717",
+          "letter": "B",
+          "label": "Fear of failure",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": -2,
+              "reason": "Reflects low tolerance for unproven hypotheses or negative outcomes."
+            },
+            {
+              "trait": "perfectionism",
+              "weight": 2,
+              "reason": "Indicates a need for guaranteed success before committing energy."
+            }
+          ]
+        },
+        {
+          "option_id": "ac027364-1d75-47bd-ab3c-1864166cb029",
+          "letter": "C",
+          "label": "Lack of motivation",
+          "mappings": [
+            {
+              "trait": "goal_orientation",
+              "weight": -2,
+              "reason": "Suggests difficulty internally generating drive without immediate external pressure."
+            },
+            {
+              "trait": "discipline",
+              "weight": -2,
+              "reason": "Reveals a weak systemic structure to carry forward past initial enthusiasm."
+            }
+          ]
+        },
+        {
+          "option_id": "8d5deb12-d3cc-46d8-8df9-77858e740d65",
+          "letter": "D",
+          "label": "Waiting for the perfect time",
+          "mappings": [
+            {
+              "trait": "perfectionism",
+              "weight": 3,
+              "reason": "Demonstrates the illusion of idealized conditions delaying practical starts."
+            },
+            {
+              "trait": "initiative",
+              "weight": -2,
+              "reason": "Inhibits an agile, iterative approach to project launching."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Execution Friction",
+        "Action Orientation"
+      ],
+      "frameworks": [
+        {
+          "name": "Lean Startup",
+          "relevance": "Highlights blocks to building MVP (Minimum Viable Product)."
+        },
+        {
+          "name": "Eisenhower Matrix",
+          "relevance": "Reflects prioritization struggles leading to procrastination."
+        }
+      ],
+      "confidence_logic": "Clarifying the specific barrier to initiation solidly isolates analytical blocks from emotional blocks, raising structural confidence.",
+      "contributions": {
+        "personality": "Determines if the individual is internally paralyzed by emotion, logic, or pure entropy.",
+        "swot": "Names the precise bottleneck in the user's execution pipeline.",
+        "4w1h": "Answers 'When' the user gets stuck in the idea-to-action timeline.",
+        "strengths": "Can indicate thoroughness or high standards prior to launch.",
+        "weaknesses": "Shows a propensity for procrastination masked as planning or caution.",
+        "career": "Dictates if the user needs a structured corporate environment vs. a chaotic startup one.",
+        "learning": "Recommends time-boxing or micro-step tactics to force momentum.",
+        "roadmap": "Aims to shrink the gap between ideation and the first physical action step.",
+        "opportunities": "Allows managers to inject specific catalysts (deadlines or reassurance) to jumpstart the user.",
+        "podcasts": "Recommends action-oriented productivity or mindset shows.",
+        "books": "Points to literature on overcoming resistance, habit formation, or shipping work.",
+        "role_models": "Connects to prolific creators who prioritize volume and iteration over perfection.",
+        "motivation": "Shows that reducing the activation energy required is key to unlocking user drive."
+      },
+      "suggested_improvements": "Could add an option for 'Lack of resources/clarity' to capture systemic blockers."
+    },
+    {
+      "question_id": "f3d5a04f-d5d6-4ff0-a44f-78d78a26ea16",
+      "question_text": "When you meet new people, you usually\u2026",
+      "primary_trait": "sociability",
+      "secondary_traits": [
+        "confidence",
+        "introversion",
+        "analytical_thinking"
+      ],
+      "options": [
+        {
+          "option_id": "6d1c2cc9-5dc0-46a6-afc0-f68be8e0a876",
+          "letter": "A",
+          "label": "Start conversations confidently",
+          "mappings": [
+            {
+              "trait": "sociability",
+              "weight": 3,
+              "reason": "Exhibits proactive extroversion and comfort initiating social bonds."
+            },
+            {
+              "trait": "confidence",
+              "weight": 2,
+              "reason": "Shows lack of hesitation in facing potential social rejection."
+            }
+          ]
+        },
+        {
+          "option_id": "c9161d55-fb53-4338-a713-eeb7ffbd97aa",
+          "letter": "B",
+          "label": "Wait until someone approaches me",
+          "mappings": [
+            {
+              "trait": "sociability",
+              "weight": -2,
+              "reason": "Indicates passive social engagement relying on external initiation."
+            },
+            {
+              "trait": "introversion",
+              "weight": 2,
+              "reason": "Reflects a preference for minimizing self-exposure in unknown settings."
+            }
+          ]
+        },
+        {
+          "option_id": "479216bb-bc12-461a-8ad0-b02b4434a996",
+          "letter": "C",
+          "label": "Observe before interacting",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 1,
+              "reason": "Shows a tactical approach to social settings, gathering data first."
+            },
+            {
+              "trait": "introversion",
+              "weight": 1,
+              "reason": "Requires low-energy observation time before expending energy socially."
+            }
+          ]
+        },
+        {
+          "option_id": "931ecbb6-f024-4d42-bdca-2cfed64c6a21",
+          "letter": "D",
+          "label": "Stay with people I already know",
+          "mappings": [
+            {
+              "trait": "openness",
+              "weight": -2,
+              "reason": "Reveals a strong preference for the familiar over novel social experiences."
+            },
+            {
+              "trait": "sociability",
+              "weight": -2,
+              "reason": "Shows avoidance of expanding network in favor of preserving safety."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Social Orientation",
+        "Network Expansion"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Direct measure of Extroversion and Openness to new experiences."
+        },
+        {
+          "name": "Attachment Theory",
+          "relevance": "Hints at secure vs. anxious approaches to unfamiliar interpersonal dynamics."
+        }
+      ],
+      "confidence_logic": "Behavioral choices in explicitly novel settings vividly isolate risk tolerance from social capability.",
+      "contributions": {
+        "personality": "Identifies extroverted vs introverted tendencies in high-novelty environments.",
+        "swot": "Exposes strengths in relationship building versus weaknesses in networking.",
+        "4w1h": "Answers 'Who' the individual is naturally inclined to interact with.",
+        "strengths": "Points to proactive charisma or careful, thoughtful social reading skills.",
+        "weaknesses": "Highlights potential missed opportunities due to shyness or comfort zoning.",
+        "career": "Dictates suitability for client-facing, sales, or highly collaborative roles.",
+        "learning": "Suggests gamification methods for practicing low-stakes conversational starts.",
+        "roadmap": "Details how to systematically build a network tailored to their comfort level.",
+        "opportunities": "Opens strategic networking strategies relying heavily on active vs passive tools.",
+        "podcasts": "Recommends communication and charismatic presence breakdowns.",
+        "books": "Points to guides on networking for introverts or mastering human behavior.",
+        "role_models": "Connects to successful figures who lean into their natural social style, loud or quiet.",
+        "motivation": "Reveals if they are fueled by new social energy or deeply drained by it."
+      },
+      "suggested_improvements": "Could distinguish between 'observing out of anxiety' vs 'observing out of strategy'."
+    },
+    {
+      "question_id": "3b7370ae-00ac-4576-b747-6c5d17b82c6b",
+      "question_text": "When faced with an important decision, what do you rely on most?",
+      "primary_trait": "decision_making",
+      "secondary_traits": [
+        "analytical_thinking",
+        "reflectiveness",
+        "teamwork"
+      ],
+      "options": [
+        {
+          "option_id": "7e70101e-bf8c-4c50-acf7-95c34e54cad0",
+          "letter": "A",
+          "label": "Logic",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Shows complete reliance on objective data, framing, and deduction."
+            },
+            {
+              "trait": "decision_making",
+              "weight": 1,
+              "reason": "Indicates a structured, dispassionate approach to resolving questions."
+            }
+          ]
+        },
+        {
+          "option_id": "8760a04c-e116-45c8-a9bd-76ac4e55ee62",
+          "letter": "B",
+          "label": "Experience",
+          "mappings": [
+            {
+              "trait": "reflectiveness",
+              "weight": 2,
+              "reason": "Relies on historical data and personal lessons learned to predict outcomes."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 1,
+              "reason": "Shows adaptation based on continuous feedback loops from the past."
+            }
+          ]
+        },
+        {
+          "option_id": "e148cfd2-74aa-426d-b893-538cfba1a79f",
+          "letter": "C",
+          "label": "My feelings",
+          "mappings": [
+            {
+              "trait": "emotional_intelligence",
+              "weight": 2,
+              "reason": "Validates intuition and visceral emotional signaling as critical intelligence."
+            },
+            {
+              "trait": "authenticity",
+              "weight": 1,
+              "reason": "Ensures choices align deeply with personal values over stark utility."
+            }
+          ]
+        },
+        {
+          "option_id": "4b25f529-73df-4dc1-86a5-7c9cd3cfcb2f",
+          "letter": "D",
+          "label": "Advice from others",
+          "mappings": [
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Demonstrates a crowdsourced approach to risk management and ideation."
+            },
+            {
+              "trait": "decision_making",
+              "weight": -1,
+              "reason": "May point to hesitance in owning the final call without communal consensus."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Cognitive Style",
+        "Information Processing"
+      ],
+      "frameworks": [
+        {
+          "name": "MBTI",
+          "relevance": "Heavily maps to Thinking (Logic) vs. Feeling (Emotions) dichotomies."
+        },
+        {
+          "name": "Cynefin Framework",
+          "relevance": "Reflects how an individual categorizes and responds to complex vs clear environments."
+        }
+      ],
+      "confidence_logic": "Clear isolation of logic, intuition, history, and consensus gives extremely high confidence on cognitive operational styles.",
+      "contributions": {
+        "personality": "Clarifies the exact cognitive mechanism ruling the user's executive function.",
+        "swot": "Shows defensive and offensive decision-making capabilities.",
+        "4w1h": "Answers 'How' the individual processes impending critical choices.",
+        "strengths": "Highlights capacity for cold calculus, deep intuition, empirical wisdom, or collaboration.",
+        "weaknesses": "Reveals blind spots (e.g., ignoring data for feelings, or ignoring people for logic).",
+        "career": "Dictates alignment with analytical vs human-centric leadership roles.",
+        "learning": "Suggests introducing mental models tailored to their native processing style.",
+        "roadmap": "Aims to integrate their primary method with at least one secondary method for holistic thinking.",
+        "opportunities": "Allows pairing with colleagues who possess the opposing decision-making style.",
+        "podcasts": "Recommends strategy, behavioral economics, or management content.",
+        "books": "Points to literature on cognitive biases, systems thinking, or trusting intuition.",
+        "role_models": "Connects to tacticians, visionaries, or empaths functioning efficiently at high levels.",
+        "motivation": "Shows they execute best when allowed to evaluate via their preferred cognitive lens."
+      },
+      "suggested_improvements": "Could make it harder by combining them (e.g., Logical Analysis vs Intuitive Experience)."
+    },
+    {
+      "question_id": "5d9882c3-4e69-496a-a9bd-5130eb14fb3d",
+      "question_text": "What motivates you the most to keep moving forward?",
+      "primary_trait": "goal_orientation",
+      "secondary_traits": [
+        "growth_mindset",
+        "altruism",
+        "need_for_approval"
+      ],
+      "options": [
+        {
+          "option_id": "8501c7cb-dcaa-477f-ae9c-d56bf09e653f",
+          "letter": "A",
+          "label": "Achieving my goals",
+          "mappings": [
+            {
+              "trait": "goal_orientation",
+              "weight": 3,
+              "reason": "Indicates highly intrinsic motivation tied directly to hitting personal KPIs."
+            },
+            {
+              "trait": "achievement_drive",
+              "weight": 2,
+              "reason": "Shows a powerful engine reliant on crossing finish lines."
+            }
+          ]
+        },
+        {
+          "option_id": "08bbbccb-3466-4a7e-bc69-8f4166d5e1c1",
+          "letter": "B",
+          "label": "Learning and growing",
+          "mappings": [
+            {
+              "trait": "growth_mindset",
+              "weight": 3,
+              "reason": "Highlights a process-oriented drive valuing expansion over definitive endpoints."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 2,
+              "reason": "Relishes the acquisition of new skills as the primary reward."
+            }
+          ]
+        },
+        {
+          "option_id": "a1b1f3b8-38d9-441d-9e1c-368466d1c68e",
+          "letter": "C",
+          "label": "Helping others",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Reveals a service-based motivational core focused on utility to the tribe."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Suggests drive is fueled by easing the friction or pain of others."
+            }
+          ]
+        },
+        {
+          "option_id": "b90cc579-5503-40d1-8a0e-bc9c6bf934cd",
+          "letter": "D",
+          "label": "Recognition for my work",
+          "mappings": [
+            {
+              "trait": "need_for_approval",
+              "weight": 3,
+              "reason": "Demonstrates an externalized motivation requiring praise, status, or validation."
+            },
+            {
+              "trait": "achievement_drive",
+              "weight": 1,
+              "reason": "Shows ambition strictly tethered to how achievements are perceived by others."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Motivational Profile",
+        "Core Values"
+      ],
+      "frameworks": [
+        {
+          "name": "SDT",
+          "relevance": "Maps exactly to Intrinsic, Extrinsic, and Prosocial motivational channels."
+        },
+        {
+          "name": "Ikigai",
+          "relevance": "Identifies the central pillar (What you love / What the world needs) driving life momentum."
+        }
+      ],
+      "confidence_logic": "Forced choice of 'greatest motivator' generates strong prioritization signals linking drive to specific behavioral endpoints.",
+      "contributions": {
+        "personality": "Identifies the core battery that powers the user through adversity and routine.",
+        "swot": "Exposes whether the user's drive is highly self-reliant or dangerously dependent on externals.",
+        "4w1h": "Answers 'Why' the individual gets out of bed and pushes through friction.",
+        "strengths": "Highlights deep reservoirs of ambition, curiosity, compassion, or competitive spirit.",
+        "weaknesses": "Reveals burnout risks if goals fail, learning stalls, help is rejected, or praise is withheld.",
+        "career": "Strongly dictates ideal cultural fit (commission-based, mission-driven, R&D focused).",
+        "learning": "Recommends framing new challenges entirely through this primary motivational lens.",
+        "roadmap": "Structures all future life goals to cascade from this foundational 'Why'.",
+        "opportunities": "Allows managers to exactly tailor incentives to match the individual's deepest desires.",
+        "podcasts": "Recommends peak performance content mapped to mission, learning, or execution.",
+        "books": "Points to memoirs and philosophical texts anchoring to the chosen life purpose.",
+        "role_models": "Connects to historical figures who sacrificed heavily for this specific type of reward.",
+        "motivation": "Defines precisely what must be present in any environment to prevent apathy."
+      },
+      "suggested_improvements": "Could introduce 'financial security' as a starkly pragmatic option."
+    },
+    {
+      "question_id": "89b613d2-811f-4b67-a860-8fe90083de8b",
+      "question_text": "When something goes wrong, what's your natural reaction?",
+      "primary_trait": "problem_solving",
+      "secondary_traits": [
+        "analytical_thinking",
+        "initiative",
+        "communication"
+      ],
+      "options": [
+        {
+          "option_id": "917333fb-3aec-4df5-b4c1-bf84ade86965",
+          "letter": "A",
+          "label": "I analyze what happened",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Focuses on post-mortem intelligence gathering before taking reactionary steps."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 2,
+              "reason": "Shows a desire to understand root causes to prevent future recurrence."
+            }
+          ]
+        },
+        {
+          "option_id": "9bfa0b67-09e9-4631-a5fc-2035a791d47c",
+          "letter": "B",
+          "label": "I look for a solution immediately",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Exhibits rapid tactical deployment to stop bleeding and restore function."
+            },
+            {
+              "trait": "initiative",
+              "weight": 2,
+              "reason": "Demonstrates high bias for action during moments of crisis."
+            }
+          ]
+        },
+        {
+          "option_id": "1cf723c0-0c0d-4bb1-a8a7-befcc8ee8aa4",
+          "letter": "C",
+          "label": "I seek advice from someone",
+          "mappings": [
+            {
+              "trait": "teamwork",
+              "weight": 2,
+              "reason": "Relies on shared knowledge and communal responsibility to navigate failures."
+            },
+            {
+              "trait": "communication",
+              "weight": 2,
+              "reason": "Shows willingness to rapidly externalize issues rather than hiding mistakes."
+            }
+          ]
+        },
+        {
+          "option_id": "4c2e9d81-e25d-4db9-84ce-45b1e6e0cc35",
+          "letter": "D",
+          "label": "I take some time before responding",
+          "mappings": [
+            {
+              "trait": "emotional_intelligence",
+              "weight": 2,
+              "reason": "Deliberately down-regulates panic to ensure a measured, non-reactive response."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 1,
+              "reason": "Prioritizes emotional processing alongside practical strategizing."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Crisis Management",
+        "Action vs Reflection"
+      ],
+      "frameworks": [
+        {
+          "name": "OODA Loop",
+          "relevance": "Maps exactly to Observe (A), Orient/Pause (D), Decide (C), Act (B)."
+        },
+        {
+          "name": "4W1H",
+          "relevance": "Analyzes the immediate 'What to do' when processes break down."
+        }
+      ],
+      "confidence_logic": "Crisis resolution requires instinctive behavior, so forcing a choice here yields extremely reliable data on default functional states.",
+      "contributions": {
+        "personality": "Showcases the dominant quadrant of the user's reactive psyche (think, act, rely, or process).",
+        "swot": "Identifies highly valuable emergency operational modes and potential delays.",
+        "4w1h": "Answers 'How' the user tackles sudden, unexpected friction or failure.",
+        "strengths": "Highlights cool-headed logic, rapid iteration, strong networks, or profound composure.",
+        "weaknesses": "Reveals tendencies toward analysis paralysis, rushed mistakes, over-dependence, or delayed action.",
+        "career": "Dictates suitability for live operational roles (ER, live events) vs thoughtful strategic roles.",
+        "learning": "Suggests training in whichever phases of the OODA loop the individual naturally skips.",
+        "roadmap": "Aims to build a balanced crisis protocol utilizing all four response types effectively.",
+        "opportunities": "Empowers the user to act as an anchor or point-person for teams prone to panic.",
+        "podcasts": "Recommends crisis leadership and strategic planning materials.",
+        "books": "Points to literature on rapid cognition, crisis leadership, or systems engineering.",
+        "role_models": "Connects to first responders, generals, or diplomats skilled at de-escalation.",
+        "motivation": "Shows they restore personal equilibrium best by engaging their primary coping mechanism."
+      },
+      "suggested_improvements": "Could add 'I feel overwhelmed physically' to capture visceral somatic responses."
+    }
+  ]
+}

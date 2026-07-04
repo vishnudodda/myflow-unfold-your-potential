@@ -1,0 +1,1105 @@
+{
+  "new_traits": [
+    {
+      "slug": "extrinsic_motivation",
+      "name": "Extrinsic Motivation",
+      "description": "Driven by external rewards, tangible outcomes, status, or external obligations rather than purely inherent satisfaction."
+    },
+    {
+      "slug": "intrinsic_motivation",
+      "name": "Intrinsic Motivation",
+      "description": "Driven by internal satisfaction, a passion for learning, and the inherent joy of the activity itself."
+    },
+    {
+      "slug": "purposefulness",
+      "name": "Purposefulness",
+      "description": "The degree to which an individual seeks enduring meaning, societal impact, and a broader sense of direction in life."
+    },
+    {
+      "slug": "long_term_planning",
+      "name": "Long-Term Planning",
+      "description": "The tendency to project into the future, organizing present actions and behaviors around distant objectives."
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "a6f48abd-8771-4fd4-8270-bd0355f81f8c",
+      "question_text": "What is your biggest goal in life right now?",
+      "primary_trait": "goal_orientation",
+      "secondary_traits": [
+        "achievement_drive",
+        "extrinsic_motivation",
+        "altruism"
+      ],
+      "options": [
+        {
+          "option_id": "a3fc75e2-8e20-4fe7-bdba-9c1f432a5b4c",
+          "letter": "A",
+          "label": "Build a successful career",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Choosing career success indicates a strong desire for professional mastery and upward mobility."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 2,
+              "reason": "Focusing on a career implies structured ambition and milestone-driven behavior."
+            }
+          ]
+        },
+        {
+          "option_id": "37c1fdf4-e4c2-4aae-8aa2-18676c7dd421",
+          "letter": "B",
+          "label": "Achieve financial freedom",
+          "mappings": [
+            {
+              "trait": "extrinsic_motivation",
+              "weight": 3,
+              "reason": "Prioritizing financial freedom targets tangible security and external resource acquisition."
+            },
+            {
+              "trait": "financial_intelligence",
+              "weight": 2,
+              "reason": "Focusing on wealth independence suggests cognitive attention to economic structures and security."
+            }
+          ]
+        },
+        {
+          "option_id": "8594900a-e080-4706-89fa-c44dfca7272c",
+          "letter": "C",
+          "label": "Make a positive impact on society",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Selecting societal impact highlights prosocial goals overriding individualistic gains."
+            },
+            {
+              "trait": "purposefulness",
+              "weight": 2,
+              "reason": "This objective directly correlates with finding deeper existential meaning through broader contribution."
+            }
+          ]
+        },
+        {
+          "option_id": "f4a0c004-3243-4a0f-9b1d-0c67a826f883",
+          "letter": "D",
+          "label": "Discover what truly makes me happy",
+          "mappings": [
+            {
+              "trait": "self_awareness",
+              "weight": 3,
+              "reason": "Focusing on internal discovery indicates a prioritization of introspection and emotional alignment."
+            },
+            {
+              "trait": "intrinsic_motivation",
+              "weight": 2,
+              "reason": "Seeking happiness points to internal fulfillment rather than external benchmarks of success."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Motivational Orientation",
+        "Life Ambition"
+      ],
+      "frameworks": [
+        {
+          "name": "SDT",
+          "relevance": "Differentiates between extrinsic (financial/career) and intrinsic (happiness/impact) life goals."
+        },
+        {
+          "name": "Ikigai",
+          "relevance": "Identifies which quadrant of Ikigai (what you love vs. what the world needs vs. what you can get paid for) the user gravitates toward."
+        }
+      ],
+      "confidence_logic": "Confidence in mapping motivational drives is high because the options present mutually exclusive primary life orientations that clearly align with distinct psychological incentives.",
+      "contributions": {
+        "personality": "Reveals whether the individual leans toward competitive conscientiousness, prosocial agreeableness, or introspective openness.",
+        "swot": "Strengths align with their core driver (e.g., drive, empathy), while weaknesses may involve neglecting opposite spectrums like financial reality or personal well-being.",
+        "4w1h": "Answers the 'Why' behind their foundational lifestyle and career choices.",
+        "strengths": "Highlights a core driver, be it professional ambition, financial foresight, empathy, or self-reflection.",
+        "weaknesses": "May expose potential blind spots, such as hyper-focusing on wealth to the detriment of happiness, or lacking practical milestones while searching for meaning.",
+        "career": "Directly influences whether they should seek corporate ladders, high-yield investments, non-profits, or flexible exploratory roles.",
+        "learning": "Points to learning goals either centered on professional hard skills, financial literacy, social sciences, or personal development.",
+        "roadmap": "Sets the ultimate 'North Star' for their development plan, dictating which immediate milestones matter most.",
+        "opportunities": "Helps pinpoint opportunities that match their primary life goal to maximize engagement.",
+        "podcasts": "Recommends content ranging from startup/business podcasts to philosophy or social entrepreneurship shows.",
+        "books": "Suggests titles like 'Think and Grow Rich' for option B or 'Man's Search for Meaning' for option C.",
+        "role_models": "Connects them with figures like corporate CEOs, philanthropists, or thought leaders based on their choice.",
+        "motivation": "Frames all future feedback through the lens of their stated biggest life goal to ensure maximum resonance."
+      },
+      "suggested_improvements": "Could split 'Make a positive impact' into local community versus global scale to further differentiate locus of control."
+    },
+    {
+      "question_id": "7bf1ed15-a6f8-4e58-8931-fe8e5fca5c4f",
+      "question_text": "If you could choose any profession without limitations, what would you choose?",
+      "primary_trait": "openness",
+      "secondary_traits": [
+        "leadership",
+        "analytical_thinking",
+        "creativity"
+      ],
+      "options": [
+        {
+          "option_id": "3c1153b4-dccc-4f1d-93df-09d41ebd8585",
+          "letter": "A",
+          "label": "Entrepreneur or Business Owner",
+          "mappings": [
+            {
+              "trait": "risk_taking",
+              "weight": 2,
+              "reason": "Choosing entrepreneurship points to comfort with uncertainty and desire to create independent systems."
+            },
+            {
+              "trait": "leadership",
+              "weight": 2,
+              "reason": "Business ownership involves guiding operational direction and managing human capital."
+            }
+          ]
+        },
+        {
+          "option_id": "1b562f00-dfa1-4b8d-9d17-3e4b72eded88",
+          "letter": "B",
+          "label": "Scientist/Engineer/Researcher",
+          "mappings": [
+            {
+              "trait": "analytical_thinking",
+              "weight": 3,
+              "reason": "Gravitating toward STEM professions demonstrates a preference for logic, empirical data, and system building."
+            },
+            {
+              "trait": "problem_solving",
+              "weight": 2,
+              "reason": "These roles inherently require resolving complex technical or conceptual puzzles."
+            }
+          ]
+        },
+        {
+          "option_id": "101ab149-be12-484a-8de0-7a7d85f264ef",
+          "letter": "C",
+          "label": "Artist, Creator, or Designer",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Choosing creative fields reveals an innate drive for aesthetic expression and ideation."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Artistic inclination heavily correlates with openness to new experiences and unconventional thought."
+            }
+          ]
+        },
+        {
+          "option_id": "bbdbf9c7-eace-4c6a-8c68-0398ae8d6064",
+          "letter": "D",
+          "label": "Social Leader, Teacher, or Doctor",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Vocations dedicated to care, development, and social cohesion indicate high social interest."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Directly working to heal or educate others relies heavily on interpersonal emotional intelligence."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Vocational Identity",
+        "Cognitive Preference"
+      ],
+      "frameworks": [
+        {
+          "name": "RIASEC",
+          "relevance": "Maps perfectly to Enterprising (A), Investigative (B), Artistic (C), and Social (D) career themes."
+        }
+      ],
+      "confidence_logic": "Confidence is strong because the options are classic archetypical proxies for Holland's vocational codes, mapping cleanly to established traits.",
+      "contributions": {
+        "personality": "Reflects core Big Five traits such as Openness (Artistic/Investigative) and Agreeableness (Social).",
+        "swot": "Highlights innate conceptual and working preferences as strengths, while exposing potential disinterest in opposite quadrants.",
+        "4w1h": "Answers 'What' they want to dedicate their structured working time toward.",
+        "strengths": "Points to innate capacities like leadership, analytical reasoning, creative outputs, or empathetic engagement.",
+        "weaknesses": "May reveal an aversion to routine administrative tasks or, conversely, to unstructured environments.",
+        "career": "Directly outputs an ideal industry matrix for job exploration or upskilling.",
+        "learning": "Guides the modality of learning, from technical deep dives to collaborative workshops.",
+        "roadmap": "Aligns the user's developmental pathway with the skills required by their aspirational vocational archetype.",
+        "opportunities": "Identifies side-projects or shifts in current roles that mirror their unconstrained dream job.",
+        "podcasts": "Recommends niche industry podcasts aligned with their chosen field.",
+        "books": "Suggests domain-specific literature, such as design manifestos, leadership biographies, or scientific journals.",
+        "role_models": "Connects them to iconic figures in business, science, art, or social activism.",
+        "motivation": "Frames motivation through the lens of achieving the autonomy and mastery present in their dream profession."
+      },
+      "suggested_improvements": "Could add a fifth option representing purely administrative or traditional operational roles (Conventional code) for full RIASEC coverage."
+    },
+    {
+      "question_id": "f24c8166-5281-47fc-bb01-6cf295fabab9",
+      "question_text": "Which activity makes you lose track of time?",
+      "primary_trait": "intrinsic_motivation",
+      "secondary_traits": [
+        "problem_solving",
+        "creativity",
+        "altruism"
+      ],
+      "options": [
+        {
+          "option_id": "24ee511d-8981-4f58-ba4e-1012b9196855",
+          "letter": "A",
+          "label": "Solving problems or building things",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Finding flow in troubleshooting or construction denotes a mechanistic and analytical engagement loop."
+            },
+            {
+              "trait": "analytical_thinking",
+              "weight": 2,
+              "reason": "Building and solving require breaking down complexities into actionable logic."
+            }
+          ]
+        },
+        {
+          "option_id": "4d1b22f2-a9a9-44c7-8705-e0ad4851bf53",
+          "letter": "B",
+          "label": "Creating art, content, or designs",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 3,
+              "reason": "Immersing oneself in aesthetic or content generation implies a deep drive for creative expression."
+            },
+            {
+              "trait": "openness",
+              "weight": 1,
+              "reason": "Creative flow states often correlate with high openness to experience."
+            }
+          ]
+        },
+        {
+          "option_id": "9ecd5e34-8ce4-4a8f-9004-cdad0ec41f90",
+          "letter": "C",
+          "label": "Helping or guiding others",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Losing oneself in service indicates a strong interpersonal and empathetic focus."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Guiding others effectively requires a deep intuitive understanding of their feelings and needs."
+            }
+          ]
+        },
+        {
+          "option_id": "16d8e9e6-cb08-4a9c-9de8-2d5bf5ab55f9",
+          "letter": "D",
+          "label": "Learning something new",
+          "mappings": [
+            {
+              "trait": "curiosity",
+              "weight": 3,
+              "reason": "Finding flow through information synthesis indicates a highly inquisitive and exploratory nature."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 2,
+              "reason": "Deep engagement in learning suggests rapid assimilation of novel concepts."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Engagement Style",
+        "Flow Modalities"
+      ],
+      "frameworks": [
+        {
+          "name": "VIA Strengths",
+          "relevance": "Connects flow states to core signature strengths like Love of Learning, Creativity, or Kindness."
+        }
+      ],
+      "confidence_logic": "Flow state is a reliable proxy for intrinsic motivation; assigning these specific states to established traits provides high confidence in mapping an individual's primary psychological rewards.",
+      "contributions": {
+        "personality": "Shows how the individual interacts with their environment when cognitive resistance is lowest.",
+        "swot": "Highlights the exact tasks where the user will be most productive and resilient to burnout (Strength).",
+        "4w1h": "Answers 'How' they prefer to spend unstructured or deeply focused time.",
+        "strengths": "Defines their core flow triggers, showcasing where they naturally excel without external pushing.",
+        "weaknesses": "Suggests they may struggle or procrastinate on tasks directly opposite to their flow preference.",
+        "career": "Helps match day-to-day job descriptions with their intrinsic flow triggers to ensure job satisfaction.",
+        "learning": "Informs the optimal pedagogical approach\u2014e.g., project-based for builders vs. interactive for helpers.",
+        "roadmap": "Embeds flow-inducing activities into their daily routine to sustain long-term engagement.",
+        "opportunities": "Identifies passion projects that can organically evolve into primary career paths.",
+        "podcasts": "Recommends deep-dive content related to their flow modality, like maker podcasts or educational history series.",
+        "books": "Points to books on 'Flow' by Mihaly Csikszentmihalyi or domain-specific deep learning texts.",
+        "role_models": "Connects them to individuals who masterfully integrated these specific flow states into their careers.",
+        "motivation": "Leverages the concept of autotelic (self-driven) activities to build sustainable motivational habits."
+      },
+      "suggested_improvements": "Could add an option for 'organizing, optimizing, or planning' to capture highly structured flow states."
+    },
+    {
+      "question_id": "389eaba0-07bc-4439-9bed-f3583077cd10",
+      "question_text": "Where do you see yourself after 10 years?",
+      "primary_trait": "long_term_planning",
+      "secondary_traits": [
+        "achievement_drive",
+        "extrinsic_motivation",
+        "purposefulness"
+      ],
+      "options": [
+        {
+          "option_id": "c9daf7c1-8b08-49c2-845d-c9070d463e7f",
+          "letter": "A",
+          "label": "Leading a successful organization",
+          "mappings": [
+            {
+              "trait": "leadership",
+              "weight": 3,
+              "reason": "Aspiring to organizational leadership demonstrates a long-term goal of social influence and operational control."
+            },
+            {
+              "trait": "achievement_drive",
+              "weight": 2,
+              "reason": "Setting a high-stakes, competitive 10-year goal requires significant ambition."
+            }
+          ]
+        },
+        {
+          "option_id": "aabc102d-57ac-4c68-972a-ba9c132620fa",
+          "letter": "B",
+          "label": "Financially independent and secure",
+          "mappings": [
+            {
+              "trait": "financial_intelligence",
+              "weight": 2,
+              "reason": "Targeting financial independence requires sustained economic strategy and delayed gratification."
+            },
+            {
+              "trait": "extrinsic_motivation",
+              "weight": 2,
+              "reason": "Focusing on security and resource accumulation reflects strong pragmatic, external goal setting."
+            }
+          ]
+        },
+        {
+          "option_id": "1021e00a-8633-417f-9c3c-733bcf475eb9",
+          "letter": "C",
+          "label": "Living a balanced and meaningful life",
+          "mappings": [
+            {
+              "trait": "purposefulness",
+              "weight": 3,
+              "reason": "Prioritizing meaning over status or wealth indicates a focus on enduring existential satisfaction."
+            },
+            {
+              "trait": "authenticity",
+              "weight": 1,
+              "reason": "Seeking a balanced life often reflects a desire to stay true to one's personal values over societal expectations."
+            }
+          ]
+        },
+        {
+          "option_id": "d1dfdce0-5933-4599-a350-727100b82553",
+          "letter": "D",
+          "label": "Still exploring new opportunities and learning",
+          "mappings": [
+            {
+              "trait": "openness",
+              "weight": 3,
+              "reason": "Expecting to remain exploratory after a decade shows an immense, enduring appetite for novelty."
+            },
+            {
+              "trait": "learning_agility",
+              "weight": 2,
+              "reason": "Aspiring purely to keep learning implies prioritizing cognitive flexibility above static achievements."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Temporal Orientation",
+        "Life Ambition"
+      ],
+      "frameworks": [
+        {
+          "name": "Big Five",
+          "relevance": "Isolates traits like Conscientiousness (options A/B) from Openness (option D) in a temporal forecasting context."
+        }
+      ],
+      "confidence_logic": "Long-term forecasting heavily filters for a person's ultimate value priorities, allowing for highly weighted inferences on ambition, pragmatism, and openness.",
+      "contributions": {
+        "personality": "Identifies whether an individual is outcome-driven, security-driven, value-driven, or novelty-driven.",
+        "swot": "Strengths include clear long-term focus or adaptability; weaknesses could be rigidity or lack of concrete milestones.",
+        "4w1h": "Answers 'Where' the individual intends to end up, providing the destination critical for mapping out the 'How'.",
+        "strengths": "Highlights enduring drivers like ambition, financial prudence, emotional regulation, or relentless curiosity.",
+        "weaknesses": "May expose vulnerabilities like an obsession with status, fear of scarcity, or avoidance of commitment.",
+        "career": "Helps distinguish between 'ladder-climbing' profiles and continuous lateral explorers.",
+        "learning": "Informs whether learning should be tactical (for promotion) or broad/exploratory (for generalist knowledge).",
+        "roadmap": "Provides the 10-year anchor point used to reverse-engineer 1-year and 3-year objectives.",
+        "opportunities": "Identifies long-arc opportunities like equity vesting, long-term investments, or continuous education platforms.",
+        "podcasts": "Recommends macroeconomic forecasting, leadership interviews, or philosophical explorations of a well-lived life.",
+        "books": "Suggests strategic vision books or life-design manuals like 'Designing Your Life'.",
+        "role_models": "Profiles individuals who successfully executed 10-year pivots into leadership, financial independence, or public service.",
+        "motivation": "Tethers today's difficult tasks to their self-declared idealized 10-year future state."
+      },
+      "suggested_improvements": "Could add an option regarding building a family or community to encapsulate pure interdependent/relational goals."
+    },
+    {
+      "question_id": "a63780b5-027b-4d80-b3a4-eecf818c7ce9",
+      "question_text": "If you had unlimited money, what would you spend most of your time doing?",
+      "primary_trait": "purposefulness",
+      "secondary_traits": [
+        "altruism",
+        "problem_solving",
+        "creativity"
+      ],
+      "options": [
+        {
+          "option_id": "b4829a36-b12f-41e7-bac2-7a5e56dbba6d",
+          "letter": "A",
+          "label": "Solving real-world problems",
+          "mappings": [
+            {
+              "trait": "problem_solving",
+              "weight": 3,
+              "reason": "Choosing to tackle problems even without financial incentive indicates deep intrinsic motivation toward engineering solutions."
+            },
+            {
+              "trait": "purposefulness",
+              "weight": 2,
+              "reason": "Focusing on 'real-world' issues speaks to a desire for enduring, meaningful impact."
+            }
+          ]
+        },
+        {
+          "option_id": "05e41a3e-4b11-495b-bf63-eab52192bcae",
+          "letter": "B",
+          "label": "Helping people and communities",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Directing vast resources toward others is the definitional manifestation of high altruism."
+            },
+            {
+              "trait": "empathy",
+              "weight": 2,
+              "reason": "Shows a powerful empathetic resonance with the struggles or needs of communities."
+            }
+          ]
+        },
+        {
+          "option_id": "6847d9dc-85a4-45e0-9ed3-2f9c4dcb6bd5",
+          "letter": "C",
+          "label": "Building innovative ideas or businesses",
+          "mappings": [
+            {
+              "trait": "creativity",
+              "weight": 2,
+              "reason": "Creating ventures without resource constraints reflects a pure drive to actualize new concepts."
+            },
+            {
+              "trait": "initiative",
+              "weight": 2,
+              "reason": "Indicates self-starting energy directed toward forming new entities rather than passive consumption."
+            }
+          ]
+        },
+        {
+          "option_id": "9d1fdaa8-3f3f-4517-92a6-2c6847fc49d8",
+          "letter": "D",
+          "label": "Exploring, learning, and traveling",
+          "mappings": [
+            {
+              "trait": "curiosity",
+              "weight": 3,
+              "reason": "Prioritizing unfettered exploration reflects a deeply embedded thirst for knowledge and experience."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Traveling and learning are hallmark behaviors of high openness to novel experiences."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Unconstrained Values",
+        "Intrinsic Motivation"
+      ],
+      "frameworks": [
+        {
+          "name": "Ikigai",
+          "relevance": "Removes 'what you can be paid for' to uncover the pure 'what you love' and 'what the world needs' quadrants."
+        }
+      ],
+      "confidence_logic": "By hypothetical removing financial survival instincts, this question strips away extrinsic motivation to reveal pure, unadulterated intrinsic drivers.",
+      "contributions": {
+        "personality": "Exposes core traits unchecked by environmental survival pressures.",
+        "swot": "Strengths lie in the purity of their passion; weaknesses might involve struggling to monetize these interests in reality.",
+        "4w1h": "Answers 'What' they would do if survival was guaranteed, serving as a north star for true alignment.",
+        "strengths": "Defines what they will work on tirelessly without needing external validation.",
+        "weaknesses": "May highlight areas where they might tolerate poor working conditions just because they love the work.",
+        "career": "Suggests industries where their true passion lies, pointing toward eventual ideal roles once financial baselines are met.",
+        "learning": "Shows the subjects they devour voluntarily in their free time.",
+        "roadmap": "Helps distinguish between 'day jobs' designed to fund existence versus 'passion projects' intended to fulfill them.",
+        "opportunities": "Identifies volunteer or low-barrier entry points into fulfilling sectors they might have ignored due to salary concerns.",
+        "podcasts": "Recommends content spanning global problem solving, community building, startup innovation, or travel and history.",
+        "books": "Points toward visionary non-fiction or biographies of philanthropists, inventors, and explorers.",
+        "role_models": "Highlights post-economic figures like Bill Gates, Yvon Chouinard, or unconstrained artists for inspiration.",
+        "motivation": "Using the 'lottery test' allows coaches to tap into the deepest level of individual drive to reignite passion during mundane tasks."
+      },
+      "suggested_improvements": "Could add an option for 'relaxing, consuming, and enjoying leisure' to capture those with lower inherent drive or high burnout."
+    },
+    {
+      "question_id": "a3fdd855-270e-4365-8230-3bd8c76b4f34",
+      "question_text": "What does success mean to you?",
+      "primary_trait": "authenticity",
+      "secondary_traits": [
+        "goal_orientation",
+        "extrinsic_motivation",
+        "altruism"
+      ],
+      "options": [
+        {
+          "option_id": "42e2e9fd-0500-485d-8d97-850c70fa6cae",
+          "letter": "A",
+          "label": "Achieving my goals",
+          "mappings": [
+            {
+              "trait": "goal_orientation",
+              "weight": 3,
+              "reason": "Equating success with goal completion indicates highly systemic, checklist-driven personal validation."
+            },
+            {
+              "trait": "achievement_drive",
+              "weight": 2,
+              "reason": "Suggests intrinsic satisfaction derived from conquering predefined challenges."
+            }
+          ]
+        },
+        {
+          "option_id": "ef64ecda-856a-4b6a-b90c-77f1a9dc7ccf",
+          "letter": "B",
+          "label": "Living a happy and peaceful life",
+          "mappings": [
+            {
+              "trait": "authenticity",
+              "weight": 2,
+              "reason": "Valuing peace often means shunning socially expected rat-races in favor of personal emotional health."
+            },
+            {
+              "trait": "emotional_intelligence",
+              "weight": 1,
+              "reason": "Reflects a prioritization of internal emotional regulation over external metrics."
+            }
+          ]
+        },
+        {
+          "option_id": "7d8c6441-6d3c-4f39-a40b-b16afe65a78e",
+          "letter": "C",
+          "label": "Being respected for my work",
+          "mappings": [
+            {
+              "trait": "extrinsic_motivation",
+              "weight": 3,
+              "reason": "Deriving success from respect and prestige highlights a strong external locus of validation."
+            },
+            {
+              "trait": "sociability",
+              "weight": 1,
+              "reason": "Desiring respect suggests attunement to social hierarchies and community reputation."
+            }
+          ]
+        },
+        {
+          "option_id": "6624afc8-0a86-4d54-800a-a8a4306c846a",
+          "letter": "D",
+          "label": "Creating a positive impact on others",
+          "mappings": [
+            {
+              "trait": "altruism",
+              "weight": 3,
+              "reason": "Defining success by the betterment of others demonstrates high prosocial drive."
+            },
+            {
+              "trait": "purposefulness",
+              "weight": 2,
+              "reason": "Reflects a belief that personal success is inseparable from collective advancement."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Value Construct",
+        "Validation Source"
+      ],
+      "frameworks": [
+        {
+          "name": "SDT",
+          "relevance": "Differentiates between internal (peace, goals) and external (respect) validation mechanisms."
+        }
+      ],
+      "confidence_logic": "Asking for definitions of a subjective concept like 'success' provides distinct categorization of internal vs. external and communal vs. individual psychological needs.",
+      "contributions": {
+        "personality": "Exposes whether the user operates via a self-referential framework or a society-referential one.",
+        "swot": "Strengths include resilience in their chosen path; weaknesses involve vulnerabilities to either status-anxiety or lack of worldly ambition.",
+        "4w1h": "Answers 'Why' the individual measures their life a certain way, establishing baseline metrics.",
+        "strengths": "Pinpoints their most powerful motivational lever (e.g., public recognition vs. inner tranquility).",
+        "weaknesses": "May indicate over-reliance on the opinions of others or, conversely, a lack of competitive fire.",
+        "career": "Dictates whether they will thrive in highly visible corporate roles, quiet individual contributor roles, or NGO spaces.",
+        "learning": "Influences how they interpret grades or certificates (as personal milestones vs. social proof).",
+        "roadmap": "Aligns the final KPIs of their roadmap to match their emotional definition of success.",
+        "opportunities": "Helps them filter out shiny but misaligned opportunities that don't match their deep definition of success.",
+        "podcasts": "Recommends content on stoicism, leadership psychology, prestige economics, or social entrepreneurship.",
+        "books": "Points toward titles like 'Status Anxiety' or 'The Subtle Art of Not Giving a F*ck' to balance their perspectives.",
+        "role_models": "Highlights individuals known for redefining success on their own terms (e.g., retiring early, pivoting to philanthropy).",
+        "motivation": "A crucial anchor to remind them of what they are actually playing the game for during moments of doubt."
+      },
+      "suggested_improvements": "Option A is slightly broad; replacing it with 'Mastering a difficult craft' might sharper the distinction between goal completion and mastery."
+    },
+    {
+      "question_id": "a3c88e02-cd3e-4542-a57d-ec6fcbfea205",
+      "question_text": "What inspires you to work harder every day?",
+      "primary_trait": "achievement_drive",
+      "secondary_traits": [
+        "growth_mindset",
+        "dependability",
+        "purposefulness"
+      ],
+      "options": [
+        {
+          "option_id": "4123082d-ea57-40d3-bd7c-857c15cf5633",
+          "letter": "A",
+          "label": "Becoming the best version of myself",
+          "mappings": [
+            {
+              "trait": "growth_mindset",
+              "weight": 3,
+              "reason": "A focus on relentless self-improvement embodies the belief that abilities can be continually developed."
+            },
+            {
+              "trait": "intrinsic_motivation",
+              "weight": 2,
+              "reason": "Driven by mastering oneself rather than outperforming others."
+            }
+          ]
+        },
+        {
+          "option_id": "a8252622-8c9e-473c-90f3-1b9851f50000",
+          "letter": "B",
+          "label": "Supporting my family",
+          "mappings": [
+            {
+              "trait": "dependability",
+              "weight": 3,
+              "reason": "Working for the sake of dependents highlights immense reliability and duty."
+            },
+            {
+              "trait": "extrinsic_motivation",
+              "weight": 1,
+              "reason": "Providing for family acts as a powerful external, though deeply internalized, obligation."
+            }
+          ]
+        },
+        {
+          "option_id": "7153e062-758b-4113-a648-0dbdd467c073",
+          "letter": "C",
+          "label": "Achieving my dreams",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Hustling to actualize personal dreams denotes high ambition and forward momentum."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 2,
+              "reason": "Dreams act as distant macro-goals requiring structured, daily effort."
+            }
+          ]
+        },
+        {
+          "option_id": "6f1cb2d5-09a5-4344-88ac-b2bcf07751a9",
+          "letter": "D",
+          "label": "Making a difference in the world",
+          "mappings": [
+            {
+              "trait": "purposefulness",
+              "weight": 3,
+              "reason": "Drawing energy from broader global impact is a sign of high existential purposefulness."
+            },
+            {
+              "trait": "altruism",
+              "weight": 2,
+              "reason": "Daily hard work fueled by the desire to help others indicates profound prosocial drive."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Daily Motivation",
+        "Engine of Effort"
+      ],
+      "frameworks": [
+        {
+          "name": "SDT",
+          "relevance": "Maps exactly to internalized regulation (family), intrinsic mastery (best version), and integrated regulation (making a difference)."
+        }
+      ],
+      "confidence_logic": "By isolating the daily trigger for hard effort, we can confidently categorize whether their immediate kinetic energy is sourced from duty, ego, mastery, or service.",
+      "contributions": {
+        "personality": "Shows whether duty, self-actualization, ambition, or community is their primary psychological anchor.",
+        "swot": "Strengths include the specific fuel that makes them resilient; weaknesses lie in what happens if that fuel source is threatened (e.g., family crisis or shattered dreams).",
+        "4w1h": "Answers the 'Why' behind their daily grind and execution.",
+        "strengths": "Defines what keeps them consistent when motivation inevitably wanes.",
+        "weaknesses": "May expose burnout triggers if their hard work fails to translate into family security or tangible self-improvement.",
+        "career": "Guides the framing of job roles (e.g., framing a role as a provider of stability vs. a launchpad for dreams).",
+        "learning": "Determines whether they learn best when it directly correlates to immediate obligations versus grand future visions.",
+        "roadmap": "Integrates their core inspiration into every milestone so the journey feels emotionally coherent.",
+        "opportunities": "Highlights situations where they can intertwine their personal dreams with supporting loved ones.",
+        "podcasts": "Recommends daily motivational audio tailored to family builders, visionaries, or self-improvement junkies.",
+        "books": "Points to biographies of those driven by similar engines, like 'Shoe Dog' (dreams) or 'The 7 Habits of Highly Effective People' (growth).",
+        "role_models": "Connects them to archetypes of the dedicated provider, the relentless builder, or the visionary changemaker.",
+        "motivation": "Provides the exact phrase or concept to evoke when they are facing a difficult, monotonous task."
+      },
+      "suggested_improvements": "Option C 'Achieving my dreams' is a bit vague and overlaps slightly with A; narrowing it to 'Reaching the top of my field' could add precision."
+    },
+    {
+      "question_id": "c450ff9f-b659-4f96-87e0-14b468056a3a",
+      "question_text": "If you had only one priority this year, what would it be?",
+      "primary_trait": "goal_orientation",
+      "secondary_traits": [
+        "learning_agility",
+        "achievement_drive",
+        "financial_intelligence"
+      ],
+      "options": [
+        {
+          "option_id": "e5418e82-87e4-4abc-a3e9-e8c93f3dfc4c",
+          "letter": "A",
+          "label": "Learning new skills",
+          "mappings": [
+            {
+              "trait": "learning_agility",
+              "weight": 3,
+              "reason": "Nominating skill acquisition as the absolute top priority reveals high dedication to cognitive adaptability."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": 2,
+              "reason": "Suggests the belief that acquiring capabilities outweighs producing immediate outward results."
+            }
+          ]
+        },
+        {
+          "option_id": "2509e5ca-3d61-4df0-a751-7cd52a830d13",
+          "letter": "B",
+          "label": "Building my career",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Choosing career building points to a direct focus on professional status, progression, and mastery."
+            },
+            {
+              "trait": "initiative",
+              "weight": 1,
+              "reason": "Focusing intensely on career requires proactive maneuvering and networking."
+            }
+          ]
+        },
+        {
+          "option_id": "9c1db134-d9d2-4361-964f-9433279fb98a",
+          "letter": "C",
+          "label": "Improving myself personally",
+          "mappings": [
+            {
+              "trait": "self_awareness",
+              "weight": 3,
+              "reason": "Concentrating on personal improvement indicates a prioritization of mental, physical, or emotional self-regulation."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 2,
+              "reason": "Implies a willingness to look inward and recalibrate personal habits."
+            }
+          ]
+        },
+        {
+          "option_id": "71ced729-6c5f-4723-82b2-1dbc6e8f066b",
+          "letter": "D",
+          "label": "Earning and managing money wisely",
+          "mappings": [
+            {
+              "trait": "financial_intelligence",
+              "weight": 3,
+              "reason": "Explicitly targeting wealth management signals high pragmatic focus on economic stability and compounding."
+            },
+            {
+              "trait": "discipline",
+              "weight": 1,
+              "reason": "Managing money wisely requires temporal discounting and restraint."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Immediate Urgency",
+        "Resource Allocation"
+      ],
+      "frameworks": [
+        {
+          "name": "SWOT",
+          "relevance": "Pinpoints the user's perceived immediate weakness or most pressing opportunity for the current year."
+        }
+      ],
+      "confidence_logic": "Forcing a single annual priority cuts through generalist noise, confidently revealing the individual's most urgent developmental focus.",
+      "contributions": {
+        "personality": "Identifies if the user is in a phase of consumption (learning/saving), production (career), or recalibration (personal improvement).",
+        "swot": "Their chosen priority often reveals the area they feel most vulnerable in (Weakness) or most excited to scale (Opportunity).",
+        "4w1h": "Answers the immediate 'What' for their 12-month horizon.",
+        "strengths": "Demonstrates focus and the ability to ruthlessly prioritize one dimension of life.",
+        "weaknesses": "May imply neglect of non-chosen areas (e.g., grinding on the career while health deteriorates).",
+        "career": "Informs whether they are in an upskilling phase, an execution phase, or a wealth-consolidation phase.",
+        "learning": "Directs their learning budget exclusively toward technical skills, leadership, self-help, or finance respectively.",
+        "roadmap": "Forms the central pillar of their 1-year tactical plan.",
+        "opportunities": "Highlights the immediate next steps needed to fulfill that one specific priority.",
+        "podcasts": "Recommends highly tactical, actionable podcasts specific to career growth, investing, mindfulness, or skill building.",
+        "books": "Suggests foundational texts like 'Atomic Habits' (self), 'The Psychology of Money' (finance), 'Deep Work' (career), or 'Ultralearning' (skills).",
+        "role_models": "Profiles practitioners who mastered the specific domain chosen for the year.",
+        "motivation": "Keeps annual reviews grounded by tracking their progress mapped exclusively to their chosen priority."
+      },
+      "suggested_improvements": "Could present these priorities dynamically based on their 10-year goal to gauge alignment between short-term tactics and long-term vision."
+    },
+    {
+      "question_id": "40ba86be-f4dc-414e-a1af-ffa8cd21deb5",
+      "question_text": "How do you usually plan for your future?",
+      "primary_trait": "goal_orientation",
+      "secondary_traits": [
+        "adaptability",
+        "long_term_planning",
+        "openness"
+      ],
+      "options": [
+        {
+          "option_id": "731abe51-6803-4662-884a-67082e4aa528",
+          "letter": "A",
+          "label": "I have a clear long-term plan",
+          "mappings": [
+            {
+              "trait": "long_term_planning",
+              "weight": 3,
+              "reason": "Maintaining a clear long-term plan indicates high foresight, conscientiousness, and chronological organization."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 3,
+              "reason": "Shows a deeply systemic approach to life, mapping distant destinations to current actions."
+            }
+          ]
+        },
+        {
+          "option_id": "dfbb90f6-97ab-46c5-aad5-897fb08e9a67",
+          "letter": "B",
+          "label": "I set short-term goals first",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 2,
+              "reason": "Focusing incrementally allows for continuous pivoting based on immediate feedback."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": 1,
+              "reason": "Still displays structure and forward momentum, but restricted to shorter time horizons."
+            }
+          ]
+        },
+        {
+          "option_id": "76609d2d-837d-48b8-95d9-1241d7e53e34",
+          "letter": "C",
+          "label": "I think about it but rarely plan",
+          "mappings": [
+            {
+              "trait": "goal_orientation",
+              "weight": -2,
+              "reason": "Thinking without structuring suggests a lack of execution mechanics or low conscientiousness."
+            },
+            {
+              "trait": "reflectiveness",
+              "weight": 1,
+              "reason": "Still indicates internal contemplation, even if separated from tactical application."
+            }
+          ]
+        },
+        {
+          "option_id": "8110234c-edd7-4799-9b7d-91b0be83fd5b",
+          "letter": "D",
+          "label": "I mostly go with the flow",
+          "mappings": [
+            {
+              "trait": "adaptability",
+              "weight": 3,
+              "reason": "Going with the flow requires immense flexibility and comfort with ambiguity."
+            },
+            {
+              "trait": "goal_orientation",
+              "weight": -3,
+              "reason": "Represents the exact antithesis of structured goal tracking and milestone setting."
+            },
+            {
+              "trait": "openness",
+              "weight": 2,
+              "reason": "Correlates with high openness to serendipity and novel pathways as they arise."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Executive Strategy",
+        "Action Orientation"
+      ],
+      "frameworks": [
+        {
+          "name": "4W1H",
+          "relevance": "Directly evaluates the 'How'\u2014the methodological approach to bridging the present and the future."
+        }
+      ],
+      "confidence_logic": "Self-reporting on planning methodologies provides standard, clear indicators of Conscientiousness and timeline projection, mapping accurately to goal orientation and adaptability.",
+      "contributions": {
+        "personality": "Illustrates the balance of Conscientiousness (planning) vs. Openness (free-flowing) in their daily operations.",
+        "swot": "Strengths lie in either high predictability (planners) or high resilience to change (flow-ers); weaknesses are rigidity or aimlessness.",
+        "4w1h": "Explains 'How' they intend to execute upon their ambitions.",
+        "strengths": "Highlights organizational foresight or situational agility.",
+        "weaknesses": "May reveal a tendency to over-plan to the point of paralysis, or under-plan to the point of drift.",
+        "career": "Determines suitability for highly structured corporate hierarchies versus chaotic startup environments.",
+        "learning": "Informs whether they need a rigid syllabus or a self-directed, exploratory curriculum.",
+        "roadmap": "Mandates how detailed the roadmap should be: 5-year Gantt charts for 'A' vs. loose 3-month themes for 'D'.",
+        "opportunities": "Identifies opportunities based on their structure tolerance, such as project management vs. crisis response.",
+        "podcasts": "Recommends time-management and productivity shows for planners, and agile thinking or improvisation content for flow-ers.",
+        "books": "Points to 'Getting Things Done' for tacticians or 'Antifragile' for adaptable mindsets.",
+        "role_models": "Contrasts hyper-organized leaders like Steve Jobs with highly adaptable fluid thinkers or artists.",
+        "motivation": "Frames task completion either as adhering strictly to the grand plan or seizing the spontaneous moment."
+      },
+      "suggested_improvements": "Could incorporate a question assessing if their plans frequently fail when exposed to reality, adding a realism check to their preferred style."
+    },
+    {
+      "question_id": "a6d0b41d-187d-49a0-9c3f-f58e757d4d46",
+      "question_text": "What motivates you to keep moving forward even during difficult times?",
+      "primary_trait": "resilience",
+      "secondary_traits": [
+        "achievement_drive",
+        "purposefulness",
+        "curiosity"
+      ],
+      "options": [
+        {
+          "option_id": "b685d24c-afda-45ff-956f-11e28730bc38",
+          "letter": "A",
+          "label": "My dreams and ambitions",
+          "mappings": [
+            {
+              "trait": "achievement_drive",
+              "weight": 3,
+              "reason": "Using ambitions as an anchor during hardship indicates an overpowering individualistic drive to succeed."
+            },
+            {
+              "trait": "resilience",
+              "weight": 2,
+              "reason": "Maintains psychological buoyancy by focusing entirely on future positive outcomes."
+            }
+          ]
+        },
+        {
+          "option_id": "7feb2e43-1156-461e-bf90-d695e0136860",
+          "letter": "B",
+          "label": "My family and loved ones",
+          "mappings": [
+            {
+              "trait": "dependability",
+              "weight": 2,
+              "reason": "Deriving grit from interpersonal duty reveals strong relational loyalty and reliability."
+            },
+            {
+              "trait": "resilience",
+              "weight": 3,
+              "reason": "Social support and obligation are statistically some of the strongest known buffers for human resilience."
+            }
+          ]
+        },
+        {
+          "option_id": "1c7a1471-d0d8-443b-9aa6-c6e19ad01664",
+          "letter": "C",
+          "label": "My curiosity to learn and grow",
+          "mappings": [
+            {
+              "trait": "curiosity",
+              "weight": 3,
+              "reason": "Reframing difficulty as an educational puzzle demonstrates high cognitive flexibility and inquisitiveness."
+            },
+            {
+              "trait": "growth_mindset",
+              "weight": 2,
+              "reason": "Viewing the struggle itself as the mechanism for growth is the core tenet of a growth mindset."
+            }
+          ]
+        },
+        {
+          "option_id": "8b656072-00c2-4f2d-984a-5b9f571a574e",
+          "letter": "D",
+          "label": "The desire to make a meaningful impact",
+          "mappings": [
+            {
+              "trait": "purposefulness",
+              "weight": 3,
+              "reason": "Sustaining effort through hardship via a sense of mission reveals enduring existential purpose."
+            },
+            {
+              "trait": "altruism",
+              "weight": 2,
+              "reason": "Putting oneself through difficulty for the benefit of the collective indicates deep prosocial endurance."
+            }
+          ]
+        }
+      ],
+      "higher_level_dimensions": [
+        "Grit Mechanisms",
+        "Adversity Response"
+      ],
+      "frameworks": [
+        {
+          "name": "VIA Strengths",
+          "relevance": "Connects resilience to specific character strengths like Hope (dreams), Love (family), Curiosity (learning), or Spirituality (meaning)."
+        }
+      ],
+      "confidence_logic": "Assessing behavior under stress ('difficult times') yields the most authentic read on deep-seated motivational anchors, making these linkages highly robust.",
+      "contributions": {
+        "personality": "Identifies the emotional load-bearing pillar that keeps the individual functional during crises.",
+        "swot": "Strengths include immense perseverance grounded in clear values; weaknesses arise if that single value structure collapses.",
+        "4w1h": "Answers the deeper 'Why persist?' when standard motivations fail.",
+        "strengths": "Points to highly reliable sources of grit (vision, duty, intellect, or mission).",
+        "weaknesses": "May reveal a lack of diverse coping mechanisms if they only ever rely on one source of strength.",
+        "career": "Helps organizations understand how to support this individual during crunch times or industry downturns.",
+        "learning": "Shows how to frame difficult learning curves\u2014either as steps toward a dream, tools for providing, puzzles to solve, or weapons for change.",
+        "roadmap": "Embeds 'break-glass-in-case-of-emergency' reminders into their roadmap for inevitable low points.",
+        "opportunities": "Identifies high-stress, high-reward opportunities that they uniquely have the psychological stamina to endure.",
+        "podcasts": "Recommends resilience narratives, survival stories, family-focused psychology, or purpose-driven activism content.",
+        "books": "Suggests 'Grit' by Angela Duckworth or Viktor Frankl's 'Man's Search for Meaning'.",
+        "role_models": "Profiles historical figures who endured extreme hardship by clinging to their specific core anchor (e.g., Nelson Mandela for impact).",
+        "motivation": "Armors the user against future burnout by clearly identifying and protecting their primary source of grit."
+      },
+      "suggested_improvements": "Could add an element assessing how they historically bounced back from failure to add a retrospective behavioral check to their self-report."
+    }
+  ]
+}
