@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedStatsRouteImport } from './routes/_authenticated/stats'
 import { Route as AuthenticatedRoadmapRouteImport } from './routes/_authenticated/roadmap'
 import { Route as AuthenticatedRecommendationsRouteImport } from './routes/_authenticated/recommendations'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedStatsRoute = AuthenticatedStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRoadmapRoute = AuthenticatedRoadmapRouteImport.update({
   id: '/roadmap',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
+  '/stats': typeof AuthenticatedStatsRoute
   '/assessments/$slug': typeof AuthenticatedAssessmentsSlugRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
 }
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
   '/roadmap': typeof AuthenticatedRoadmapRoute
+  '/stats': typeof AuthenticatedStatsRoute
   '/assessments/$slug': typeof AuthenticatedAssessmentsSlugRoute
   '/results/$id': typeof AuthenticatedResultsIdRoute
 }
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recommendations': typeof AuthenticatedRecommendationsRoute
   '/_authenticated/roadmap': typeof AuthenticatedRoadmapRoute
+  '/_authenticated/stats': typeof AuthenticatedStatsRoute
   '/_authenticated/assessments/$slug': typeof AuthenticatedAssessmentsSlugRoute
   '/_authenticated/results/$id': typeof AuthenticatedResultsIdRoute
 }
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/recommendations'
     | '/roadmap'
+    | '/stats'
     | '/assessments/$slug'
     | '/results/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/recommendations'
     | '/roadmap'
+    | '/stats'
     | '/assessments/$slug'
     | '/results/$id'
   id:
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/recommendations'
     | '/_authenticated/roadmap'
+    | '/_authenticated/stats'
     | '/_authenticated/assessments/$slug'
     | '/_authenticated/results/$id'
   fileRoutesById: FileRoutesById
@@ -160,6 +172,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/stats': {
+      id: '/_authenticated/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof AuthenticatedStatsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/roadmap': {
       id: '/_authenticated/roadmap'
@@ -211,6 +230,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRecommendationsRoute: typeof AuthenticatedRecommendationsRoute
   AuthenticatedRoadmapRoute: typeof AuthenticatedRoadmapRoute
+  AuthenticatedStatsRoute: typeof AuthenticatedStatsRoute
   AuthenticatedAssessmentsSlugRoute: typeof AuthenticatedAssessmentsSlugRoute
   AuthenticatedResultsIdRoute: typeof AuthenticatedResultsIdRoute
 }
@@ -220,6 +240,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRecommendationsRoute: AuthenticatedRecommendationsRoute,
   AuthenticatedRoadmapRoute: AuthenticatedRoadmapRoute,
+  AuthenticatedStatsRoute: AuthenticatedStatsRoute,
   AuthenticatedAssessmentsSlugRoute: AuthenticatedAssessmentsSlugRoute,
   AuthenticatedResultsIdRoute: AuthenticatedResultsIdRoute,
 }
