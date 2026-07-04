@@ -35,11 +35,11 @@ export const loadQuestions = createServerFn({ method: "POST" })
   });
 
 export type DashboardResult = {
-  summary: { headline: string; bullets: string[] };
+  summary: { headline: string; bullets: string[]; motivation?: string };
   roleModels: Array<{ name: string; why: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string }>;
-  podcasts: Array<{ title: string; host: string; pitch: string }>;
+  podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
 };
 
 const AnalyzeSchema = z.object({
