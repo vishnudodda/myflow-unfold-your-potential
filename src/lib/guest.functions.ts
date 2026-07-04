@@ -73,9 +73,9 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       prompt: userMsg,
     });
     const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/, "").trim();
-    let result: unknown;
+    let result: Record<string, unknown>;
     try {
-      result = JSON.parse(cleaned);
+      result = JSON.parse(cleaned) as Record<string, unknown>;
     } catch {
       throw new Error("AI returned an invalid response. Please try again.");
     }
