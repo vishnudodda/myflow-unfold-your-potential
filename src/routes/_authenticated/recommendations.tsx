@@ -19,7 +19,23 @@ export const Route = createFileRoute("/_authenticated/recommendations")({
 type Career = { id: string; title: string; industry: string | null; match_score: number; reasoning: string | null; required_skills: string[] | null };
 type Learning = { id: string; kind: string; title: string; creator: string | null; url: string; duration: string | null; reason: string | null; skill_tag: string | null };
 type RoleModel = { id: string; name: string; title: string | null; bio: string | null; story: string | null; reason: string | null };
-type Opportunity = { id: string; kind: string; title: string; organization: string | null; location: string | null; is_remote: boolean | null; url: string | null; description: string | null; match_reason: string | null; trust_score: number | null };
+type Opportunity = {
+  id: string;
+  kind: string;
+  title: string;
+  organization: string | null;
+  location: string | null;
+  is_remote: boolean | null;
+  url: string | null;
+  description: string | null;
+  match_reason: string | null;
+  trust_score: number | null;
+  posted_date: string | null;
+  deadline: string | null;
+  stipend: string | null;
+  required_skills: string[] | null;
+  confidence: string | null;
+};
 
 function RecsPage() {
   const get = useServerFn(getRecommendations);
@@ -150,7 +166,7 @@ function RecsPage() {
               </div>
               {data.opportunities.length === 0 && (
                 <div className="md:col-span-2 p-8 rounded-2xl border border-dashed border-border text-center">
-                  <p className="text-sm text-muted-foreground">No opportunities yet — click "Refresh opportunities" above.</p>
+                  <p className="text-sm text-muted-foreground">No verified recent opportunities right now — check back in a few days, or click "Refresh opportunities" above.</p>
                 </div>
               )}
               {data.opportunities.map((o) => (
@@ -161,13 +177,27 @@ function RecsPage() {
                       <h3 className="mt-1 font-display text-lg font-bold">{o.title}</h3>
                       {o.organization && <p className="text-xs text-muted-foreground">{o.organization}{o.location ? ` · ${o.location}` : ""}{o.is_remote ? " · Remote" : ""}</p>}
                     </div>
-                    {typeof o.trust_score === "number" && (
-                      <span className="text-xs font-mono px-2 py-1 rounded-full bg-muted">Trust {Math.round(o.trust_score * 100)}%</span>
+                    {o.confidence && (
+                      <span className={`text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded-full ${
+                        o.confidence === "high" ? "bg-primary/10 text-primary" :
+                        o.confidence === "medium" ? "bg-foreground/10 text-foreground" :
+                        "bg-muted text-muted-foreground"
+                      }`}>{o.confidence} confidence</span>
                     )}
                   </div>
+                  <dl className="mt-4 grid grid-cols-2 gap-3 text-xs">
+                    {o.posted_date && <div><dt className="text-muted-foreground">Posted</dt><dd className="font-medium">{o.posted_date}</dd></div>}
+                    {o.deadline && <div><dt className="text-muted-foreground">Deadline</dt><dd className="font-medium">{o.deadline}</dd></div>}
+                    {o.stipend && <div><dt className="text-muted-foreground">Stipend</dt><dd className="font-medium">{o.stipend}</dd></div>}
+                  </dl>
+                  {o.required_skills && o.required_skills.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {o.required_skills.slice(0, 6).map((s, i) => <span key={i} className="text-[10px] uppercase font-bold tracking-widest px-2 py-1 rounded-full bg-muted">{s}</span>)}
+                    </div>
+                  )}
                   {o.description && <p className="mt-3 text-sm text-muted-foreground">{o.description}</p>}
                   {o.match_reason && <p className="mt-2 text-xs text-primary">Why: {o.match_reason}</p>}
-                  {o.url && <a href={o.url} target="_blank" rel="noreferrer" className="mt-4 inline-block text-sm font-semibold text-primary hover:underline">Learn more →</a>}
+                  {o.url && <a href={o.url} target="_blank" rel="noreferrer" className="mt-4 inline-block text-sm font-semibold text-primary hover:underline">Apply →</a>}
                 </article>
               ))}
             </TabsContent>
