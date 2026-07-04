@@ -53,7 +53,11 @@ export async function gatherProfileContext(
   userId: string,
 ): Promise<string> {
   const [{ data: profile }, { data: results }] = await Promise.all([
-    supabase.from("profiles").select("display_name, age_band, goals").eq("user_id", userId).maybeSingle(),
+    supabase
+      .from("profiles")
+      .select("display_name, age_band, goals, education_level, country, work_mode, experience_level")
+      .eq("user_id", userId)
+      .maybeSingle(),
     supabase
       .from("ai_results")
       .select("prompt_slug, output, created_at")

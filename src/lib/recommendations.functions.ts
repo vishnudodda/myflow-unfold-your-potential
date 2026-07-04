@@ -6,6 +6,42 @@ type Obj = Record<string, unknown>;
 const asArray = (v: unknown): Obj[] => (Array.isArray(v) ? (v as Obj[]) : []);
 const asStr = (v: unknown): string | null => (typeof v === "string" ? v : null);
 const asNum = (v: unknown): number | null => (typeof v === "number" ? v : null);
+const asDate = (v: unknown): string | null => {
+  const s = asStr(v);
+  if (!s) return null;
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
+};
+const asConfidence = (v: unknown): string | null => {
+  const s = asStr(v);
+  if (!s) return null;
+  const u = s.toLowerCase();
+  if (u.startsWith("h")) return "high";
+  if (u.startsWith("m")) return "medium";
+  if (u.startsWith("l")) return "low";
+  return null;
+};
+const asStrArr = (v: unknown): string[] => (Array.isArray(v) ? (v as unknown[]).filter((x) => typeof x === "string") as string[] : []);
+
+function mapOpp(userId: string, o: Obj) {
+  return {
+    user_id: userId,
+    kind: asStr(o.kind) ?? asStr(o.type) ?? "internship",
+    title: asStr(o.title) ?? asStr(o.name) ?? "Opportunity",
+    organization: asStr(o.organization) ?? asStr(o.company) ?? asStr(o.host),
+    location: asStr(o.location) ?? asStr(o.city),
+    is_remote: typeof o.is_remote === "boolean" ? o.is_remote : /remote/i.test(asStr(o.location) ?? ""),
+    url: asStr(o.url) ?? asStr(o.link) ?? asStr(o.application_link),
+    description: asStr(o.description) ?? asStr(o.summary) ?? asStr(o.duration),
+    match_reason: asStr(o.match_reason) ?? asStr(o.reason) ?? asStr(o.why) ?? asStr(o.why_it_matches),
+    trust_score: asNum(o.trust_score) ?? 0.7,
+    posted_date: asDate(o.posted_date ?? o.posted ?? o.posted_at),
+    deadline: asDate(o.deadline ?? o.application_deadline ?? o.deadline_date),
+    stipend: asStr(o.stipend) ?? asStr(o.compensation) ?? asStr(o.pay),
+    required_skills: asStrArr(o.required_skills ?? o.skills),
+    confidence: asConfidence(o.confidence ?? o.confidence_still_open ?? o.is_open),
+  };
+}
 
 async function ensureSomeContext(
   supabase: import("@supabase/supabase-js").SupabaseClient,
@@ -32,20 +68,7 @@ export const generateOpportunities = createServerFn({ method: "POST" })
       const prompt = await loadPrompt("internship-opportunities");
       const out = await runPrompt(prompt, { profile: profileCtx, responses: "" });
       const opps = asArray((out as Obj).opportunities ?? (out as Obj).internships ?? out).slice(0, 12);
-      const rows = opps
-        .map((o) => ({
-          user_id: userId,
-          kind: asStr(o.kind) ?? asStr(o.type) ?? "internship",
-          title: asStr(o.title) ?? asStr(o.name) ?? "Opportunity",
-          organization: asStr(o.organization) ?? asStr(o.company) ?? asStr(o.host),
-          location: asStr(o.location) ?? asStr(o.city),
-          is_remote: typeof o.is_remote === "boolean" ? o.is_remote : /remote/i.test(asStr(o.location) ?? ""),
-          url: asStr(o.url) ?? asStr(o.link),
-          description: asStr(o.description) ?? asStr(o.summary),
-          match_reason: asStr(o.match_reason) ?? asStr(o.reason) ?? asStr(o.why),
-          trust_score: asNum(o.trust_score) ?? 0.7,
-        }))
-        .filter((r) => r.title && r.title !== "Opportunity");
+      const rows = opps.map((o) => mapOpp(userId, o)).filter((r) => r.title && r.title !== "Opportunity");
       await supabase.from("opportunities").delete().eq("user_id", userId);
       if (rows.length) {
         const { error } = await supabase.from("opportunities").insert(rows);
@@ -145,18 +168,7 @@ export const generateRecommendations = createServerFn({ method: "POST" })
 
     if (oppOut) {
       const opps = asArray((oppOut as Obj).opportunities ?? (oppOut as Obj).internships ?? oppOut).slice(0, 12);
-      const oppRows = opps.map((o) => ({
-      user_id: userId,
-      kind: asStr(o.kind) ?? asStr(o.type) ?? "internship",
-      title: asStr(o.title) ?? asStr(o.name) ?? "Opportunity",
-      organization: asStr(o.organization) ?? asStr(o.company) ?? asStr(o.host),
-      location: asStr(o.location) ?? asStr(o.city),
-      is_remote: typeof o.is_remote === "boolean" ? o.is_remote : /remote/i.test(asStr(o.location) ?? ""),
-      url: asStr(o.url) ?? asStr(o.link),
-      description: asStr(o.description) ?? asStr(o.summary),
-      match_reason: asStr(o.match_reason) ?? asStr(o.reason) ?? asStr(o.why),
-      trust_score: asNum(o.trust_score) ?? 0.7,
-    }));
+      const oppRows = opps.map((o) => mapOpp(userId, o)).filter((r) => r.title && r.title !== "Opportunity");
       await supabase.from("opportunities").delete().eq("user_id", userId);
       if (oppRows.length) await supabase.from("opportunities").insert(oppRows);
       counts.opportunities = oppRows.length;

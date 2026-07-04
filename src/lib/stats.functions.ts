@@ -22,6 +22,8 @@ export const generatePowerStats = createServerFn({ method: "POST" })
       value: asStr(s.value) ?? String(s.value ?? "—"),
       benchmark: asStr(s.benchmark),
       narrative: asStr(s.narrative) ?? asStr(s.description),
+      source: asStr(s.source) ?? asStr(s.citation),
+      is_estimate: typeof s.is_estimate === "boolean" ? s.is_estimate : true,
     }));
     if (rows.length) await supabase.from("power_stats").insert(rows);
     return { count: rows.length };

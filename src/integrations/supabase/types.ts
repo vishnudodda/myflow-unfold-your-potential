@@ -314,7 +314,9 @@ export type Database = {
       }
       opportunities: {
         Row: {
+          confidence: string | null
           created_at: string
+          deadline: string | null
           description: string | null
           expires_at: string | null
           id: string
@@ -323,13 +325,18 @@ export type Database = {
           location: string | null
           match_reason: string | null
           organization: string | null
+          posted_date: string | null
+          required_skills: string[] | null
+          stipend: string | null
           title: string
           trust_score: number | null
           url: string | null
           user_id: string
         }
         Insert: {
+          confidence?: string | null
           created_at?: string
+          deadline?: string | null
           description?: string | null
           expires_at?: string | null
           id?: string
@@ -338,13 +345,18 @@ export type Database = {
           location?: string | null
           match_reason?: string | null
           organization?: string | null
+          posted_date?: string | null
+          required_skills?: string[] | null
+          stipend?: string | null
           title: string
           trust_score?: number | null
           url?: string | null
           user_id: string
         }
         Update: {
+          confidence?: string | null
           created_at?: string
+          deadline?: string | null
           description?: string | null
           expires_at?: string | null
           id?: string
@@ -353,6 +365,9 @@ export type Database = {
           location?: string | null
           match_reason?: string | null
           organization?: string | null
+          posted_date?: string | null
+          required_skills?: string[] | null
+          stipend?: string | null
           title?: string
           trust_score?: number | null
           url?: string | null
@@ -365,8 +380,10 @@ export type Database = {
           benchmark: string | null
           created_at: string
           id: string
+          is_estimate: boolean | null
           label: string
           narrative: string | null
+          source: string | null
           user_id: string
           value: string
         }
@@ -374,8 +391,10 @@ export type Database = {
           benchmark?: string | null
           created_at?: string
           id?: string
+          is_estimate?: boolean | null
           label: string
           narrative?: string | null
+          source?: string | null
           user_id: string
           value: string
         }
@@ -383,8 +402,10 @@ export type Database = {
           benchmark?: string | null
           created_at?: string
           id?: string
+          is_estimate?: boolean | null
           label?: string
           narrative?: string | null
+          source?: string | null
           user_id?: string
           value?: string
         }
@@ -394,32 +415,44 @@ export type Database = {
         Row: {
           age_band: Database["public"]["Enums"]["age_band"] | null
           avatar_url: string | null
+          country: string | null
           created_at: string
           display_name: string | null
+          education_level: string | null
+          experience_level: string | null
           goals: string[] | null
           onboarded_at: string | null
           updated_at: string
           user_id: string
+          work_mode: string | null
         }
         Insert: {
           age_band?: Database["public"]["Enums"]["age_band"] | null
           avatar_url?: string | null
+          country?: string | null
           created_at?: string
           display_name?: string | null
+          education_level?: string | null
+          experience_level?: string | null
           goals?: string[] | null
           onboarded_at?: string | null
           updated_at?: string
           user_id: string
+          work_mode?: string | null
         }
         Update: {
           age_band?: Database["public"]["Enums"]["age_band"] | null
           avatar_url?: string | null
+          country?: string | null
           created_at?: string
           display_name?: string | null
+          education_level?: string | null
+          experience_level?: string | null
           goals?: string[] | null
           onboarded_at?: string | null
           updated_at?: string
           user_id?: string
+          work_mode?: string | null
         }
         Relationships: []
       }
