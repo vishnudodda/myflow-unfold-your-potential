@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/stats")({
   component: StatsPage,
 });
 
-type Stat = { id: string; label: string; value: string; benchmark: string | null; narrative: string | null };
+type Stat = { id: string; label: string; value: string; benchmark: string | null; narrative: string | null; source: string | null; is_estimate: boolean | null };
 
 function StatsPage() {
   const get = useServerFn(getPowerStats);
@@ -57,8 +57,8 @@ function StatsPage() {
       </header>
       <main className="mx-auto max-w-6xl px-6 py-12">
         <span className="text-xs font-mono text-primary tracking-widest uppercase">Power Statistics</span>
-        <h1 className="mt-2 font-display text-4xl font-bold">Your benchmarks</h1>
-        <p className="mt-2 text-muted-foreground max-w-2xl">Personal metrics distilled from your responses — with context on how they compare.</p>
+        <h1 className="mt-2 font-display text-4xl font-bold">You've come further than you think.</h1>
+        <p className="mt-2 text-muted-foreground max-w-2xl">You already have opportunities that many don't. Now imagine what you can achieve if you keep growing.</p>
 
         {loading ? (
           <p className="mt-12 text-muted-foreground">Loading…</p>
@@ -76,6 +76,11 @@ function StatsPage() {
                 <p className="mt-3 font-display text-4xl font-bold text-primary">{s.value}</p>
                 {s.benchmark && <p className="mt-2 text-xs text-muted-foreground">{s.benchmark}</p>}
                 {s.narrative && <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{s.narrative}</p>}
+                {(s.source || s.is_estimate) && (
+                  <p className="mt-4 text-[10px] uppercase tracking-widest text-muted-foreground/60">
+                    {s.is_estimate ? "Estimate" : "Verified"}{s.source ? ` · ${s.source}` : ""}
+                  </p>
+                )}
               </article>
             ))}
           </div>
