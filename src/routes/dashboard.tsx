@@ -225,3 +225,29 @@ function Panel({ title, tone, emoji, children }: { title: string; tone: keyof ty
     </section>
   );
 }
+
+// Splits a paragraph into text + number tokens (e.g. "617M", "70%", "1.1B", "258 million")
+// and animates each number with the odometer counter so stats like the UNESCO figure roll in.
+function AnimatedText({ text }: { text: string }) {
+  const regex = /(\d[\d,]*(?:\.\d+)?\s?(?:%|[KMB]|million|billion|thousand)?)/gi;
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (!part) return null;
+        if (regex.test(part)) {
+          // reset regex state between tests
+          regex.lastIndex = 0;
+          return (
+            <AnimatedCounter
+              key={i}
+              value={part.trim()}
+              className="font-mono font-semibold text-foreground"
+            />
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
