@@ -247,10 +247,14 @@ export const generateReport = createServerFn({ method: "POST" })
       const f = opts.font ?? font;
       const color = opts.color ?? [0.15, 0.15, 0.2];
       const gap = opts.gap ?? 4;
-      const safe = (text ?? "").replace(/[^\x20-\x7E]/g, (c) => {
-        const map: Record<string, string> = { "—": "-", "–": "-", "'": "'", "'": "'", """: '"', """: '"', "…": "...", "•": "-", "✧": "*", "✦": "*", "✨": "*" };
-        return map[c] ?? "";
-      });
+      const map: Record<string, string> = {
+        "\u2014": "-", "\u2013": "-",
+        "\u2018": "'", "\u2019": "'",
+        "\u201C": '"', "\u201D": '"',
+        "\u2026": "...", "\u2022": "-",
+        "\u2727": "*", "\u2726": "*", "\u2728": "*",
+      };
+      const safe = (text ?? "").replace(/[^\x20-\x7E]/g, (c) => map[c] ?? "");
       const lines = wrap(safe, f, size, MAX_W);
       for (const ln of lines) {
         ensure(size + gap);
