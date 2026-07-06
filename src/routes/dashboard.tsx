@@ -203,7 +203,7 @@ function Dashboard() {
                   <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                 </div>
                 <div className="text-xs md:text-sm font-mono uppercase tracking-widest text-primary max-w-xl">
-                  {r.perspective.lessPrivileged?.label || r.perspective.stat}
+                  {r.perspective.lessPrivileged ? "young people you're already ahead of — your head start ✦" : r.perspective.stat}
                 </div>
                 <p className="text-sm md:text-base text-foreground/85 leading-relaxed max-w-2xl">
                   {stripNumbers(
