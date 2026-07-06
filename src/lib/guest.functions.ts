@@ -12,6 +12,65 @@ export const listAssessments = createServerFn({ method: "GET" }).handler(async (
   return { assessments: data ?? [] };
 });
 
+export type IndustryInsight = {
+  id: string;
+  title: string;
+  description: string;
+  statistic: string;
+  source: string;
+  publicationYear: number;
+  sourceUrl: string;
+  category: string[];
+  icon: string | null;
+  lastVerified: string;
+};
+
+export const getIndustryInsights = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    z.object({ categories: z.array(z.string()).optional(), limit: z.number().int().min(1).max(8).optional() }).parse(d),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const limit = data.limit ?? 4;
+    const cats = (data.categories ?? []).filter(Boolean);
+    let rows: Array<Record<string, unknown>> = [];
+    if (cats.length) {
+      const { data: matched } = await supabaseAdmin
+        .from("industry_insights")
+        .select("*")
+        .overlaps("categories", cats)
+        .order("sort_weight", { ascending: false })
+        .limit(limit);
+      rows = matched ?? [];
+    }
+    if (rows.length < limit) {
+      const { data: fill } = await supabaseAdmin
+        .from("industry_insights")
+        .select("*")
+        .contains("categories", ["general"])
+        .order("sort_weight", { ascending: false })
+        .limit(limit);
+      const seen = new Set(rows.map((r) => r.id));
+      for (const row of fill ?? []) {
+        if (rows.length >= limit) break;
+        if (!seen.has(row.id)) rows.push(row);
+      }
+    }
+    const insights: IndustryInsight[] = rows.slice(0, limit).map((r) => ({
+      id: String(r.id),
+      title: String(r.title),
+      description: String(r.description),
+      statistic: String(r.statistic),
+      source: String(r.source_name),
+      publicationYear: Number(r.publication_year),
+      sourceUrl: String(r.source_url),
+      category: (r.categories as string[]) ?? [],
+      icon: (r.icon as string | null) ?? null,
+      lastVerified: String(r.last_verified),
+    }));
+    return { insights };
+  });
+
 export const loadQuestions = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ slugs: z.array(z.string()).min(1) }).parse(d))
   .handler(async ({ data }) => {
