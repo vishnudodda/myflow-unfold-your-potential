@@ -36,10 +36,18 @@ export const loadQuestions = createServerFn({ method: "POST" })
 
 export type DashboardResult = {
   summary: { headline: string; bullets: string[]; motivation?: string };
-  roleModels: Array<{ name: string; why: string }>;
+  roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
-  opportunities: Array<{ title: string; org: string; stipend: string; confidence: string }>;
+  opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
   podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
+  perspective?: {
+    headline: string;
+    stat: string;
+    statNumber: string;
+    source?: string;
+    message: string;
+    facts: Array<{ number: string; label: string; detail: string }>;
+  };
 };
 
 const AnalyzeSchema = z.object({
@@ -56,15 +64,25 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
   "summary": { "headline": string, "bullets": string[3], "motivation": string },
   "roleModels": [ { "name": string, "why": string } ] (exactly 3),
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
-  "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low" } ] (exactly 3),
-  "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string } ] (exactly 3)
+  "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
+  "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string } ] (exactly 3),
+  "perspective": {
+    "headline": string,
+    "stat": string,
+    "statNumber": string,
+    "source": string,
+    "message": string,
+    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
+  }
 }
 Ground every field in the user's answers. No generic filler. No disclaimers.
 
 Rules:
 - summary.motivation: 1–2 warm, personal sentences of encouragement addressed to the user by name.
 - roleModels: pick people whose age, era, or breakout moment is RELATABLE to the user's age (e.g. teen prodigies for age 13, early-career founders for 22). Prefer contemporary figures the user could realistically look up today.
-- podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.`;
+- podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
+- opportunities.url: a real https link where the user can apply or learn more (official program page, org site, or a reliable listing like Internshala/YourStory/opportunitydesk.org). Never invent a broken URL — if unsure, link to a search page on the org's site.
+- perspective: a motivating "put things in context" panel. statNumber is a big bold figure (e.g. "1.1B", "258M", "70%"). stat is a one-line framing of that number (e.g. "children worldwide are out of school"). source cites a credible org (UNICEF, WHO, UNESCO, World Bank, UN). message is 2 warm sentences that turn the stat into gratitude + fuel for the user by name — not pity. facts are 3 additional grounding stats (number + short label + one-line detail), each from a real global/UN/WHO/UNESCO/World Bank statistic. Prefer recent figures (last 5 years). Never fabricate — if unsure, use a well-known widely-cited figure.`;
 
 export const analyzeGuest = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => AnalyzeSchema.parse(d))
@@ -88,8 +106,35 @@ export const analyzeGuest = createServerFn({ method: "POST" })
     const cleaned = text.trim().replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/, "").trim();
     try {
       const parsed = JSON.parse(cleaned) as DashboardResult;
+      // Enrich role models with Wikipedia thumbnails; fallback to generated avatars.
+      const enriched = await Promise.all(
+        (parsed.roleModels ?? []).map(async (rm) => {
+          const photoUrl = await fetchWikiThumb(rm.name) ?? avatarFor(rm.name);
+          return { ...rm, photoUrl };
+        })
+      );
+      parsed.roleModels = enriched;
       return { result: parsed };
     } catch {
       throw new Error("AI returned an invalid response. Please try again.");
     }
   });
+
+async function fetchWikiThumb(name: string): Promise<string | undefined> {
+  try {
+    const slug = encodeURIComponent(name.trim().replace(/\s+/g, "_"));
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`, {
+      headers: { "accept": "application/json", "user-agent": "MyFlow/1.0" },
+    });
+    if (!res.ok) return undefined;
+    const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string } };
+    return j.thumbnail?.source ?? j.originalimage?.source;
+  } catch {
+    return undefined;
+  }
+}
+
+function avatarFor(name: string): string {
+  const n = encodeURIComponent(name);
+  return `https://ui-avatars.com/api/?name=${n}&background=e0e7ff&color=1e3a8a&size=256&bold=true`;
+}
