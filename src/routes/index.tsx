@@ -39,7 +39,10 @@ function Intro() {
     "Teamwork",
     "Creativity",
     "Problem-solving",
+    "Coding / Programming",
     "Digital / Tech",
+    "Data analysis",
+    "Design (UI/UX/Graphic)",
     "Writing",
     "Public speaking",
     "Languages",
@@ -112,7 +115,7 @@ function Intro() {
           <div className="space-y-3">
             <div>
               <Label>Skills you already have</Label>
-              <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones. This unlocks jobs and gigs even if you only explore Ability & Habits.</p>
+              <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones.</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {SKILL_OPTIONS.map((s) => {
