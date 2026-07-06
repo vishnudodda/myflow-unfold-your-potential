@@ -46,6 +46,8 @@ export type DashboardResult = {
     statNumber: string;
     source?: string;
     message: string;
+    simpleMeaning: string;
+    lessPrivileged: { number: string; label: string; message: string };
     facts: Array<{ number: string; label: string; detail: string }>;
   };
 };
@@ -74,6 +76,8 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
     "statNumber": string,
     "source": string,
     "message": string,
+    "simpleMeaning": string,
+    "lessPrivileged": { "number": string, "label": string, "message": string },
     "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
   }
 }
@@ -84,7 +88,15 @@ Rules:
 - roleModels: pick people whose age, era, or breakout moment is RELATABLE to the user's age (e.g. teen prodigies for age 13, early-career founders for 22). Prefer contemporary figures the user could realistically look up today.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
 - opportunities: MUST be matched to the user's education stage AND declared skills. If the user is in school, suggest scholarships, competitions, or teen fellowships. If in college, suggest internships and campus programs. If graduated / job-hunting, suggest entry-level jobs, apprenticeships, or paid fellowships they can apply to today. If already working, suggest next-step roles or upskilling programs. Even when the user only explored a couple of modules (e.g. Ability + Habits), lean on their skills list to still recommend concrete jobs / gigs / programs — never say "not enough info". opportunities.url must be a real https link (official program page, org site, or a reliable listing like Internshala / YourStory / opportunitydesk.org / LinkedIn Jobs search). Never invent a broken URL — if unsure, link to a search page on the org's site.
-- perspective: a motivating "put things in context" panel. statNumber is a big bold figure (e.g. "1.1B", "258M", "70%"). stat is a one-line framing of that number (e.g. "children worldwide are out of school"). source cites a credible org (UNICEF, WHO, UNESCO, World Bank, UN). message is 2 warm sentences that turn the stat into gratitude + fuel for the user by name — not pity. facts are 3 additional grounding stats (number + short label + one-line detail), each from a real global/UN/WHO/UNESCO/World Bank statistic. Prefer recent figures (last 5 years). Never fabricate — if unsure, use a well-known widely-cited figure.`;
+- perspective: a motivating "put things in context" panel.
+  • statNumber is a big bold figure (e.g. "1.1B", "258M", "70%").
+  • stat is a one-line framing of that number (e.g. "children worldwide are out of school").
+  • source cites a credible org (UNICEF, WHO, UNESCO, World Bank, UN, ILO, WEF).
+  • simpleMeaning: 1–2 SHORT sentences that a 10-year-old can understand. No jargon. Break the stat down like a friendly teacher — e.g. for "50% will need reskilling by 2025" say "That means 1 out of every 2 workers on Earth has to learn brand-new skills to keep their jobs. It's a huge wave — and you're already ahead by exploring who you are today." Always end this field with a why-it-matters-to-YOU line addressed to the user by name.
+  • message: 2 warm sentences that turn the stat into gratitude + fuel for the user by name — not pity.
+  • lessPrivileged: a concrete count of young people with FEWER opportunities than the user (schooling, internet, safety, food, healthcare — pick the axis that fits their answers). number is a big figure (e.g. "244M", "1.3B"), label is a short tag (e.g. "kids out of school right now"), message is 1–2 kid-friendly sentences addressed to the user by name that frame it as motivation: they already have the launchpad, so their next step counts for more.
+  • facts are 3 additional grounding stats (number + short label + one-line detail), each from a real global/UN/WHO/UNESCO/World Bank/ILO/WEF statistic.
+  Prefer recent figures (last 5 years). Never fabricate — if unsure, use a well-known widely-cited figure.`;
 
 export const analyzeGuest = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => AnalyzeSchema.parse(d))
