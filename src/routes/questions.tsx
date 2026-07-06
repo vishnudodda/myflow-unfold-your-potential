@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { loadQuestions, analyzeGuest } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/questions")({
@@ -12,7 +13,19 @@ export const Route = createFileRoute("/questions")({
   component: Questions,
 });
 
-type Session = { name: string; age: number; slugs: string[]; education?: string; skills?: string[] };
+type Session = {
+  name: string;
+  age: number;
+  slugs: string[];
+  education?: string;
+  skills?: string[];
+  customSkills?: string[];
+  goal?: string;
+  selfDescription?: string;
+};
+
+const OTHER_ID = "__other__";
+const SKIP_ID = "__skip__";
 
 function Questions() {
   const navigate = useNavigate();
@@ -20,6 +33,7 @@ function Questions() {
   const analyzeFn = useServerFn(analyzeGuest);
   const [session, setSession] = useState<Session | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [otherText, setOtherText] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [current, setCurrent] = useState(0);
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
@@ -60,7 +74,13 @@ function Questions() {
     const out: Array<{ moduleSlug: string; moduleTitle: string; id: string; text: string; options: Array<{ id: string; label: string }> }> = [];
     for (const m of data?.modules ?? []) {
       for (const q of m.questions) {
-        out.push({ moduleSlug: m.slug, moduleTitle: m.title, id: q.id, text: q.text, options: q.options });
+        out.push({
+          moduleSlug: m.slug,
+          moduleTitle: m.title,
+          id: q.id,
+          text: q.text,
+          options: [...q.options, { id: OTHER_ID, label: "Other (type your own)" }],
+        });
       }
     }
     return out;
@@ -73,66 +93,67 @@ function Questions() {
   const isLast = current === totalQs - 1;
 
   function pick(qid: string, oid: string) {
-    setAnswers((prev) => {
-      const next = { ...prev, [qid]: oid };
-      // Kick off analysis eagerly the moment the last answer is picked,
-      // so it runs in the background while the user reaches for "Analyze".
-      if (isLast && session && data && Object.keys(next).length === totalQs && !analysisPromiseRef.current) {
-        const flat: Array<{ moduleSlug: string; question: string; answer: string }> = [];
-        for (const m of data.modules) {
-          for (const qq of m.questions) {
-            const oidPick = next[qq.id];
-            const opt = qq.options.find((o) => o.id === oidPick);
-            if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
-          }
-        }
-        analysisPromiseRef.current = analyzeFn({
-          data: {
-            name: session.name,
-            age: session.age,
-            education: session.education,
-            skills: session.skills,
-            slugs: session.slugs,
-            answers: flat,
-          },
-        }) as Promise<{ result: unknown }>;
-      }
-      return next;
-    });
-    if (!isLast) {
+    setAnswers((prev) => ({ ...prev, [qid]: oid }));
+    if (oid !== OTHER_ID && !isLast) {
       setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 220);
     }
   }
 
+  function skip() {
+    if (!q) return;
+    setAnswers((prev) => ({ ...prev, [q.id]: SKIP_ID }));
+    if (!isLast) {
+      setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 180);
+    }
+  }
+
+  function buildFlatAnswers(): Array<{ moduleSlug: string; question: string; answer: string; skipped?: boolean; custom?: boolean }> {
+    if (!data) return [];
+    const out: Array<{ moduleSlug: string; question: string; answer: string; skipped?: boolean; custom?: boolean }> = [];
+    for (const m of data.modules) {
+      for (const qq of m.questions) {
+        const oid = answers[qq.id];
+        if (!oid || oid === SKIP_ID) {
+          out.push({ moduleSlug: m.slug, question: qq.text, answer: "(skipped)", skipped: true });
+          continue;
+        }
+        if (oid === OTHER_ID) {
+          const txt = (otherText[qq.id] || "").trim();
+          out.push({ moduleSlug: m.slug, question: qq.text, answer: txt || "(other — no detail)", custom: true });
+          continue;
+        }
+        const opt = qq.options.find((o) => o.id === oid);
+        if (opt) out.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
+      }
+    }
+    return out;
+  }
+
   async function onAnalyze() {
-    if (!complete || !session || !data) return;
+    if (!session || !data) return;
     setSubmitting(true);
     try {
-      // Reuse the in-flight analysis started at pick-time when available.
-      if (!analysisPromiseRef.current) {
-        const flat: Array<{ moduleSlug: string; question: string; answer: string }> = [];
-        for (const m of data.modules) {
-          for (const qq of m.questions) {
-            const oid = answers[qq.id];
-            const opt = qq.options.find((o) => o.id === oid);
-            if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
-          }
-        }
-        analysisPromiseRef.current = analyzeFn({
-          data: {
-            name: session.name,
-            age: session.age,
-            education: session.education,
-            skills: session.skills,
-            slugs: session.slugs,
-            answers: flat,
-          },
-        }) as Promise<{ result: unknown }>;
-      }
+      const flat = buildFlatAnswers();
+      analysisPromiseRef.current = analyzeFn({
+        data: {
+          name: session.name,
+          age: session.age,
+          education: session.education,
+          skills: session.skills,
+          customSkills: session.customSkills,
+          goal: session.goal,
+          selfDescription: session.selfDescription,
+          slugs: session.slugs,
+          answers: flat,
+        },
+      }) as Promise<{ result: unknown }>;
       const res = (await analysisPromiseRef.current) as { result: unknown };
       const raw = localStorage.getItem("myflow.session");
       const sess = raw ? JSON.parse(raw) : {};
-      localStorage.setItem("myflow.session", JSON.stringify({ ...sess, result: res.result }));
+      localStorage.setItem(
+        "myflow.session",
+        JSON.stringify({ ...sess, result: res.result, flatAnswers: flat }),
+      );
       navigate({ to: "/dashboard" });
     } catch (err) {
       analysisPromiseRef.current = null;
@@ -197,6 +218,15 @@ function Questions() {
                     </button>
                   );
                 })}
+                {answers[q.id] === OTHER_ID && (
+                  <Textarea
+                    autoFocus
+                    value={otherText[q.id] || ""}
+                    onChange={(e) => setOtherText((p) => ({ ...p, [q.id]: e.target.value }))}
+                    placeholder="Type your own answer…"
+                    className="min-h-[90px]"
+                  />
+                )}
               </div>
 
               <div className="mt-8 sticky bottom-0 -mx-6 px-6 py-4 bg-background/95 backdrop-blur border-t border-border sm:static sm:mx-0 sm:px-0 sm:py-0 sm:bg-transparent sm:backdrop-blur-0 sm:border-t-0 flex items-center justify-between">
@@ -208,6 +238,9 @@ function Questions() {
                   ← Back
                 </Button>
                 <div className="flex items-center gap-2">
+                  <Button variant="ghost" onClick={skip}>
+                    Skip
+                  </Button>
                   {!isLast && (
                     <Button
                       variant="outline"
@@ -217,9 +250,9 @@ function Questions() {
                       Next →
                     </Button>
                   )}
-                  {(isLast || complete) && (
-                    <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
-                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : "Answer all to analyze"}
+                  {isLast && (
+                    <Button size="lg" disabled={submitting} onClick={onAnalyze}>
+                      {submitting ? "Analyzing…" : "Analyze ✧"}
                     </Button>
                   )}
                 </div>
