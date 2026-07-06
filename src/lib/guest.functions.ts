@@ -40,17 +40,6 @@ export type DashboardResult = {
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
   podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
-  analysis?: {
-    strengths: string[];
-    growthAreas: string[];
-    personalityPatterns: string[];
-    interests: string[];
-    motivations: string[];
-    learningStyle: string;
-    blindSpots: string[];
-    careerInsights: string[];
-    conclusion: string;
-  };
   perspective?: {
     headline: string;
     stat: string;
@@ -68,22 +57,11 @@ const AnalyzeSchema = z.object({
   age: z.number().int().min(8).max(99),
   education: z.string().optional(),
   skills: z.array(z.string()).optional(),
-  customSkills: z.array(z.string()).optional(),
-  goal: z.string().optional(),
-  selfDescription: z.string().optional(),
   slugs: z.array(z.string()).min(1),
-  answers: z.array(
-    z.object({
-      moduleSlug: z.string(),
-      question: z.string(),
-      answer: z.string(),
-      skipped: z.boolean().optional(),
-      custom: z.boolean().optional(),
-    }),
-  ),
+  answers: z.array(z.object({ moduleSlug: z.string(), question: z.string(), answer: z.string() })),
 });
 
-const SYSTEM_PROMPT = `You are MyFlow, a warm, sharp coach for young people (ages 10–27). You synthesize a person's assessment answers into a deeply personalized dashboard.
+const SYSTEM_PROMPT = `You are MyFlow, a warm, sharp coach for young people (ages 11–27). You synthesize a person's assessment answers into a personalized 5-panel dashboard.
 
 CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly this shape:
 {
@@ -92,17 +70,6 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
   "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
   "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string } ] (exactly 3),
-  "analysis": {
-    "strengths": string[3-5],
-    "growthAreas": string[3-5],
-    "personalityPatterns": string[2-4],
-    "interests": string[2-4],
-    "motivations": string[2-4],
-    "learningStyle": string,
-    "blindSpots": string[2-4],
-    "careerInsights": string[3-5],
-    "conclusion": string
-  },
   "perspective": {
     "headline": string,
     "stat": string,
@@ -114,21 +81,10 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
     "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
   }
 }
-Ground every field in the ACTUAL responses. No generic filler. No disclaimers. Address the user by name.
-
-Personalization inputs you MUST use:
-- Age → tone, examples, and role models must match their life stage.
-- Goal → every roadmap step, opportunity, and career insight should visibly move them toward it.
-- One-line self-description → mirror their own words back at least once in summary/analysis.
-- Skills (declared + custom "Other" skills) → weave into strengths and opportunities.
-- Questionnaire answers → the primary evidence base. Quote or paraphrase specific answers.
-- Custom "Other" text answers → treat as high-signal, personal detail — weigh them heavily.
-- Skipped questions → do NOT invent answers. Work with what's there. If a whole area is skipped, acknowledge gently ("we didn't cover X yet — worth exploring") rather than fabricating.
-- Adapt depth to volume: if the user answered few questions or skipped many, keep claims tight and honest. If they answered richly, go deeper.
+Ground every field in the user's answers. No generic filler. No disclaimers.
 
 Rules:
-- summary.motivation: 1–2 warm, personal sentences of encouragement addressed to the user by name, referencing their stated goal.
-- analysis: human-friendly, concrete, no clichés. strengths & growthAreas come from actual answer patterns. learningStyle is 1–2 sentences. conclusion is 2–3 warm sentences tying everything back to their goal and self-description.
+- summary.motivation: 1–2 warm, personal sentences of encouragement addressed to the user by name.
 - roleModels: pick people whose age, era, or breakout moment is RELATABLE to the user's age (e.g. teen prodigies for age 13, early-career founders for 22). Prefer contemporary figures the user could realistically look up today.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
 - opportunities: MUST be matched to the user's education stage AND declared skills. If the user is in school, suggest scholarships, competitions, or teen fellowships. If in college, suggest internships and campus programs. If graduated / job-hunting, suggest entry-level jobs, apprenticeships, or paid fellowships they can apply to today. If already working, suggest next-step roles or upskilling programs. Even when the user only explored a couple of modules (e.g. Ability + Habits), lean on their skills list to still recommend concrete jobs / gigs / programs — never say "not enough info". opportunities.url must be a real https link (official program page, org site, or a reliable listing like Internshala / YourStory / opportunitydesk.org / LinkedIn Jobs search). Never invent a broken URL — if unsure, link to a search page on the org's site.
@@ -153,16 +109,10 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       `Age: ${data.age}`,
       data.education ? `Current stage: ${data.education}` : `Current stage: (not provided)`,
       `Existing skills: ${(data.skills && data.skills.length) ? data.skills.join(", ") : "(none declared)"}`,
-      `Custom skills (self-added): ${(data.customSkills && data.customSkills.length) ? data.customSkills.join(", ") : "(none)"}`,
-      `Current goal: ${data.goal || "(not provided)"}`,
-      `Self-description (one line): ${data.selfDescription || "(not provided)"}`,
       `Modules explored: ${data.slugs.join(", ")}`,
       ``,
       `Answers:`,
-      ...data.answers.map((a, i) => {
-        const tag = a.skipped ? " [SKIPPED]" : a.custom ? " [CUSTOM]" : "";
-        return `${i + 1}. [${a.moduleSlug}]${tag} Q: ${a.question}\n   A: ${a.answer}`;
-      }),
+      ...data.answers.map((a, i) => `${i + 1}. [${a.moduleSlug}] Q: ${a.question}\n   A: ${a.answer}`),
     ].join("\n");
     const { text } = await generateText({
       model: gateway("google/gemini-3-flash-preview"),
