@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { DashboardResult } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
+import { AnimatedCounter } from "@/components/animated-counter";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -152,8 +153,11 @@ function Dashboard() {
               </h3>
               <div className="mt-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
                 <div className="shrink-0">
-                  <div className="font-display text-5xl md:text-6xl font-bold text-primary leading-none tracking-tight">
-                    {r.perspective.statNumber}
+                  <div className="relative rounded-2xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink p-4 md:p-5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
+                    <div className="font-mono text-5xl md:text-6xl font-bold text-paper leading-none tracking-tight">
+                      <AnimatedCounter value={r.perspective.statNumber} />
+                    </div>
+                    <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                   </div>
                   {r.perspective.source && (
                     <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
@@ -174,7 +178,9 @@ function Dashboard() {
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
                     {r.perspective.facts.map((f, i) => (
                       <div key={i} className="rounded-2xl bg-white/80 p-4 border border-border">
-                        <div className="font-display text-2xl font-bold text-primary">{f.number}</div>
+                        <div className="font-mono text-2xl font-bold text-primary">
+                          <AnimatedCounter value={f.number} duration={1600} />
+                        </div>
                         <div className="text-[11px] font-mono uppercase tracking-widest text-foreground/70 mt-1">{f.label}</div>
                         <div className="text-xs text-muted-foreground mt-2">{f.detail}</div>
                       </div>
