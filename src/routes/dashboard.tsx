@@ -15,7 +15,6 @@ type Session = { name: string; age: number; result?: DashboardResult };
 function Dashboard() {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const raw = localStorage.getItem("myflow.session");
@@ -151,83 +150,28 @@ function Dashboard() {
               <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
                 {r.perspective.headline}
               </h3>
-              <div className="mt-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-                <div className="shrink-0">
-                  <div className="relative rounded-2xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink p-4 md:p-5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
-                    <div className="font-mono text-5xl md:text-6xl font-bold text-paper leading-none tracking-tight">
-                      <AnimatedCounter value={r.perspective.statNumber} />
-                    </div>
-                    <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
+              <div className="mt-8 flex flex-col items-center text-center gap-5">
+                <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink px-10 py-8 md:px-16 md:py-10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
+                  <div className="font-mono text-7xl md:text-8xl font-bold text-paper leading-none tracking-tight">
+                    <AnimatedCounter value={r.perspective.lessPrivileged?.number || r.perspective.statNumber} duration={2200} />
                   </div>
-                  {r.perspective.source && (
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
-                      Source · {r.perspective.source}
-                    </div>
-                  )}
+                  <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                 </div>
-                <p className="text-sm md:text-base text-foreground/85 leading-relaxed">
-                  <AnimatedText text={r.perspective.stat} />
+                <div className="text-xs md:text-sm font-mono uppercase tracking-widest text-primary max-w-xl">
+                  {r.perspective.lessPrivileged?.label || r.perspective.stat}
+                </div>
+                <p className="text-sm md:text-base text-foreground/85 leading-relaxed max-w-2xl">
+                  {stripNumbers(
+                    r.perspective.lessPrivileged?.message ||
+                      r.perspective.simpleMeaning ||
+                      r.perspective.message
+                  )}
                 </p>
-              </div>
-
-              {r.perspective.simpleMeaning && (
-                <div className="mt-5 rounded-2xl bg-white/80 border border-primary/15 p-4 md:p-5">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-primary/80 mb-1">
-                    What this means (in plain words)
+                {r.perspective.source && (
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                    Source · {r.perspective.source}
                   </div>
-                  <p className="text-sm md:text-base text-foreground/90 leading-relaxed">
-                    <AnimatedText text={r.perspective.simpleMeaning} />
-                  </p>
-                </div>
-              )}
-
-              {expanded && (
-                <div className="mt-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-                  <div className="rounded-2xl bg-white/70 p-4 md:p-5">
-                    <p className="text-sm italic text-foreground/90">{r.perspective.message}</p>
-                  </div>
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {r.perspective.facts.map((f, i) => (
-                      <div key={i} className="rounded-2xl bg-white/80 p-4 border border-border">
-                        <div className="font-mono text-2xl font-bold text-primary">
-                          <AnimatedCounter value={f.number} duration={1600} />
-                        </div>
-                        <div className="text-[11px] font-mono uppercase tracking-widest text-foreground/70 mt-1">{f.label}</div>
-                        <div className="text-xs text-muted-foreground mt-2">{f.detail}</div>
-                      </div>
-                    ))}
-                  </div>
-                  {r.perspective.lessPrivileged && (
-                    <div className="mt-5 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-pastel-peach via-white to-pastel-lilac p-5 md:p-6 shadow-[0_10px_40px_-20px_rgba(30,58,138,0.4)]">
-                      <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-2">
-                        Your launchpad · Why your next step matters
-                      </div>
-                      <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-                        <div className="shrink-0 rounded-2xl bg-ink px-5 py-3 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
-                          <div className="font-mono text-4xl md:text-5xl font-bold text-paper leading-none">
-                            <AnimatedCounter value={r.perspective.lessPrivileged.number} duration={1800} />
-                          </div>
-                          <div className="text-[10px] font-mono uppercase tracking-widest text-paper/70 mt-2">
-                            {r.perspective.lessPrivileged.label}
-                          </div>
-                        </div>
-                        <p className="text-sm md:text-base text-foreground/90 leading-relaxed">
-                          {r.perspective.lessPrivileged.message}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="mt-6 flex justify-center">
-                <Button
-                  variant="outline"
-                  className="rounded-full bg-white/70 backdrop-blur border-primary/30 hover:bg-white"
-                  onClick={() => setExpanded((v) => !v)}
-                >
-                  {expanded ? "Show less ↑" : "See more ↓"}
-                </Button>
+                )}
               </div>
             </div>
           </div>
@@ -257,27 +201,12 @@ function Panel({ title, tone, emoji, children }: { title: string; tone: keyof ty
   );
 }
 
-// Splits a paragraph into text + number tokens (e.g. "617M", "70%", "1.1B", "258 million")
-// and animates each number with the odometer counter so stats like the UNESCO figure roll in.
-function AnimatedText({ text }: { text: string }) {
-  const splitRegex = /(\d[\d,]*(?:\.\d+)?\s?(?:%|[KMB]|million|billion|thousand)?)/gi;
-  const testRegex = /^\d[\d,]*(?:\.\d+)?\s?(?:%|[KMB]|million|billion|thousand)?$/i;
-  const parts = text.split(splitRegex);
-  return (
-    <>
-      {parts.map((part, i) => {
-        if (!part) return null;
-        if (testRegex.test(part.trim())) {
-          return (
-            <AnimatedCounter
-              key={i}
-              value={part.trim()}
-              className="font-mono font-semibold text-foreground"
-            />
-          );
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
-  );
+// Removes standalone numbers/percentages from a sentence so the Perspective
+// panel shows exactly one figure — the big animated counter above.
+function stripNumbers(text: string): string {
+  return text
+    .replace(/\d[\d,]*(?:\.\d+)?\s?(?:%|[KMB]\b|million|billion|thousand)?/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([.,;:!?])/g, "$1")
+    .trim();
 }
