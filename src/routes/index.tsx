@@ -22,6 +22,9 @@ function Intro() {
   const [age, setAge] = useState("");
   const [education, setEducation] = useState("");
   const [skills, setSkills] = useState<Set<string>>(new Set());
+  const [otherSkill, setOtherSkill] = useState("");
+  const [goal, setGoal] = useState("");
+  const [selfDescription, setSelfDescription] = useState("");
 
   const EDUCATION_OPTIONS = [
     { value: "in-school", label: "Currently in school" },
@@ -48,6 +51,7 @@ function Intro() {
     "Languages",
     "Basic literacy & numeracy",
     "Physical / hands-on",
+    "Other",
   ];
 
   function toggleSkill(s: string) {
@@ -62,15 +66,22 @@ function Intro() {
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const ageNum = parseInt(age, 10);
-    if (!name.trim() || !ageNum || ageNum < 8 || ageNum > 99) return;
+    if (!name.trim() || !ageNum || ageNum < 10 || ageNum > 27) return;
     if (!education) return;
+    const skillList = Array.from(skills).filter((s) => s !== "Other");
+    const customSkills = skills.has("Other")
+      ? otherSkill.split(",").map((s) => s.trim()).filter(Boolean)
+      : [];
     localStorage.setItem(
       "myflow.session",
       JSON.stringify({
         name: name.trim(),
         age: ageNum,
         education,
-        skills: Array.from(skills),
+        skills: skillList,
+        customSkills,
+        goal: goal.trim(),
+        selfDescription: selfDescription.trim(),
       }),
     );
     navigate({ to: "/pick" });
@@ -92,8 +103,17 @@ function Intro() {
               <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Alex" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">Your age</Label>
-              <Input id="age" type="number" min={8} max={99} required value={age} onChange={(e) => setAge(e.target.value)} placeholder="e.g. 17" />
+              <Label>Your age</Label>
+              <Select value={age} onValueChange={setAge}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your age" />
+                </SelectTrigger>
+                <SelectContent className="max-h-64">
+                  {Array.from({ length: 27 - 10 + 1 }, (_, i) => 10 + i).map((n) => (
+                    <SelectItem key={n} value={String(n)}>{n}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -131,9 +151,37 @@ function Intro() {
                 );
               })}
             </div>
+            {skills.has("Other") && (
+              <Input
+                value={otherSkill}
+                onChange={(e) => setOtherSkill(e.target.value)}
+                placeholder="Type your skill(s) — separate with commas"
+                className="mt-2"
+              />
+            )}
           </div>
 
-          <Button type="submit" className="w-full" size="lg" disabled={!education}>Continue</Button>
+          <div className="space-y-2">
+            <Label htmlFor="goal">What is your current goal?</Label>
+            <Input
+              id="goal"
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+              placeholder="e.g. Get into a top college, land a design internship, launch a side project…"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="selfdesc">Describe yourself in one line</Label>
+            <Input
+              id="selfdesc"
+              value={selfDescription}
+              onChange={(e) => setSelfDescription(e.target.value)}
+              placeholder="e.g. Curious builder who loves stories and small experiments."
+            />
+          </div>
+
+          <Button type="submit" className="w-full" size="lg" disabled={!education || !age}>Continue</Button>
         </form>
       </div>
     </main>
