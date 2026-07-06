@@ -250,13 +250,6 @@ function expandToDigits(raw: string): string {
   return total.toLocaleString("en-US");
 }
 
-function _oldEscape(s: string): string {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 function downloadReport(session: Session) {
   const r = session.result;
