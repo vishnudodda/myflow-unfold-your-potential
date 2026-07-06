@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { DashboardResult } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/animated-counter";
+import { jsPDF } from "jspdf";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -10,7 +11,18 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
-type Session = { name: string; age: number; result?: DashboardResult };
+type Session = {
+  name: string;
+  age: number;
+  education?: string;
+  skills?: string[];
+  customSkills?: string[];
+  goal?: string;
+  selfDescription?: string;
+  slugs?: string[];
+  flatAnswers?: Array<{ moduleSlug: string; question: string; answer: string; skipped?: boolean; custom?: boolean }>;
+  result?: DashboardResult;
+};
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -27,14 +39,24 @@ function Dashboard() {
   if (!session?.result) return null;
   const r = session.result;
 
+  function downloadReport() {
+    if (!session) return;
+    generatePdfReport(session);
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-pastel-blue via-background to-pastel-lilac text-foreground px-6 py-10">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between">
           <Link to="/" className="font-display text-xl font-bold tracking-tighter">MYFLOW</Link>
-          <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
-            Start over
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button size="sm" className="rounded-full" onClick={downloadReport}>
+              Download report ↓
+            </Button>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
+              Start over
+            </Button>
+          </div>
         </div>
 
         <header className="mt-10">
@@ -110,6 +132,44 @@ function Dashboard() {
             )}
           </Panel>
         </div>
+
+        {/* Deep analysis */}
+        {r.analysis && (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Panel title="Strengths" tone="mint" emoji="💪">
+              <ul className="space-y-2 text-sm list-disc pl-5">
+                {r.analysis.strengths?.map((s, i) => <li key={i}>{s}</li>)}
+              </ul>
+            </Panel>
+            <Panel title="Growth areas" tone="peach" emoji="🌱">
+              <ul className="space-y-2 text-sm list-disc pl-5">
+                {r.analysis.growthAreas?.map((s, i) => <li key={i}>{s}</li>)}
+              </ul>
+            </Panel>
+            <Panel title="Personality patterns" tone="lilac" emoji="🧭">
+              <ul className="space-y-2 text-sm list-disc pl-5">
+                {r.analysis.personalityPatterns?.map((s, i) => <li key={i}>{s}</li>)}
+              </ul>
+              {r.analysis.learningStyle && (
+                <div className="mt-3 rounded-lg bg-white/70 p-3 text-xs">
+                  <span className="font-mono uppercase tracking-widest text-primary text-[10px]">Learning style · </span>
+                  {r.analysis.learningStyle}
+                </div>
+              )}
+            </Panel>
+            <Panel title="Career insights" tone="lemon" emoji="🎯">
+              <ul className="space-y-2 text-sm list-disc pl-5">
+                {r.analysis.careerInsights?.map((s, i) => <li key={i}>{s}</li>)}
+              </ul>
+              {r.analysis.blindSpots?.length ? (
+                <div className="mt-3 rounded-lg bg-white/70 p-3 text-xs">
+                  <span className="font-mono uppercase tracking-widest text-primary text-[10px]">Watch out for · </span>
+                  {r.analysis.blindSpots.join(" · ")}
+                </div>
+              ) : null}
+            </Panel>
+          </div>
+        )}
 
         {/* Row 3: Roadmap + Podcasts */}
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
