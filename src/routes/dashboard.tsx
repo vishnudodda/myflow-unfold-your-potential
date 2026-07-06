@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { DashboardResult } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
+import { AnimatedCounter } from "@/components/animated-counter";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
