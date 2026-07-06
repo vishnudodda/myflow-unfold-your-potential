@@ -261,6 +261,116 @@ function Panel({ title, tone, emoji, children }: { title: string; tone: keyof ty
   );
 }
 
+function generatePdfReport(s: Session) {
+  const r = s.result!;
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 48;
+  const maxW = pageW - margin * 2;
+  let y = margin;
+
+  const ensure = (h: number) => {
+    if (y + h > pageH - margin) { doc.addPage(); y = margin; }
+  };
+  const line = (text: string, opts: { size?: number; bold?: boolean; color?: [number, number, number]; gap?: number } = {}) => {
+    const size = opts.size ?? 11;
+    doc.setFont("helvetica", opts.bold ? "bold" : "normal");
+    doc.setFontSize(size);
+    doc.setTextColor(...(opts.color ?? [30, 30, 30]));
+    const wrapped = doc.splitTextToSize(text, maxW);
+    for (const w of wrapped) {
+      ensure(size + 4);
+      doc.text(w, margin, y);
+      y += size + 4;
+    }
+    y += opts.gap ?? 0;
+  };
+  const h1 = (t: string) => line(t, { size: 22, bold: true, color: [30, 58, 138], gap: 6 });
+  const h2 = (t: string) => { y += 6; line(t, { size: 14, bold: true, color: [30, 58, 138], gap: 4 }); };
+  const bullet = (t: string) => line(`•  ${t}`, { size: 11 });
+  const kv = (k: string, v: string) => line(`${k}: ${v}`, { size: 11 });
+
+  h1(`MyFlow Report — ${s.name}`);
+  line(new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }), { size: 10, color: [120, 120, 120], gap: 8 });
+
+  h2("Your profile");
+  kv("Name", s.name);
+  kv("Age", String(s.age));
+  if (s.education) kv("Current stage", s.education);
+  if (s.goal) kv("Current goal", s.goal);
+  if (s.selfDescription) kv("One-line self-description", s.selfDescription);
+  if (s.skills?.length) kv("Skills", s.skills.join(", "));
+  if (s.customSkills?.length) kv("Custom skills", s.customSkills.join(", "));
+  if (s.slugs?.length) kv("Modules explored", s.slugs.join(", "));
+
+  h2("Summary");
+  if (r.summary?.headline) line(r.summary.headline, { size: 12, bold: true });
+  r.summary?.bullets?.forEach(bullet);
+  if (r.summary?.motivation) { y += 4; line(`"${r.summary.motivation}"`, { size: 11, color: [70, 70, 70] }); }
+
+  if (r.analysis) {
+    h2("Personality analysis");
+    const a = r.analysis;
+    if (a.strengths?.length)          { line("Strengths", { bold: true }); a.strengths.forEach(bullet); }
+    if (a.growthAreas?.length)        { line("Growth areas", { bold: true }); a.growthAreas.forEach(bullet); }
+    if (a.personalityPatterns?.length){ line("Personality patterns", { bold: true }); a.personalityPatterns.forEach(bullet); }
+    if (a.interests?.length)          { line("Interests", { bold: true }); a.interests.forEach(bullet); }
+    if (a.motivations?.length)        { line("Motivations", { bold: true }); a.motivations.forEach(bullet); }
+    if (a.learningStyle)              { line("Learning style", { bold: true }); line(a.learningStyle); }
+    if (a.blindSpots?.length)         { line("Potential blind spots", { bold: true }); a.blindSpots.forEach(bullet); }
+    if (a.careerInsights?.length)     { line("Career insights", { bold: true }); a.careerInsights.forEach(bullet); }
+  }
+
+  if (r.roleModels?.length) {
+    h2("Recommended role models");
+    r.roleModels.forEach((rm) => { line(rm.name, { bold: true }); line(rm.why); y += 2; });
+  }
+
+  if (r.roadmap?.length) {
+    h2("Roadmap");
+    r.roadmap.forEach((m) => line(`${m.horizon} — ${m.action}`));
+  }
+
+  if (r.opportunities?.length) {
+    h2("Opportunities");
+    r.opportunities.forEach((o) => {
+      line(o.title, { bold: true });
+      line(`${o.org} · ${o.stipend} · Confidence: ${o.confidence}`);
+      if (o.url) line(o.url, { color: [30, 58, 138] });
+      y += 2;
+    });
+  }
+
+  if (r.podcasts?.length) {
+    h2("Podcasts");
+    r.podcasts.forEach((p) => {
+      line(p.title, { bold: true });
+      line(`by ${p.host} — ${p.pitch}`);
+      if (p.url) line(p.url, { color: [30, 58, 138] });
+      y += 2;
+    });
+  }
+
+  if (s.flatAnswers?.length) {
+    h2("Your questionnaire responses");
+    s.flatAnswers.forEach((qa, i) => {
+      const tag = qa.skipped ? " (SKIPPED)" : qa.custom ? " (custom)" : "";
+      line(`${i + 1}. [${qa.moduleSlug}]${tag}`, { size: 10, color: [110, 110, 110] });
+      line(`Q: ${qa.question}`, { size: 11 });
+      line(`A: ${qa.answer}`, { size: 11, color: qa.skipped ? [170, 90, 90] : [30, 30, 30] });
+      y += 2;
+    });
+  }
+
+  if (r.analysis?.conclusion) {
+    h2("Personalized conclusion");
+    line(r.analysis.conclusion);
+  }
+
+  doc.save(`MyFlow-${s.name.replace(/\s+/g, "_")}.pdf`);
+}
+
 // Removes standalone numbers/percentages from a sentence so the Perspective
 // panel shows exactly one figure — the big animated counter above.
 function stripNumbers(text: string): string {
