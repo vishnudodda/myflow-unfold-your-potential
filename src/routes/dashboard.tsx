@@ -158,47 +158,18 @@ function Dashboard() {
           </Panel>
         </div>
 
-        {/* Deep Analysis */}
-        {r.analysis && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Panel title="Personality & Motivations" tone="lilac" emoji="🧭">
-              <p className="text-sm">{r.analysis.personality}</p>
-              <div className="mt-3 text-xs text-muted-foreground"><span className="font-mono uppercase tracking-widest text-primary">Motivations · </span>{r.analysis.motivations}</div>
-              <div className="mt-2 text-xs text-muted-foreground"><span className="font-mono uppercase tracking-widest text-primary">Learning style · </span>{r.analysis.learningStyle}</div>
-            </Panel>
-            <Panel title="Strengths & Growth" tone="mint" emoji="🌿">
-              <div className="text-[10px] font-mono uppercase tracking-widest text-primary">Strengths</div>
-              <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.strengths.map((s, i) => (<li key={i}>{s}</li>))}</ul>
-              <div className="mt-3 text-[10px] font-mono uppercase tracking-widest text-primary">Growth areas</div>
-              <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.growthAreas.map((s, i) => (<li key={i}>{s}</li>))}</ul>
-              {r.analysis.blindSpots?.length ? (
-                <>
-                  <div className="mt-3 text-[10px] font-mono uppercase tracking-widest text-primary">Watch-outs</div>
-                  <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.blindSpots.map((s, i) => (<li key={i}>{s}</li>))}</ul>
-                </>
-              ) : null}
-            </Panel>
-            <div className="md:col-span-2">
-              <Panel title="Career insights & conclusion" tone="peach" emoji="✨">
-                <p className="text-sm">{r.analysis.careerInsights}</p>
-                <p className="mt-3 text-sm italic text-foreground/85">{r.analysis.conclusion}</p>
-              </Panel>
-            </div>
-          </div>
-        )}
-
         {/* Perspective — motivational stats */}
         {r.perspective && (
           <div className="mt-8">
             <div className="rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-pastel-lilac to-pastel-blue p-6 md:p-8 shadow-[0_20px_60px_-25px_rgba(30,58,138,0.35)]">
               <div className="text-[11px] font-mono uppercase tracking-widest text-primary">Perspective ✧</div>
               <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
-                {r.perspective.headline}
+                You're already ahead of millions — this is your head start ✦
               </h3>
               <div className="mt-8 flex flex-col items-center text-center gap-5">
                 <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink px-10 py-8 md:px-16 md:py-10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
                   <div className="font-mono text-7xl md:text-8xl font-bold text-paper leading-none tracking-tight">
-                    <AnimatedCounter value={r.perspective.lessPrivileged?.number || r.perspective.statNumber} duration={2200} />
+                    <AnimatedCounter value={expandToDigits(r.perspective.lessPrivileged?.number || r.perspective.statNumber)} duration={2600} />
                   </div>
                   <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                 </div>
