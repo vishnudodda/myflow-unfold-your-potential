@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { DashboardResult } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
-import { AnimatedCounter } from "@/components/animated-counter";
+import { VerifiedIndustryInsights } from "@/components/verified-industry-insights";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -19,6 +19,7 @@ type Session = {
   customSkill?: string;
   goal?: string;
   oneLiner?: string;
+  slugs?: string[];
   result?: DashboardResult;
   answersFlat?: FlatAnswer[];
 };
@@ -187,40 +188,10 @@ function Dashboard() {
           </div>
         )}
 
-        {/* Perspective — motivational stats */}
-        {r.perspective && (
-          <div className="mt-8">
-            <div className="rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-pastel-lilac to-pastel-blue p-6 md:p-8 shadow-[0_20px_60px_-25px_rgba(30,58,138,0.35)]">
-              <div className="text-[11px] font-mono uppercase tracking-widest text-primary">Perspective ✧</div>
-              <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
-                {r.perspective.headline}
-              </h3>
-              <div className="mt-8 flex flex-col items-center text-center gap-5">
-                <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink px-10 py-8 md:px-16 md:py-10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
-                  <div className="font-mono text-7xl md:text-8xl font-bold text-paper leading-none tracking-tight">
-                    <AnimatedCounter value={r.perspective.lessPrivileged?.number || r.perspective.statNumber} duration={2200} />
-                  </div>
-                  <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
-                </div>
-                <div className="text-xs md:text-sm font-mono uppercase tracking-widest text-primary max-w-xl">
-                  {r.perspective.lessPrivileged?.label || r.perspective.stat}
-                </div>
-                <p className="text-sm md:text-base text-foreground/85 leading-relaxed max-w-2xl">
-                  {stripNumbers(
-                    r.perspective.lessPrivileged?.message ||
-                      r.perspective.simpleMeaning ||
-                      r.perspective.message
-                  )}
-                </p>
-                {r.perspective.source && (
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                    Source · {r.perspective.source}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Verified industry insights — real data, real sources */}
+        <div className="mt-8">
+          <VerifiedIndustryInsights categories={buildInsightCategories(session)} />
+        </div>
       </div>
     </main>
   );
@@ -369,12 +340,21 @@ ${r.perspective.source ? `<div class="muted">Source: ${escapeHtml(r.perspective.
   if (w) { w.document.write(html); w.document.close(); }
 }
 
-// Removes standalone numbers/percentages from a sentence so the Perspective
-// panel shows exactly one figure — the big animated counter above.
-function stripNumbers(text: string): string {
-  return text
-    .replace(/\d[\d,]*(?:\.\d+)?\s?(?:%|[KMB]\b|million|billion|thousand)?/gi, "")
-    .replace(/\s{2,}/g, " ")
-    .replace(/\s+([.,;:!?])/g, "$1")
-    .trim();
+function buildInsightCategories(session: Session): string[] {
+  const cats = new Set<string>();
+  for (const slug of session.slugs ?? []) cats.add(slug);
+  const skillMap: Array<[RegExp, string]> = [
+    [/cod|program|tech|digital|data|design/i, "tech"],
+    [/ai|machine|ml/i, "ai"],
+    [/learn|study|school/i, "learning"],
+    [/communi|team|leader|social|public speak/i, "skills"],
+  ];
+  for (const s of session.skills ?? []) {
+    for (const [re, cat] of skillMap) if (re.test(s)) cats.add(cat);
+  }
+  if (session.goal) {
+    for (const [re, cat] of skillMap) if (re.test(session.goal)) cats.add(cat);
+  }
+  cats.add("career");
+  return Array.from(cats);
 }
