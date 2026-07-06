@@ -14,6 +14,7 @@ type Session = { name: string; age: number; result?: DashboardResult };
 function Dashboard() {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const raw = localStorage.getItem("myflow.session");
@@ -50,9 +51,23 @@ function Dashboard() {
           <Panel title="Role Models" tone="lilac" emoji="✨">
             <div className="space-y-4">
               {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3">
-                  <div className="font-semibold text-sm">{rm.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
+                <div key={i} className="rounded-xl bg-white/70 p-3 flex gap-3 items-start">
+                  {rm.photoUrl && (
+                    <img
+                      src={rm.photoUrl}
+                      alt={rm.name}
+                      loading="lazy"
+                      className="h-14 w-14 rounded-full object-cover border border-border shrink-0 bg-muted"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        t.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(rm.name)}&background=e0e7ff&color=1e3a8a&size=256&bold=true`;
+                      }}
+                    />
+                  )}
+                  <div className="min-w-0">
+                    <div className="font-semibold text-sm">{rm.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -67,6 +82,11 @@ function Dashboard() {
                     <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/15 text-primary" : o.confidence === "Medium" ? "bg-pastel-peach text-foreground" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">{o.org} · {o.stipend}</div>
+                  {o.url && (
+                    <a href={o.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-[11px] font-mono uppercase text-primary hover:underline">
+                      Apply / Learn more ↗
+                    </a>
+                  )}
                 </div>
               ))}
             </div>
@@ -121,6 +141,60 @@ function Dashboard() {
             </div>
           </Panel>
         </div>
+
+        {/* Perspective — motivational stats */}
+        {r.perspective && (
+          <div className="mt-8">
+            <div className="rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-pastel-lilac to-pastel-blue p-6 md:p-8 shadow-[0_20px_60px_-25px_rgba(30,58,138,0.35)]">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-primary">Perspective ✧</div>
+              <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
+                {r.perspective.headline}
+              </h3>
+              <div className="mt-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+                <div className="shrink-0">
+                  <div className="font-display text-5xl md:text-6xl font-bold text-primary leading-none tracking-tight">
+                    {r.perspective.statNumber}
+                  </div>
+                  {r.perspective.source && (
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
+                      Source · {r.perspective.source}
+                    </div>
+                  )}
+                </div>
+                <p className="text-sm md:text-base text-foreground/85 leading-relaxed">
+                  {r.perspective.stat}
+                </p>
+              </div>
+
+              {expanded && (
+                <div className="mt-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="rounded-2xl bg-white/70 p-4 md:p-5">
+                    <p className="text-sm italic text-foreground/90">{r.perspective.message}</p>
+                  </div>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {r.perspective.facts.map((f, i) => (
+                      <div key={i} className="rounded-2xl bg-white/80 p-4 border border-border">
+                        <div className="font-display text-2xl font-bold text-primary">{f.number}</div>
+                        <div className="text-[11px] font-mono uppercase tracking-widest text-foreground/70 mt-1">{f.label}</div>
+                        <div className="text-xs text-muted-foreground mt-2">{f.detail}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-6 flex justify-center">
+                <Button
+                  variant="outline"
+                  className="rounded-full bg-white/70 backdrop-blur border-primary/30 hover:bg-white"
+                  onClick={() => setExpanded((v) => !v)}
+                >
+                  {expanded ? "Show less ↑" : "See more ↓"}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
