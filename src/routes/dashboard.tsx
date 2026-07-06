@@ -178,7 +178,9 @@ function Dashboard() {
                   <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
                     {r.perspective.facts.map((f, i) => (
                       <div key={i} className="rounded-2xl bg-white/80 p-4 border border-border">
-                        <div className="font-display text-2xl font-bold text-primary">{f.number}</div>
+                        <div className="font-mono text-2xl font-bold text-primary">
+                          <AnimatedCounter value={f.number} duration={1600} />
+                        </div>
                         <div className="text-[11px] font-mono uppercase tracking-widest text-foreground/70 mt-1">{f.label}</div>
                         <div className="text-xs text-muted-foreground mt-2">{f.detail}</div>
                       </div>
