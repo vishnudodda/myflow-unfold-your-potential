@@ -170,6 +170,17 @@ function Dashboard() {
                 </p>
               </div>
 
+              {r.perspective.simpleMeaning && (
+                <div className="mt-5 rounded-2xl bg-white/80 border border-primary/15 p-4 md:p-5">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-primary/80 mb-1">
+                    What this means (in plain words)
+                  </div>
+                  <p className="text-sm md:text-base text-foreground/90 leading-relaxed">
+                    <AnimatedText text={r.perspective.simpleMeaning} />
+                  </p>
+                </div>
+              )}
+
               {expanded && (
                 <div className="mt-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="rounded-2xl bg-white/70 p-4 md:p-5">
@@ -186,6 +197,26 @@ function Dashboard() {
                       </div>
                     ))}
                   </div>
+                  {r.perspective.lessPrivileged && (
+                    <div className="mt-5 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-pastel-peach via-white to-pastel-lilac p-5 md:p-6 shadow-[0_10px_40px_-20px_rgba(30,58,138,0.4)]">
+                      <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-2">
+                        Your launchpad · Why your next step matters
+                      </div>
+                      <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                        <div className="shrink-0 rounded-2xl bg-ink px-5 py-3 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
+                          <div className="font-mono text-4xl md:text-5xl font-bold text-paper leading-none">
+                            <AnimatedCounter value={r.perspective.lessPrivileged.number} duration={1800} />
+                          </div>
+                          <div className="text-[10px] font-mono uppercase tracking-widest text-paper/70 mt-2">
+                            {r.perspective.lessPrivileged.label}
+                          </div>
+                        </div>
+                        <p className="text-sm md:text-base text-foreground/90 leading-relaxed">
+                          {r.perspective.lessPrivileged.message}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
