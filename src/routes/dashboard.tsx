@@ -153,8 +153,11 @@ function Dashboard() {
               </h3>
               <div className="mt-6 flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
                 <div className="shrink-0">
-                  <div className="font-display text-5xl md:text-6xl font-bold text-primary leading-none tracking-tight">
-                    {r.perspective.statNumber}
+                  <div className="relative rounded-2xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink p-4 md:p-5 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
+                    <div className="font-mono text-5xl md:text-6xl font-bold text-paper leading-none tracking-tight">
+                      <AnimatedCounter value={r.perspective.statNumber} />
+                    </div>
+                    <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                   </div>
                   {r.perspective.source && (
                     <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mt-2">
