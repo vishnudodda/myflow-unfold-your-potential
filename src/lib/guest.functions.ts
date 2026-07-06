@@ -141,6 +141,7 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
     const slug = encodeURIComponent(name.trim().replace(/\s+/g, "_"));
     const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`, {
       headers: { "accept": "application/json", "user-agent": "MyFlow/1.0" },
+      signal: AbortSignal.timeout(1500),
     });
     if (!res.ok) return undefined;
     const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string } };
