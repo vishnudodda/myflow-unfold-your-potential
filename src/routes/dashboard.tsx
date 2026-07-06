@@ -166,7 +166,7 @@ function Dashboard() {
                   )}
                 </div>
                 <p className="text-sm md:text-base text-foreground/85 leading-relaxed">
-                  {r.perspective.stat}
+                  <AnimatedText text={r.perspective.stat} />
                 </p>
               </div>
 
