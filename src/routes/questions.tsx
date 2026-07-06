@@ -66,10 +66,10 @@ function Questions() {
     return out;
   }, [data]);
   const totalQs = flatQs.length;
+  const q = flatQs[current];
   const answeredCount = flatQs.filter((item) => answers[item.id]).length;
   const hasCurrentAnswer = q ? Boolean(answers[q.id]) : false;
   const complete = totalQs > 0 && answeredCount === totalQs;
-  const q = flatQs[current];
   const isLast = current === totalQs - 1;
 
   function pick(qid: string, oid: string) {
