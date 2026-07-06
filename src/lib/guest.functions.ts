@@ -40,6 +40,17 @@ export type DashboardResult = {
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
   podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
+  analysis?: {
+    personality: string;
+    strengths: string[];
+    growthAreas: string[];
+    interests: string[];
+    motivations: string;
+    learningStyle: string;
+    blindSpots: string[];
+    careerInsights: string;
+    conclusion: string;
+  };
   perspective?: {
     headline: string;
     stat: string;
@@ -57,8 +68,17 @@ const AnalyzeSchema = z.object({
   age: z.number().int().min(8).max(99),
   education: z.string().optional(),
   skills: z.array(z.string()).optional(),
+  customSkill: z.string().optional(),
+  goal: z.string().optional(),
+  oneLiner: z.string().optional(),
   slugs: z.array(z.string()).min(1),
-  answers: z.array(z.object({ moduleSlug: z.string(), question: z.string(), answer: z.string() })),
+  answers: z.array(z.object({
+    moduleSlug: z.string(),
+    question: z.string(),
+    answer: z.string().optional(),
+    custom: z.string().optional(),
+    skipped: z.boolean().optional(),
+  })),
 });
 
 const SYSTEM_PROMPT = `You are MyFlow, a warm, sharp coach for young people (ages 11–27). You synthesize a person's assessment answers into a personalized 5-panel dashboard.
@@ -70,6 +90,17 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
   "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
   "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string } ] (exactly 3),
+  "analysis": {
+    "personality": string (2-3 sentences describing personality patterns),
+    "strengths": string[] (3-5 concrete strengths grounded in the answers),
+    "growthAreas": string[] (2-4 honest, kind growth areas),
+    "interests": string[] (3-5 inferred interests / passion signals),
+    "motivations": string (what drives them, 1-2 sentences),
+    "learningStyle": string (how they seem to learn best, 1-2 sentences),
+    "blindSpots": string[] (1-3 potential blind spots, framed as awareness not criticism),
+    "careerInsights": string (2-3 sentences on fitting directions given their age, goal, skills),
+    "conclusion": string (warm closing paragraph, 3-4 sentences, addressed by name)
+  },
   "perspective": {
     "headline": string,
     "stat": string,
@@ -81,11 +112,11 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
     "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
   }
 }
-Ground every field in the user's answers. No generic filler. No disclaimers.
+Ground every field in the user's ACTUAL answers, goal, self-description, custom skills, and any free-text "Other" responses. When a question is marked SKIPPED, treat it as a signal (they weren't sure or it didn't apply) — never fabricate an answer for it. Adapt intelligently to whatever they DID share, however sparse. No generic filler. No disclaimers.
 
 Rules:
 - summary.motivation: 1–2 warm, personal sentences of encouragement addressed to the user by name.
-- roleModels: pick people whose age, era, or breakout moment is RELATABLE to the user's age (e.g. teen prodigies for age 13, early-career founders for 22). Prefer contemporary figures the user could realistically look up today.
+- roleModels: MUST be tailored to the user's exact age band and goal — do NOT reuse the same 3 people for every user. For ages 10-14: relatable young achievers, teen prodigies, youth changemakers. For 15-18: high-school-era breakouts, teen founders, young athletes/creators aligned with their declared interests & skills. For 19-22 (college band): emerging entrepreneurs, researchers, creators, athletes whose breakthrough came at that age. For 23-27: early-career founders, industry mentors, professionals whose trajectory maps onto the user's goal. Prefer contemporary figures the user could realistically look up today. Vary by skills and goal — a coder gets different names than a writer or athlete.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
 - opportunities: MUST be matched to the user's education stage AND declared skills. If the user is in school, suggest scholarships, competitions, or teen fellowships. If in college, suggest internships and campus programs. If graduated / job-hunting, suggest entry-level jobs, apprenticeships, or paid fellowships they can apply to today. If already working, suggest next-step roles or upskilling programs. Even when the user only explored a couple of modules (e.g. Ability + Habits), lean on their skills list to still recommend concrete jobs / gigs / programs — never say "not enough info". opportunities.url must be a real https link (official program page, org site, or a reliable listing like Internshala / YourStory / opportunitydesk.org / LinkedIn Jobs search). Never invent a broken URL — if unsure, link to a search page on the org's site.
 - perspective: a motivating "put things in context" panel.
@@ -109,10 +140,17 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       `Age: ${data.age}`,
       data.education ? `Current stage: ${data.education}` : `Current stage: (not provided)`,
       `Existing skills: ${(data.skills && data.skills.length) ? data.skills.join(", ") : "(none declared)"}`,
+      data.customSkill ? `Custom skills (typed): ${data.customSkill}` : `Custom skills: (none)`,
+      data.goal ? `Current goal (user's words): ${data.goal}` : `Current goal: (not shared)`,
+      data.oneLiner ? `Self-description (one line): "${data.oneLiner}"` : `Self-description: (not shared)`,
       `Modules explored: ${data.slugs.join(", ")}`,
       ``,
       `Answers:`,
-      ...data.answers.map((a, i) => `${i + 1}. [${a.moduleSlug}] Q: ${a.question}\n   A: ${a.answer}`),
+      ...data.answers.map((a, i) => {
+        if (a.skipped) return `${i + 1}. [${a.moduleSlug}] Q: ${a.question}\n   A: (SKIPPED)`;
+        const ans = a.custom ? `${a.answer ?? "Other"} — "${a.custom}"` : (a.answer ?? "");
+        return `${i + 1}. [${a.moduleSlug}] Q: ${a.question}\n   A: ${ans}`;
+      }),
     ].join("\n");
     const { text } = await generateText({
       model: gateway("google/gemini-3-flash-preview"),

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { loadQuestions, analyzeGuest } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
 
 export const Route = createFileRoute("/questions")({
   ssr: false,
@@ -12,7 +13,10 @@ export const Route = createFileRoute("/questions")({
   component: Questions,
 });
 
-type Session = { name: string; age: number; slugs: string[]; education?: string; skills?: string[] };
+type Session = { name: string; age: number; slugs: string[]; education?: string; skills?: string[]; customSkill?: string; goal?: string; oneLiner?: string };
+
+const OTHER_ID = "__other__";
+const SKIP_ID = "__skip__";
 
 function Questions() {
   const navigate = useNavigate();
@@ -20,6 +24,7 @@ function Questions() {
   const analyzeFn = useServerFn(analyzeGuest);
   const [session, setSession] = useState<Session | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [customText, setCustomText] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [current, setCurrent] = useState(0);
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
@@ -60,7 +65,13 @@ function Questions() {
     const out: Array<{ moduleSlug: string; moduleTitle: string; id: string; text: string; options: Array<{ id: string; label: string }> }> = [];
     for (const m of data?.modules ?? []) {
       for (const q of m.questions) {
-        out.push({ moduleSlug: m.slug, moduleTitle: m.title, id: q.id, text: q.text, options: q.options });
+        out.push({
+          moduleSlug: m.slug,
+          moduleTitle: m.title,
+          id: q.id,
+          text: q.text,
+          options: [...q.options, { id: OTHER_ID, label: "Other (type your own)" }],
+        });
       }
     }
     return out;
@@ -72,67 +83,89 @@ function Questions() {
   const complete = totalQs > 0 && answeredCount === totalQs;
   const isLast = current === totalQs - 1;
 
+  function buildFlatAnswers(ans: Record<string, string>, custom: Record<string, string>) {
+    const flat: Array<{ moduleSlug: string; question: string; answer?: string; custom?: string; skipped?: boolean }> = [];
+    for (const m of data?.modules ?? []) {
+      for (const qq of m.questions) {
+        const oid = ans[qq.id];
+        if (!oid || oid === SKIP_ID) {
+          flat.push({ moduleSlug: m.slug, question: qq.text, skipped: true });
+          continue;
+        }
+        if (oid === OTHER_ID) {
+          flat.push({ moduleSlug: m.slug, question: qq.text, answer: "Other", custom: custom[qq.id]?.trim() || undefined });
+          continue;
+        }
+        const opt = qq.options.find((o) => o.id === oid);
+        if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
+      }
+    }
+    return flat;
+  }
+
+  function maybeKickoffAnalysis(nextAnswers: Record<string, string>, nextCustom: Record<string, string>) {
+    if (!session || !data) return;
+    if (Object.keys(nextAnswers).length !== totalQs) return;
+    if (analysisPromiseRef.current) return;
+    analysisPromiseRef.current = analyzeFn({
+      data: {
+        name: session.name,
+        age: session.age,
+        education: session.education,
+        skills: session.skills,
+        customSkill: session.customSkill,
+        goal: session.goal,
+        oneLiner: session.oneLiner,
+        slugs: session.slugs,
+        answers: buildFlatAnswers(nextAnswers, nextCustom),
+      },
+    }) as Promise<{ result: unknown }>;
+  }
+
   function pick(qid: string, oid: string) {
     setAnswers((prev) => {
       const next = { ...prev, [qid]: oid };
-      // Kick off analysis eagerly the moment the last answer is picked,
-      // so it runs in the background while the user reaches for "Analyze".
-      if (isLast && session && data && Object.keys(next).length === totalQs && !analysisPromiseRef.current) {
-        const flat: Array<{ moduleSlug: string; question: string; answer: string }> = [];
-        for (const m of data.modules) {
-          for (const qq of m.questions) {
-            const oidPick = next[qq.id];
-            const opt = qq.options.find((o) => o.id === oidPick);
-            if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
-          }
-        }
-        analysisPromiseRef.current = analyzeFn({
-          data: {
-            name: session.name,
-            age: session.age,
-            education: session.education,
-            skills: session.skills,
-            slugs: session.slugs,
-            answers: flat,
-          },
-        }) as Promise<{ result: unknown }>;
-      }
+      if (isLast && oid !== OTHER_ID) maybeKickoffAnalysis(next, customText);
       return next;
     });
-    if (!isLast) {
+    if (!isLast && oid !== OTHER_ID) {
       setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 220);
     }
+  }
+
+  function skip(qid: string) {
+    setAnswers((prev) => {
+      const next = { ...prev, [qid]: SKIP_ID };
+      if (isLast) maybeKickoffAnalysis(next, customText);
+      return next;
+    });
+    if (!isLast) setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 180);
   }
 
   async function onAnalyze() {
     if (!complete || !session || !data) return;
     setSubmitting(true);
     try {
-      // Reuse the in-flight analysis started at pick-time when available.
       if (!analysisPromiseRef.current) {
-        const flat: Array<{ moduleSlug: string; question: string; answer: string }> = [];
-        for (const m of data.modules) {
-          for (const qq of m.questions) {
-            const oid = answers[qq.id];
-            const opt = qq.options.find((o) => o.id === oid);
-            if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
-          }
-        }
         analysisPromiseRef.current = analyzeFn({
           data: {
             name: session.name,
             age: session.age,
             education: session.education,
             skills: session.skills,
+            customSkill: session.customSkill,
+            goal: session.goal,
+            oneLiner: session.oneLiner,
             slugs: session.slugs,
-            answers: flat,
+            answers: buildFlatAnswers(answers, customText),
           },
         }) as Promise<{ result: unknown }>;
       }
       const res = (await analysisPromiseRef.current) as { result: unknown };
       const raw = localStorage.getItem("myflow.session");
       const sess = raw ? JSON.parse(raw) : {};
-      localStorage.setItem("myflow.session", JSON.stringify({ ...sess, result: res.result }));
+      const flatAns = buildFlatAnswers(answers, customText);
+      localStorage.setItem("myflow.session", JSON.stringify({ ...sess, result: res.result, answersFlat: flatAns }));
       navigate({ to: "/dashboard" });
     } catch (err) {
       analysisPromiseRef.current = null;
@@ -197,6 +230,14 @@ function Questions() {
                     </button>
                   );
                 })}
+                {answers[q.id] === OTHER_ID && (
+                  <Textarea
+                    value={customText[q.id] ?? ""}
+                    onChange={(e) => setCustomText((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                    placeholder="Type your own answer…"
+                    className="min-h-24"
+                  />
+                )}
               </div>
 
               <div className="mt-8 sticky bottom-0 -mx-6 px-6 py-4 bg-background/95 backdrop-blur border-t border-border sm:static sm:mx-0 sm:px-0 sm:py-0 sm:bg-transparent sm:backdrop-blur-0 sm:border-t-0 flex items-center justify-between">
@@ -208,6 +249,9 @@ function Questions() {
                   ← Back
                 </Button>
                 <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm" onClick={() => skip(q.id)}>
+                    Skip
+                  </Button>
                   {!isLast && (
                     <Button
                       variant="outline"

@@ -10,7 +10,18 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
-type Session = { name: string; age: number; result?: DashboardResult };
+type FlatAnswer = { moduleSlug: string; question: string; answer?: string; custom?: string; skipped?: boolean };
+type Session = {
+  name: string;
+  age: number;
+  education?: string;
+  skills?: string[];
+  customSkill?: string;
+  goal?: string;
+  oneLiner?: string;
+  result?: DashboardResult;
+  answersFlat?: FlatAnswer[];
+};
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -32,9 +43,14 @@ function Dashboard() {
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between">
           <Link to="/" className="font-display text-xl font-bold tracking-tighter">MYFLOW</Link>
-          <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
-            Start over
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="default" size="sm" className="rounded-full" onClick={() => downloadReport(session)}>
+              ↓ Download Report
+            </Button>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
+              Start over
+            </Button>
+          </div>
         </div>
 
         <header className="mt-10">
@@ -142,6 +158,35 @@ function Dashboard() {
           </Panel>
         </div>
 
+        {/* Deep Analysis */}
+        {r.analysis && (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Panel title="Personality & Motivations" tone="lilac" emoji="🧭">
+              <p className="text-sm">{r.analysis.personality}</p>
+              <div className="mt-3 text-xs text-muted-foreground"><span className="font-mono uppercase tracking-widest text-primary">Motivations · </span>{r.analysis.motivations}</div>
+              <div className="mt-2 text-xs text-muted-foreground"><span className="font-mono uppercase tracking-widest text-primary">Learning style · </span>{r.analysis.learningStyle}</div>
+            </Panel>
+            <Panel title="Strengths & Growth" tone="mint" emoji="🌿">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-primary">Strengths</div>
+              <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.strengths.map((s, i) => (<li key={i}>{s}</li>))}</ul>
+              <div className="mt-3 text-[10px] font-mono uppercase tracking-widest text-primary">Growth areas</div>
+              <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.growthAreas.map((s, i) => (<li key={i}>{s}</li>))}</ul>
+              {r.analysis.blindSpots?.length ? (
+                <>
+                  <div className="mt-3 text-[10px] font-mono uppercase tracking-widest text-primary">Watch-outs</div>
+                  <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.blindSpots.map((s, i) => (<li key={i}>{s}</li>))}</ul>
+                </>
+              ) : null}
+            </Panel>
+            <div className="md:col-span-2">
+              <Panel title="Career insights & conclusion" tone="peach" emoji="✨">
+                <p className="text-sm">{r.analysis.careerInsights}</p>
+                <p className="mt-3 text-sm italic text-foreground/85">{r.analysis.conclusion}</p>
+              </Panel>
+            </div>
+          </div>
+        )}
+
         {/* Perspective — motivational stats */}
         {r.perspective && (
           <div className="mt-8">
@@ -199,6 +244,129 @@ function Panel({ title, tone, emoji, children }: { title: string; tone: keyof ty
       <div className="mt-4">{children}</div>
     </section>
   );
+}
+
+function escapeHtml(s: string): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function downloadReport(session: Session) {
+  const r = session.result;
+  if (!r) return;
+  const a = r.analysis;
+  const answers = session.answersFlat ?? [];
+  const html = `<!doctype html>
+<html><head><meta charset="utf-8"><title>MyFlow Report — ${escapeHtml(session.name)}</title>
+<style>
+  @page { margin: 20mm; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; color:#0f172a; line-height:1.55; max-width: 820px; margin: 32px auto; padding: 0 24px; }
+  h1 { font-size: 32px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  h2 { font-size: 20px; margin: 28px 0 10px; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; color:#1e3a8a; }
+  h3 { font-size: 15px; margin: 16px 0 6px; color:#334155; text-transform: uppercase; letter-spacing: .08em; }
+  .muted { color:#64748b; font-size: 13px; }
+  .grid { display:grid; grid-template-columns: 160px 1fr; gap: 6px 16px; font-size: 14px; }
+  ul { padding-left: 20px; margin: 6px 0; }
+  li { margin: 3px 0; font-size: 14px; }
+  .card { background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:14px 16px; margin: 8px 0; }
+  .qa { margin: 10px 0; padding: 10px 12px; border-left:3px solid #c7d2fe; background:#f8fafc; border-radius:6px; font-size:13px; }
+  .qa .q { font-weight:600; color:#1e3a8a; }
+  .qa .a { margin-top:2px; }
+  .skipped { color:#94a3b8; font-style:italic; }
+  .rm { display:flex; gap:12px; align-items:flex-start; margin:8px 0; }
+  .rm img { width:56px; height:56px; border-radius:50%; object-fit:cover; border:1px solid #e5e7eb; }
+  header { border-bottom: 3px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 24px; }
+  .brand { font-size:12px; letter-spacing:.2em; color:#1e3a8a; font-weight:700; }
+  @media print { .noprint { display:none } body { margin: 0; } }
+  .noprint { position: fixed; top: 16px; right: 16px; }
+  .noprint button { background:#1e3a8a; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-size:13px; }
+</style></head><body>
+<div class="noprint"><button onclick="window.print()">Print / Save as PDF</button></div>
+<header>
+  <div class="brand">MYFLOW · PERSONAL REPORT</div>
+  <h1>${escapeHtml(session.name)}'s MyFlow snapshot</h1>
+  <div class="muted">Generated ${new Date().toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' })}</div>
+</header>
+
+<h2>Your profile</h2>
+<div class="grid">
+  <div class="muted">Name</div><div>${escapeHtml(session.name)}</div>
+  <div class="muted">Age</div><div>${session.age}</div>
+  <div class="muted">Stage</div><div>${escapeHtml(session.education ?? "—")}</div>
+  <div class="muted">Skills</div><div>${(session.skills ?? []).map(escapeHtml).join(", ") || "—"}</div>
+  ${session.customSkill ? `<div class="muted">Custom skills</div><div>${escapeHtml(session.customSkill)}</div>` : ""}
+  <div class="muted">Current goal</div><div>${escapeHtml(session.goal ?? "—")}</div>
+  <div class="muted">One-line self</div><div>${escapeHtml(session.oneLiner ?? "—")}</div>
+</div>
+
+<h2>Summary</h2>
+<div class="card"><strong>${escapeHtml(r.summary?.headline ?? "")}</strong>
+<ul>${(r.summary?.bullets ?? []).map(b => `<li>${escapeHtml(b)}</li>`).join("")}</ul>
+${r.summary?.motivation ? `<p><em>${escapeHtml(r.summary.motivation)}</em></p>` : ""}
+</div>
+
+${a ? `
+<h2>Personality analysis</h2>
+<p>${escapeHtml(a.personality)}</p>
+<h3>Motivations</h3><p>${escapeHtml(a.motivations)}</p>
+<h3>Learning style</h3><p>${escapeHtml(a.learningStyle)}</p>
+<h3>Interests</h3><ul>${a.interests.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+
+<h2>Strengths</h2>
+<ul>${a.strengths.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+
+<h2>Growth areas</h2>
+<ul>${a.growthAreas.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+
+${a.blindSpots?.length ? `<h3>Potential blind spots</h3><ul>${a.blindSpots.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+
+<h2>Career insights</h2>
+<p>${escapeHtml(a.careerInsights)}</p>
+` : ""}
+
+<h2>Recommended role models</h2>
+${(r.roleModels ?? []).map(rm => `<div class="rm">${rm.photoUrl ? `<img src="${escapeHtml(rm.photoUrl)}" alt="">` : ""}<div><strong>${escapeHtml(rm.name)}</strong><div class="muted">${escapeHtml(rm.why)}</div></div></div>`).join("")}
+
+<h2>Roadmap</h2>
+<ul>${(r.roadmap ?? []).map(m => `<li><strong>${escapeHtml(m.horizon)}:</strong> ${escapeHtml(m.action)}</li>`).join("")}</ul>
+
+<h2>Opportunities</h2>
+${(r.opportunities ?? []).map(o => `<div class="card"><strong>${escapeHtml(o.title)}</strong> <span class="muted">· ${escapeHtml(o.confidence)}</span><div class="muted">${escapeHtml(o.org)} · ${escapeHtml(o.stipend)}</div>${o.url ? `<div class="muted" style="word-break:break-all">${escapeHtml(o.url)}</div>` : ""}</div>`).join("")}
+
+<h2>Podcasts to listen to</h2>
+${(r.podcasts ?? []).map(p => `<div class="card"><strong>${escapeHtml(p.title)}</strong> <span class="muted">by ${escapeHtml(p.host)}</span><div>${escapeHtml(p.pitch)}</div>${p.url ? `<div class="muted" style="word-break:break-all">${escapeHtml(p.url)}</div>` : ""}</div>`).join("")}
+
+${answers.length ? `
+<h2>Your questionnaire responses</h2>
+${answers.map((x, i) => `<div class="qa"><div class="q">${i+1}. ${escapeHtml(x.question)}</div>${x.skipped ? `<div class="a skipped">Skipped</div>` : `<div class="a">${escapeHtml(x.answer ?? "")}${x.custom ? ` — "${escapeHtml(x.custom)}"` : ""}</div>`}</div>`).join("")}
+` : ""}
+
+${a ? `<h2>A note to close</h2><p><em>${escapeHtml(a.conclusion)}</em></p>` : ""}
+
+${r.perspective ? `<h2>Perspective</h2>
+<div class="card"><strong>${escapeHtml(r.perspective.headline)}</strong>
+<p style="font-size:28px; font-weight:700; color:#1e3a8a; margin:8px 0;">${escapeHtml(r.perspective.lessPrivileged?.number || r.perspective.statNumber)}</p>
+<div class="muted">${escapeHtml(r.perspective.lessPrivileged?.label || r.perspective.stat)}</div>
+<p>${escapeHtml(r.perspective.lessPrivileged?.message || r.perspective.simpleMeaning || r.perspective.message)}</p>
+${r.perspective.source ? `<div class="muted">Source: ${escapeHtml(r.perspective.source)}</div>` : ""}
+</div>` : ""}
+
+</body></html>`;
+  const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a2 = document.createElement("a");
+  a2.href = url;
+  a2.download = `myflow-report-${session.name.replace(/\s+/g, "-").toLowerCase()}.html`;
+  document.body.appendChild(a2);
+  a2.click();
+  document.body.removeChild(a2);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  // Also open in a new tab for immediate print-to-PDF
+  const w = window.open("", "_blank");
+  if (w) { w.document.write(html); w.document.close(); }
 }
 
 // Removes standalone numbers/percentages from a sentence so the Perspective
