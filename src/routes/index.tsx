@@ -22,6 +22,9 @@ function Intro() {
   const [age, setAge] = useState("");
   const [education, setEducation] = useState("");
   const [skills, setSkills] = useState<Set<string>>(new Set());
+  const [customSkill, setCustomSkill] = useState("");
+  const [goal, setGoal] = useState("");
+  const [oneLiner, setOneLiner] = useState("");
 
   const EDUCATION_OPTIONS = [
     { value: "in-school", label: "Currently in school" },
@@ -49,6 +52,7 @@ function Intro() {
     "Basic literacy & numeracy",
     "Physical / hands-on",
   ];
+  const AGE_OPTIONS = Array.from({ length: 27 - 10 + 1 }, (_, i) => 10 + i);
 
   function toggleSkill(s: string) {
     setSkills((prev) => {
@@ -62,15 +66,21 @@ function Intro() {
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const ageNum = parseInt(age, 10);
-    if (!name.trim() || !ageNum || ageNum < 8 || ageNum > 99) return;
+    if (!name.trim() || !ageNum || ageNum < 10 || ageNum > 27) return;
     if (!education) return;
+    const finalSkills = Array.from(skills);
+    const custom = customSkill.trim();
+    if (skills.has("Other") && custom) finalSkills.push(custom);
     localStorage.setItem(
       "myflow.session",
       JSON.stringify({
         name: name.trim(),
         age: ageNum,
         education,
-        skills: Array.from(skills),
+        skills: finalSkills,
+        customSkill: custom || undefined,
+        goal: goal.trim() || undefined,
+        oneLiner: oneLiner.trim() || undefined,
       }),
     );
     navigate({ to: "/pick" });
@@ -93,7 +103,16 @@ function Intro() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="age">Your age</Label>
-              <Input id="age" type="number" min={8} max={99} required value={age} onChange={(e) => setAge(e.target.value)} placeholder="e.g. 17" />
+              <Select value={age} onValueChange={setAge}>
+                <SelectTrigger id="age">
+                  <SelectValue placeholder="Pick your age" />
+                </SelectTrigger>
+                <SelectContent className="max-h-64">
+                  {AGE_OPTIONS.map((a) => (
+                    <SelectItem key={a} value={String(a)}>{a}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -118,7 +137,7 @@ function Intro() {
               <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones.</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {SKILL_OPTIONS.map((s) => {
+              {[...SKILL_OPTIONS, "Other"].map((s) => {
                 const on = skills.has(s);
                 return (
                   <label
@@ -131,6 +150,23 @@ function Intro() {
                 );
               })}
             </div>
+            {skills.has("Other") && (
+              <Input
+                value={customSkill}
+                onChange={(e) => setCustomSkill(e.target.value)}
+                placeholder="Type your skill(s), e.g. music production, chess"
+              />
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="goal">What is your current goal?</Label>
+            <Input id="goal" value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Get into a great college, start a side project, land my first internship" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="oneliner">Describe yourself in one line</Label>
+            <Input id="oneliner" value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} placeholder="e.g. A curious builder who loves stories and startups" />
           </div>
 
           <Button type="submit" className="w-full" size="lg" disabled={!education}>Continue</Button>
