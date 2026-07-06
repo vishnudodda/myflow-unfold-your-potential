@@ -1,8 +1,11 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import type { DashboardResult } from "@/lib/guest.functions";
+import { generateReport } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/animated-counter";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -10,11 +13,23 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
-type Session = { name: string; age: number; result?: DashboardResult };
+type Session = {
+  name: string;
+  age: number;
+  education?: string;
+  skills?: string[];
+  customSkills?: string[];
+  goal?: string;
+  selfDescription?: string;
+  result?: DashboardResult;
+  flatAnswers?: Array<{ moduleSlug: string; moduleTitle?: string; question: string; answer?: string; skipped?: boolean }>;
+};
 
 function Dashboard() {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
+  const [downloading, setDownloading] = useState(false);
+  const reportFn = useServerFn(generateReport);
 
   useEffect(() => {
     const raw = localStorage.getItem("myflow.session");
@@ -27,14 +42,57 @@ function Dashboard() {
   if (!session?.result) return null;
   const r = session.result;
 
+  async function onDownload() {
+    if (!session) return;
+    setDownloading(true);
+    try {
+      const res = await reportFn({
+        data: {
+          session: {
+            name: session.name,
+            age: session.age,
+            education: session.education,
+            skills: session.skills,
+            customSkills: session.customSkills,
+            goal: session.goal,
+            selfDescription: session.selfDescription,
+          },
+          answers: session.flatAnswers ?? [],
+          result: session.result,
+        },
+      });
+      const bin = atob(res.pdfBase64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const blob = new Blob([bytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not build the report");
+    } finally {
+      setDownloading(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-pastel-blue via-background to-pastel-lilac text-foreground px-6 py-10">
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <Link to="/" className="font-display text-xl font-bold tracking-tighter">MYFLOW</Link>
-          <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
-            Start over
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button size="sm" className="rounded-full" onClick={onDownload} disabled={downloading}>
+              {downloading ? "Preparing…" : "Download report ↓"}
+            </Button>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); localStorage.removeItem("myflow.answers"); navigate({ to: "/" }); }}>
+              Start over
+            </Button>
+          </div>
         </div>
 
         <header className="mt-10">
@@ -110,6 +168,58 @@ function Dashboard() {
             )}
           </Panel>
         </div>
+
+        {/* Deeper insights */}
+        {(r.summary?.personalityPattern || r.summary?.learningStyle || r.summary?.strengths?.length || r.summary?.growthAreas?.length || r.summary?.blindSpots?.length || r.summary?.careerInsights?.length) && (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {r.summary?.strengths?.length ? (
+              <Panel title="Strengths" tone="mint" emoji="💪">
+                <ul className="space-y-2 text-sm">
+                  {r.summary.strengths.map((s, i) => <li key={i} className="rounded-lg bg-white/70 p-3">{s}</li>)}
+                </ul>
+              </Panel>
+            ) : null}
+            {r.summary?.growthAreas?.length ? (
+              <Panel title="Growth Areas" tone="peach" emoji="🌿">
+                <ul className="space-y-2 text-sm">
+                  {r.summary.growthAreas.map((s, i) => <li key={i} className="rounded-lg bg-white/70 p-3">{s}</li>)}
+                </ul>
+              </Panel>
+            ) : null}
+            {r.summary?.personalityPattern ? (
+              <Panel title="Personality Pattern" tone="lilac" emoji="🧭">
+                <p className="text-sm">{r.summary.personalityPattern}</p>
+              </Panel>
+            ) : null}
+            {r.summary?.learningStyle ? (
+              <Panel title="Learning Style" tone="blue" emoji="📚">
+                <p className="text-sm">{r.summary.learningStyle}</p>
+              </Panel>
+            ) : null}
+            {r.summary?.blindSpots?.length ? (
+              <Panel title="Blind Spots" tone="lemon" emoji="👁️">
+                <ul className="space-y-2 text-sm">
+                  {r.summary.blindSpots.map((s, i) => <li key={i} className="rounded-lg bg-white/70 p-3">{s}</li>)}
+                </ul>
+              </Panel>
+            ) : null}
+            {r.summary?.careerInsights?.length ? (
+              <Panel title="Career Insights" tone="mint" emoji="🚀">
+                <ul className="space-y-2 text-sm">
+                  {r.summary.careerInsights.map((s, i) => <li key={i} className="rounded-lg bg-white/70 p-3">{s}</li>)}
+                </ul>
+              </Panel>
+            ) : null}
+          </div>
+        )}
+
+        {r.summary?.conclusion && (
+          <div className="mt-4">
+            <Panel title="Conclusion" tone="lilac" emoji="✨">
+              <p className="text-sm md:text-base">{r.summary.conclusion}</p>
+            </Panel>
+          </div>
+        )}
 
         {/* Row 3: Roadmap + Podcasts */}
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
