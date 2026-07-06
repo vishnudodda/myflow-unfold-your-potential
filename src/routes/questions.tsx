@@ -206,19 +206,22 @@ function Questions() {
                 >
                   ← Back
                 </Button>
-                {isLast ? (
-                  <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
-                    {submitting ? "Analyzing…" : "Analyze"}
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    disabled={!answers[q.id]}
-                    onClick={() => setCurrent((c) => Math.min(totalQs - 1, c + 1))}
-                  >
-                    Next →
-                  </Button>
-                )}
+                <div className="flex items-center gap-2">
+                  {!isLast && (
+                    <Button
+                      variant="outline"
+                      disabled={!answers[q.id]}
+                      onClick={() => setCurrent((c) => Math.min(totalQs - 1, c + 1))}
+                    >
+                      Next →
+                    </Button>
+                  )}
+                  {complete && (
+                    <Button size="lg" disabled={submitting} onClick={onAnalyze}>
+                      {submitting ? "Analyzing…" : "Analyze ✧"}
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </>
