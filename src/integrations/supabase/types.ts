@@ -237,6 +237,51 @@ export type Database = {
         }
         Relationships: []
       }
+      industry_insights: {
+        Row: {
+          categories: string[]
+          created_at: string
+          description: string
+          icon: string | null
+          id: string
+          last_verified: string
+          publication_year: number
+          sort_weight: number
+          source_name: string
+          source_url: string
+          statistic: string
+          title: string
+        }
+        Insert: {
+          categories?: string[]
+          created_at?: string
+          description: string
+          icon?: string | null
+          id?: string
+          last_verified?: string
+          publication_year: number
+          sort_weight?: number
+          source_name: string
+          source_url: string
+          statistic: string
+          title: string
+        }
+        Update: {
+          categories?: string[]
+          created_at?: string
+          description?: string
+          icon?: string | null
+          id?: string
+          last_verified?: string
+          publication_year?: number
+          sort_weight?: number
+          source_name?: string
+          source_url?: string
+          statistic?: string
+          title?: string
+        }
+        Relationships: []
+      }
       learning_resources: {
         Row: {
           created_at: string
