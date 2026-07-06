@@ -166,7 +166,7 @@ function Dashboard() {
                   )}
                 </div>
                 <p className="text-sm md:text-base text-foreground/85 leading-relaxed">
-                  {r.perspective.stat}
+                  <AnimatedText text={r.perspective.stat} />
                 </p>
               </div>
 
@@ -223,5 +223,30 @@ function Panel({ title, tone, emoji, children }: { title: string; tone: keyof ty
       </div>
       <div className="mt-4">{children}</div>
     </section>
+  );
+}
+
+// Splits a paragraph into text + number tokens (e.g. "617M", "70%", "1.1B", "258 million")
+// and animates each number with the odometer counter so stats like the UNESCO figure roll in.
+function AnimatedText({ text }: { text: string }) {
+  const splitRegex = /(\d[\d,]*(?:\.\d+)?\s?(?:%|[KMB]|million|billion|thousand)?)/gi;
+  const testRegex = /^\d[\d,]*(?:\.\d+)?\s?(?:%|[KMB]|million|billion|thousand)?$/i;
+  const parts = text.split(splitRegex);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (!part) return null;
+        if (testRegex.test(part.trim())) {
+          return (
+            <AnimatedCounter
+              key={i}
+              value={part.trim()}
+              className="font-mono font-semibold text-foreground"
+            />
+          );
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
   );
 }

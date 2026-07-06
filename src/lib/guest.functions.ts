@@ -53,6 +53,8 @@ export type DashboardResult = {
 const AnalyzeSchema = z.object({
   name: z.string().min(1),
   age: z.number().int().min(8).max(99),
+  education: z.string().optional(),
+  skills: z.array(z.string()).optional(),
   slugs: z.array(z.string()).min(1),
   answers: z.array(z.object({ moduleSlug: z.string(), question: z.string(), answer: z.string() })),
 });
@@ -81,7 +83,7 @@ Rules:
 - summary.motivation: 1–2 warm, personal sentences of encouragement addressed to the user by name.
 - roleModels: pick people whose age, era, or breakout moment is RELATABLE to the user's age (e.g. teen prodigies for age 13, early-career founders for 22). Prefer contemporary figures the user could realistically look up today.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
-- opportunities.url: a real https link where the user can apply or learn more (official program page, org site, or a reliable listing like Internshala/YourStory/opportunitydesk.org). Never invent a broken URL — if unsure, link to a search page on the org's site.
+- opportunities: MUST be matched to the user's education stage AND declared skills. If the user is in school, suggest scholarships, competitions, or teen fellowships. If in college, suggest internships and campus programs. If graduated / job-hunting, suggest entry-level jobs, apprenticeships, or paid fellowships they can apply to today. If already working, suggest next-step roles or upskilling programs. Even when the user only explored a couple of modules (e.g. Ability + Habits), lean on their skills list to still recommend concrete jobs / gigs / programs — never say "not enough info". opportunities.url must be a real https link (official program page, org site, or a reliable listing like Internshala / YourStory / opportunitydesk.org / LinkedIn Jobs search). Never invent a broken URL — if unsure, link to a search page on the org's site.
 - perspective: a motivating "put things in context" panel. statNumber is a big bold figure (e.g. "1.1B", "258M", "70%"). stat is a one-line framing of that number (e.g. "children worldwide are out of school"). source cites a credible org (UNICEF, WHO, UNESCO, World Bank, UN). message is 2 warm sentences that turn the stat into gratitude + fuel for the user by name — not pity. facts are 3 additional grounding stats (number + short label + one-line detail), each from a real global/UN/WHO/UNESCO/World Bank statistic. Prefer recent figures (last 5 years). Never fabricate — if unsure, use a well-known widely-cited figure.`;
 
 export const analyzeGuest = createServerFn({ method: "POST" })
@@ -93,6 +95,8 @@ export const analyzeGuest = createServerFn({ method: "POST" })
     const userMsg = [
       `Name: ${data.name}`,
       `Age: ${data.age}`,
+      data.education ? `Current stage: ${data.education}` : `Current stage: (not provided)`,
+      `Existing skills: ${(data.skills && data.skills.length) ? data.skills.join(", ") : "(none declared)"}`,
       `Modules explored: ${data.slugs.join(", ")}`,
       ``,
       `Answers:`,

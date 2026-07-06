@@ -12,7 +12,7 @@ export const Route = createFileRoute("/questions")({
   component: Questions,
 });
 
-type Session = { name: string; age: number; slugs: string[] };
+type Session = { name: string; age: number; slugs: string[]; education?: string; skills?: string[] };
 
 function Questions() {
   const navigate = useNavigate();
@@ -72,7 +72,14 @@ function Questions() {
         }
       }
       const res = await analyzeFn({
-        data: { name: session.name, age: session.age, slugs: session.slugs, answers: flat },
+        data: {
+          name: session.name,
+          age: session.age,
+          education: session.education,
+          skills: session.skills,
+          slugs: session.slugs,
+          answers: flat,
+        },
       });
       const raw = localStorage.getItem("myflow.session");
       const sess = raw ? JSON.parse(raw) : {};
