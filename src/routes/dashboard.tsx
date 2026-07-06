@@ -10,7 +10,18 @@ export const Route = createFileRoute("/dashboard")({
   component: Dashboard,
 });
 
-type Session = { name: string; age: number; result?: DashboardResult };
+type FlatAnswer = { moduleSlug: string; question: string; answer?: string; custom?: string; skipped?: boolean };
+type Session = {
+  name: string;
+  age: number;
+  education?: string;
+  skills?: string[];
+  customSkill?: string;
+  goal?: string;
+  oneLiner?: string;
+  result?: DashboardResult;
+  answersFlat?: FlatAnswer[];
+};
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -32,9 +43,14 @@ function Dashboard() {
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between">
           <Link to="/" className="font-display text-xl font-bold tracking-tighter">MYFLOW</Link>
-          <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
-            Start over
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="default" size="sm" className="rounded-full" onClick={() => downloadReport(session)}>
+              ↓ Download Report
+            </Button>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
+              Start over
+            </Button>
+          </div>
         </div>
 
         <header className="mt-10">
@@ -141,6 +157,35 @@ function Dashboard() {
             </div>
           </Panel>
         </div>
+
+        {/* Deep Analysis */}
+        {r.analysis && (
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Panel title="Personality & Motivations" tone="lilac" emoji="🧭">
+              <p className="text-sm">{r.analysis.personality}</p>
+              <div className="mt-3 text-xs text-muted-foreground"><span className="font-mono uppercase tracking-widest text-primary">Motivations · </span>{r.analysis.motivations}</div>
+              <div className="mt-2 text-xs text-muted-foreground"><span className="font-mono uppercase tracking-widest text-primary">Learning style · </span>{r.analysis.learningStyle}</div>
+            </Panel>
+            <Panel title="Strengths & Growth" tone="mint" emoji="🌿">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-primary">Strengths</div>
+              <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.strengths.map((s, i) => (<li key={i}>{s}</li>))}</ul>
+              <div className="mt-3 text-[10px] font-mono uppercase tracking-widest text-primary">Growth areas</div>
+              <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.growthAreas.map((s, i) => (<li key={i}>{s}</li>))}</ul>
+              {r.analysis.blindSpots?.length ? (
+                <>
+                  <div className="mt-3 text-[10px] font-mono uppercase tracking-widest text-primary">Watch-outs</div>
+                  <ul className="mt-1 space-y-1 text-sm list-disc pl-5">{r.analysis.blindSpots.map((s, i) => (<li key={i}>{s}</li>))}</ul>
+                </>
+              ) : null}
+            </Panel>
+            <div className="md:col-span-2">
+              <Panel title="Career insights & conclusion" tone="peach" emoji="✨">
+                <p className="text-sm">{r.analysis.careerInsights}</p>
+                <p className="mt-3 text-sm italic text-foreground/85">{r.analysis.conclusion}</p>
+              </Panel>
+            </div>
+          </div>
+        )}
 
         {/* Perspective — motivational stats */}
         {r.perspective && (
