@@ -1,66 +1,62 @@
-# MyFlow — Personalization & Report Upgrade
+# Reframe MyFlow — No-Auth Guided Journey
 
-Six focused upgrades across intake, questionnaire, analysis, and report export.
+## New user flow (single-session, no login)
 
-## 1. Intro page (`src/routes/index.tsx`)
+```text
+/ (Intro)          → Name + Age form
+/pick              → "What do you want to know about you?"
+                     10 assessment checkboxes (multi-select)
+/questions         → Renders questions ONLY for selected assessments,
+                     stacked in one scrollable page with progress bar.
+                     Final button: [ Analyze ]
+/dashboard         → 5 segments:
+                     1. Summary        2. Role Models
+                     3. Roadmap        4. Opportunities
+                     5. Suggested Podcasts
+```
 
-- **Age picker** — replace number input with a scrollable wheel picker (custom snap-scroll list), range **10–27**, single value, defaulting to 17.
-- **Skills** — keep the current 15 chips; add an **"Other"** chip; when active, reveal a text input for a comma-separated custom skill list. Custom skills are merged into `skills` on submit.
-- Add two new text questions stored in `myflow.session`:
-  - `goal` — "What is your current goal?" (single-line text, required)
-  - `selfDescription` — "Describe yourself in one line." (single-line text, required, max 140 chars)
-- Session shape becomes: `{ name, age, education, skills, customSkills, goal, selfDescription }`.
+No sign-in / sign-up / Google / email anywhere. Session lives in `localStorage` (name, age, selected slugs, answers, generated results).
 
-## 2. Questionnaire (`src/routes/questions.tsx` + `src/lib/guest.functions.ts`)
+## Screens
 
-- Each question renders its 4 original options plus a **5th "Other"** option; selecting it reveals a text input whose value becomes the answer (`Other: <text>`).
-- Add a **Skip** button on every question. Skipped questions record `{ skipped: true }` and are excluded from the "must answer all" gate.
-- **Analyze** button is enabled as long as at least one question in each selected module has an answer OR the user has skipped through — never blocked.
-- Auto-save answers to `localStorage` on every change (already partially done) so refresh preserves state.
-- Extend `analyzeGuest` input to accept `goal`, `selfDescription`, `customSkills`, and `answers[].skipped`.
+**1. `/` Intro** — hero + a card with `Name` and `Age` inputs and a "Continue" button. Stores `{ name, age }` in localStorage, routes to `/pick`.
 
-## 3. Analysis engine (`src/lib/guest.functions.ts`)
+**2. `/pick` Feature picker** — heading "What do you want to know about you?"; grid of 10 checkboxes, one per assessment (pulled from `assessments` table). "Continue" enabled when ≥1 checked. Stores selected slugs.
 
-Rewrite `SYSTEM_PROMPT` + user message assembly to:
-- Include age, education stage, declared + custom skills, goal, one-line self-description, module list, and every answer (skipped ones sent as `SKIPPED`).
-- Instruct the model to weigh every signal and explicitly reason across skipped gaps rather than fabricating.
-- Extend the output schema with:
-  - `summary.strengths[3]`, `summary.growthAreas[3]`, `summary.personalityPattern`, `summary.learningStyle`, `summary.blindSpots[2]`, `summary.motivation`, `summary.careerInsights[3]`, `summary.conclusion`.
-- Keep the existing `roleModels`, `roadmap`, `opportunities`, `podcasts`, `perspective` sections but pass age explicitly and instruct role-model selection to be age-appropriate (young achievers <18, student founders / creators 18–22, early-career mentors 23–27).
+**3. `/questions` Combined questionnaire** — loads all questions + options for the selected assessments in one page, grouped by module with a sticky progress indicator. Radio group per question. Bottom "Analyze" button; disabled until every question answered. On click: calls one new server fn `analyzeGuest` that runs each selected assessment's prompt + the recommendations/roadmap/stats prompts, returns a bundled result object, stored in localStorage under `myflow.result`.
 
-## 4. Dashboard (`src/routes/dashboard.tsx`)
+**4. `/dashboard` 5-panel** — reads `myflow.result` from localStorage. Grid:
+- **Summary** — top-line headline + 3-bullet insights synthesized across modules.
+- **Role Models** — 3 cards (name, why they match).
+- **Roadmap** — 4 milestones (30d / 3m / 6m / 1y), one line each.
+- **Opportunities** — 3 cards (title, org, stipend, confidence).
+- **Podcasts** — 3 cards (title, host, one-line pitch, link if any).
 
-- Render the new fields: Strengths, Growth Areas, Personality Pattern, Learning Style, Blind Spots, Career Insights, Conclusion.
-- Add a **Download Report** button in the dashboard header that calls a new server fn `generateReport` and triggers a browser download.
+## Technical changes
 
-## 5. Downloadable PDF report
+### Routes
+- Delete or bypass `/auth`, `/_authenticated/*` gating on the new user path. Keep the files, but remove nav links; add redirect from `/` to new flow.
+- Add: `src/routes/index.tsx` (rewritten intro), `src/routes/pick.tsx`, `src/routes/questions.tsx`, `src/routes/dashboard.tsx` (public, reads localStorage).
 
-- New server fn `generateReport` in `src/lib/guest.functions.ts` (or a sibling `report.functions.ts`) that accepts `{ session, answers, result }` and returns `{ pdfBase64, filename }`.
-- Uses `pdf-lib` (pure-JS, Worker-compatible) to build a clean multi-page PDF with sections:
-  1. Cover — name, age, generated date
-  2. Profile — age, education, skills, custom skills, goal, one-line self-description
-  3. Questionnaire responses — grouped by module, skipped answers clearly labeled `[Skipped]`, Other responses shown verbatim
-  4. Personality analysis — summary, personality pattern, learning style
-  5. Strengths & Growth areas
-  6. Career insights & Opportunities
-  7. Recommended role models (with why)
-  8. Roadmap
-  9. Personalized conclusion
-- Client decodes the base64 and triggers a `Blob` download as `myflow-report-<name>.pdf`.
+### Server functions (public, no auth middleware)
+- `src/lib/guest.functions.ts`:
+  - `listAssessments()` → returns 10 assessments + categories.
+  - `loadQuestions({ slugs })` → returns questions & options for chosen slugs.
+  - `analyzeGuest({ name, age, answers, slugs })` → runs prompts via existing `runPrompt` / `loadPrompt`, returns `{ summary, roleModels, roadmap, opportunities, podcasts }`. No DB writes — pure compute. Uses `supabaseAdmin` only to read prompts/questions.
 
-## 6. UX polish
+### Removed from client UX (kept in code but unlinked)
+- Auth page, protected dashboard, per-assessment page, results detail page.
 
-- Wheel picker, chip transitions, Other-textbox reveal all use existing Tailwind tokens — no new colors.
-- Smooth scroll to the next question after answer/skip.
-- Persist `myflow.session` and `myflow.answers` on every change; hydrate on mount.
-- Keep the existing design system (Playfair serif italic accents, primary color, muted foreground) — no restyle beyond the new elements.
+### State
+- `localStorage['myflow.session']` = `{ name, age, slugs, answers, result }`.
+- No profiles / user_responses / ai_results writes on the guest path.
 
-## Technical notes
+### Landing metadata
+- `head()` on `/`: title "MyFlow — Discover who you are", description matches new flow.
 
-- **Dependency added:** `pdf-lib` (pure JS, safe in the Worker runtime).
-- No DB schema changes — everything stays in `localStorage` and one server fn call.
-- `analyzeGuest` schema (`AnalyzeSchema`) and `DashboardResult` type both extended; dashboard renderer updated to match.
-- Wheel picker built inline (scroll-snap CSS) — no new dependency.
-- No changes to auth, RLS, or existing migrations.
+## Out of scope
+- Persisting results server-side.
+- Sharing / permalinks for dashboard (localStorage only).
+- Editing the underlying prompt table.
 
 Approve to build.

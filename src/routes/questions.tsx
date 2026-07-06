@@ -12,26 +12,14 @@ export const Route = createFileRoute("/questions")({
   component: Questions,
 });
 
-type Session = {
-  name: string;
-  age: number;
-  slugs: string[];
-  education?: string;
-  skills?: string[];
-  customSkills?: string[];
-  goal?: string;
-  selfDescription?: string;
-};
-
-type AnswerVal = { optionId?: string; other?: string; skipped?: boolean };
+type Session = { name: string; age: number; slugs: string[]; education?: string; skills?: string[] };
 
 function Questions() {
   const navigate = useNavigate();
   const loadFn = useServerFn(loadQuestions);
   const analyzeFn = useServerFn(analyzeGuest);
   const [session, setSession] = useState<Session | null>(null);
-  const [answers, setAnswers] = useState<Record<string, AnswerVal>>({});
-  const [otherDraft, setOtherDraft] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [current, setCurrent] = useState(0);
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
@@ -60,17 +48,7 @@ function Questions() {
     const s = JSON.parse(raw) as Session;
     if (!s.slugs?.length) { navigate({ to: "/pick" }); return; }
     setSession(s);
-    const savedAns = localStorage.getItem("myflow.answers");
-    if (savedAns) {
-      try { setAnswers(JSON.parse(savedAns)); } catch { /* ignore */ }
-    }
   }, [navigate]);
-
-  useEffect(() => {
-    if (Object.keys(answers).length) {
-      localStorage.setItem("myflow.answers", JSON.stringify(answers));
-    }
-  }, [answers]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["questions", session?.slugs],
@@ -89,80 +67,72 @@ function Questions() {
   }, [data]);
   const totalQs = flatQs.length;
   const q = flatQs[current];
-  const touchedCount = flatQs.filter((item) => {
-    const a = answers[item.id];
-    return a && (a.skipped || a.optionId || a.other);
-  }).length;
-  const hasCurrentAnswer = q ? Boolean(answers[q.id]?.optionId || answers[q.id]?.other || answers[q.id]?.skipped) : false;
-  const complete = totalQs > 0 && touchedCount === totalQs;
+  const answeredCount = flatQs.filter((item) => answers[item.id]).length;
+  const hasCurrentAnswer = q ? Boolean(answers[q.id]) : false;
+  const complete = totalQs > 0 && answeredCount === totalQs;
   const isLast = current === totalQs - 1;
 
-  function buildAnalyzePayload() {
-    if (!session || !data) return null;
-    const flat: Array<{ moduleSlug: string; question: string; answer?: string; skipped?: boolean }> = [];
-    for (const m of data.modules) {
-      for (const qq of m.questions) {
-        const a = answers[qq.id];
-        if (!a || a.skipped) {
-          flat.push({ moduleSlug: m.slug, question: qq.text, skipped: true });
-        } else if (a.other) {
-          flat.push({ moduleSlug: m.slug, question: qq.text, answer: `Other: ${a.other}` });
-        } else if (a.optionId) {
-          const opt = qq.options.find((o) => o.id === a.optionId);
-          if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
-        }
-      }
-    }
-    return {
-      name: session.name,
-      age: session.age,
-      education: session.education,
-      skills: session.skills,
-      customSkills: session.customSkills,
-      goal: session.goal,
-      selfDescription: session.selfDescription,
-      slugs: session.slugs,
-      answers: flat,
-    };
-  }
-
   function pick(qid: string, oid: string) {
-    setAnswers((prev) => ({ ...prev, [qid]: { optionId: oid } }));
-    if (!isLast) setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 220);
-  }
-  function pickOther(qid: string) {
-    setAnswers((prev) => ({ ...prev, [qid]: { other: otherDraft[qid] || "" } }));
-  }
-  function commitOther(qid: string, value: string) {
-    setOtherDraft((p) => ({ ...p, [qid]: value }));
-    setAnswers((prev) => ({ ...prev, [qid]: { other: value } }));
-  }
-  function skip(qid: string) {
-    setAnswers((prev) => ({ ...prev, [qid]: { skipped: true } }));
-    if (!isLast) setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 180);
+    setAnswers((prev) => {
+      const next = { ...prev, [qid]: oid };
+      // Kick off analysis eagerly the moment the last answer is picked,
+      // so it runs in the background while the user reaches for "Analyze".
+      if (isLast && session && data && Object.keys(next).length === totalQs && !analysisPromiseRef.current) {
+        const flat: Array<{ moduleSlug: string; question: string; answer: string }> = [];
+        for (const m of data.modules) {
+          for (const qq of m.questions) {
+            const oidPick = next[qq.id];
+            const opt = qq.options.find((o) => o.id === oidPick);
+            if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
+          }
+        }
+        analysisPromiseRef.current = analyzeFn({
+          data: {
+            name: session.name,
+            age: session.age,
+            education: session.education,
+            skills: session.skills,
+            slugs: session.slugs,
+            answers: flat,
+          },
+        }) as Promise<{ result: unknown }>;
+      }
+      return next;
+    });
+    if (!isLast) {
+      setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 220);
+    }
   }
 
   async function onAnalyze() {
     if (!complete || !session || !data) return;
-    const payload = buildAnalyzePayload();
-    if (!payload) return;
     setSubmitting(true);
     try {
+      // Reuse the in-flight analysis started at pick-time when available.
       if (!analysisPromiseRef.current) {
-        analysisPromiseRef.current = analyzeFn({ data: payload }) as Promise<{ result: unknown }>;
+        const flat: Array<{ moduleSlug: string; question: string; answer: string }> = [];
+        for (const m of data.modules) {
+          for (const qq of m.questions) {
+            const oid = answers[qq.id];
+            const opt = qq.options.find((o) => o.id === oid);
+            if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
+          }
+        }
+        analysisPromiseRef.current = analyzeFn({
+          data: {
+            name: session.name,
+            age: session.age,
+            education: session.education,
+            skills: session.skills,
+            slugs: session.slugs,
+            answers: flat,
+          },
+        }) as Promise<{ result: unknown }>;
       }
       const res = (await analysisPromiseRef.current) as { result: unknown };
       const raw = localStorage.getItem("myflow.session");
       const sess = raw ? JSON.parse(raw) : {};
-      // Also persist the flat answers + module titles for the downloadable report.
-      const flatWithTitles = payload.answers.map((a) => {
-        const mod = data.modules.find((m) => m.slug === a.moduleSlug);
-        return { ...a, moduleTitle: mod?.title };
-      });
-      localStorage.setItem(
-        "myflow.session",
-        JSON.stringify({ ...sess, result: res.result, flatAnswers: flatWithTitles }),
-      );
+      localStorage.setItem("myflow.session", JSON.stringify({ ...sess, result: res.result }));
       navigate({ to: "/dashboard" });
     } catch (err) {
       analysisPromiseRef.current = null;
@@ -208,14 +178,14 @@ function Questions() {
               <span>{current + 1} / {totalQs}</span>
             </div>
             <div className="mt-3 h-1.5 w-full bg-muted rounded-full overflow-hidden">
-              <div className="h-full bg-primary transition-all" style={{ width: `${((current + (hasCurrentAnswer ? 1 : 0)) / totalQs) * 100}%` }} />
+              <div className="h-full bg-primary transition-all" style={{ width: `${((current + (answers[q.id] ? 1 : 0)) / totalQs) * 100}%` }} />
             </div>
 
             <div key={q.id} className="mt-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tight">{q.text}</h2>
               <div className="mt-6 grid gap-3">
                 {q.options.map((o) => {
-                  const on = answers[q.id]?.optionId === o.id;
+                  const on = answers[q.id] === o.id;
                   return (
                     <button
                       key={o.id}
@@ -227,28 +197,6 @@ function Questions() {
                     </button>
                   );
                 })}
-                {(() => {
-                  const otherOn = answers[q.id]?.other !== undefined;
-                  return (
-                    <button
-                      type="button"
-                      onClick={() => pickOther(q.id)}
-                      className={`text-left p-4 rounded-xl border transition-all ${otherOn ? "border-primary bg-primary/10" : "border-border hover:bg-muted hover:border-primary/40"}`}
-                    >
-                      <span className="text-sm">Other…</span>
-                    </button>
-                  );
-                })()}
-                {answers[q.id]?.other !== undefined && (
-                  <input
-                    autoFocus
-                    type="text"
-                    value={otherDraft[q.id] ?? answers[q.id]?.other ?? ""}
-                    onChange={(e) => commitOther(q.id, e.target.value)}
-                    placeholder="Type your own answer…"
-                    className="w-full p-3 rounded-xl border border-primary/40 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  />
-                )}
               </div>
 
               <div className="mt-8 sticky bottom-0 -mx-6 px-6 py-4 bg-background/95 backdrop-blur border-t border-border sm:static sm:mx-0 sm:px-0 sm:py-0 sm:bg-transparent sm:backdrop-blur-0 sm:border-t-0 flex items-center justify-between">
@@ -260,9 +208,6 @@ function Questions() {
                   ← Back
                 </Button>
                 <div className="flex items-center gap-2">
-                  <Button variant="ghost" onClick={() => skip(q.id)}>
-                    Skip
-                  </Button>
                   {!isLast && (
                     <Button
                       variant="outline"
@@ -274,7 +219,7 @@ function Questions() {
                   )}
                   {(isLast || complete) && (
                     <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
-                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : "Answer or skip all to analyze"}
+                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : "Answer all to analyze"}
                     </Button>
                   )}
                 </div>
