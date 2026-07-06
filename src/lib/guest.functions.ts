@@ -153,10 +153,16 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       `Age: ${data.age}`,
       data.education ? `Current stage: ${data.education}` : `Current stage: (not provided)`,
       `Existing skills: ${(data.skills && data.skills.length) ? data.skills.join(", ") : "(none declared)"}`,
+      `Custom skills (self-added): ${(data.customSkills && data.customSkills.length) ? data.customSkills.join(", ") : "(none)"}`,
+      `Current goal: ${data.goal || "(not provided)"}`,
+      `Self-description (one line): ${data.selfDescription || "(not provided)"}`,
       `Modules explored: ${data.slugs.join(", ")}`,
       ``,
       `Answers:`,
-      ...data.answers.map((a, i) => `${i + 1}. [${a.moduleSlug}] Q: ${a.question}\n   A: ${a.answer}`),
+      ...data.answers.map((a, i) => {
+        const tag = a.skipped ? " [SKIPPED]" : a.custom ? " [CUSTOM]" : "";
+        return `${i + 1}. [${a.moduleSlug}]${tag} Q: ${a.question}\n   A: ${a.answer}`;
+      }),
     ].join("\n");
     const { text } = await generateText({
       model: gateway("google/gemini-3-flash-preview"),
