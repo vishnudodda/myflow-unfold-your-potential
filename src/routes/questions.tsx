@@ -66,7 +66,8 @@ function Questions() {
     return out;
   }, [data]);
   const totalQs = flatQs.length;
-  const answeredCount = Object.keys(answers).length;
+  const answeredCount = flatQs.filter((item) => answers[item.id]).length;
+  const hasCurrentAnswer = q ? Boolean(answers[q.id]) : false;
   const complete = totalQs > 0 && answeredCount === totalQs;
   const q = flatQs[current];
   const isLast = current === totalQs - 1;
@@ -198,7 +199,7 @@ function Questions() {
                 })}
               </div>
 
-              <div className="mt-8 flex items-center justify-between">
+              <div className="mt-8 sticky bottom-0 -mx-6 px-6 py-4 bg-background/95 backdrop-blur border-t border-border sm:static sm:mx-0 sm:px-0 sm:py-0 sm:bg-transparent sm:backdrop-blur-0 sm:border-t-0 flex items-center justify-between">
                 <Button
                   variant="ghost"
                   disabled={current === 0}
@@ -210,15 +211,15 @@ function Questions() {
                   {!isLast && (
                     <Button
                       variant="outline"
-                      disabled={!answers[q.id]}
+                      disabled={!hasCurrentAnswer}
                       onClick={() => setCurrent((c) => Math.min(totalQs - 1, c + 1))}
                     >
                       Next →
                     </Button>
                   )}
-                  {complete && (
-                    <Button size="lg" disabled={submitting} onClick={onAnalyze}>
-                      {submitting ? "Analyzing…" : "Analyze ✧"}
+                  {(isLast || complete) && (
+                    <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
+                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : "Answer all to analyze"}
                     </Button>
                   )}
                 </div>
