@@ -87,6 +87,7 @@ const SYSTEM_PROMPT = `You are MyFlow, a warm, sharp coach for young people (age
 CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly this shape:
 {
   "summary": { "headline": string, "bullets": string[3], "motivation": string },
+  "tagline": string,
   "roleModels": [ { "name": string, "why": string } ] (exactly 3),
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
   "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
