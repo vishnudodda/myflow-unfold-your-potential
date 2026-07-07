@@ -67,7 +67,13 @@ function Dashboard() {
           <Panel title="Role Models" tone="lilac" emoji="✨">
             <div className="space-y-4">
               {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3 flex gap-3 items-start">
+                <a
+                  key={i}
+                  href={`https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(rm.name)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group rounded-xl bg-white/70 p-3 flex gap-3 items-start hover:bg-white transition-colors hover:shadow-md"
+                >
                   {rm.photoUrl && (
                     <img
                       src={rm.photoUrl}
@@ -81,10 +87,14 @@ function Dashboard() {
                     />
                   )}
                   <div className="min-w-0">
-                    <div className="font-semibold text-sm">{rm.name}</div>
+                    <div className="font-semibold text-sm group-hover:text-primary flex items-center gap-1">
+                      {rm.name}
+                      <span className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+                    </div>
                     <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
+                    <div className="mt-1 text-[10px] font-mono uppercase tracking-widest text-primary/70">View profile ↗</div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </Panel>
@@ -192,6 +202,17 @@ function Dashboard() {
             </div>
           </div>
         )}
+
+        {/* Closing motivational tagline */}
+        <div className="mt-10 text-center">
+          <p className="font-display text-2xl md:text-4xl font-bold tracking-tight text-balance">
+            {session.name}, you are <span className="font-serif italic font-normal text-primary">brave</span> —
+            and this is your <span className="font-serif italic font-normal text-primary">map</span>. ✦
+          </p>
+          <p className="mt-3 text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
+            Take one small step today. Future-you is already cheering.
+          </p>
+        </div>
       </div>
     </main>
   );
