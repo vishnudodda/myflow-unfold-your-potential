@@ -387,3 +387,13 @@ function stripNumbers(text: string): string {
     .replace(/\s+([.,;:!?])/g, "$1")
     .trim();
 }
+
+// If the AI-generated motivation begins with the user's name (e.g. "Ren, your blend..."),
+// strip that prefix so the headline doesn't read "Ren, Ren, your blend...".
+function stripLeadingName(text: string, name: string): string {
+  if (!text || !name) return text;
+  const first = name.trim().split(/\s+/)[0];
+  if (!first) return text;
+  const re = new RegExp(`^${first.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&")}[,\\s:—-]+`, "i");
+  return text.replace(re, "").replace(/^./, (c) => c.toLowerCase());
+}
