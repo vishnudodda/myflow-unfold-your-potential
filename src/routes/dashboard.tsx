@@ -58,7 +58,7 @@ function Dashboard() {
             Your snapshot ✦
           </span>
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            {session.name}, <span className="font-serif italic font-normal text-primary">{r.summary?.motivation || r.summary?.headline || "your journey starts here"}</span>
+            {session.name}, <span className="font-serif italic font-normal text-primary">{stripLeadingName(r.summary?.motivation || r.summary?.headline || "your journey starts here", session.name)}</span>
           </h1>
         </header>
 
