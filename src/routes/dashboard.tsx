@@ -58,7 +58,7 @@ function Dashboard() {
             Your snapshot ✦
           </span>
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            {session.name}, here's your <span className="font-serif italic font-normal text-primary">map</span>.
+            {session.name}, <span className="font-serif italic font-normal text-primary">{r.summary?.motivation || r.summary?.headline || "your journey starts here"}</span>
           </h1>
         </header>
 
@@ -113,16 +113,25 @@ function Dashboard() {
         <div className="mt-4">
           <Panel title="Summary" tone="blue" emoji="💫">
             <p className="font-display text-xl md:text-2xl font-semibold text-balance">{r.summary?.headline}</p>
-            <ul className="mt-4 grid md:grid-cols-3 gap-3">
+            <ul className="mt-4 grid md:grid-cols-2 gap-3">
               {(r.summary?.bullets ?? []).map((b, i) => (
-                <li key={i} className="rounded-xl bg-white/70 p-3 text-sm">{b}</li>
+                <li key={i} className="rounded-xl bg-white/70 p-4 text-sm leading-relaxed">{b}</li>
               ))}
             </ul>
             {r.summary?.motivation && (
-              <div className="mt-4 rounded-xl bg-primary/10 border border-primary/20 p-4">
-                <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1">A note for you ✧</div>
-                <p className="text-sm italic text-foreground/90">{r.summary.motivation}</p>
+              <div className="mt-4 rounded-xl bg-primary/10 border border-primary/20 p-5">
+                <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-2">A note for you ✧</div>
+                <p className="text-base italic text-foreground/90 leading-relaxed">{r.summary.motivation}</p>
               </div>
+            )}
+            {r.analysis?.careerInsights && (
+              <div className="mt-4 rounded-xl bg-white/60 border border-border p-5">
+                <div className="text-[10px] font-mono uppercase tracking-widest text-foreground/60 mb-2">The bigger picture</div>
+                <p className="text-sm leading-relaxed text-foreground/85">{r.analysis.careerInsights}</p>
+              </div>
+            )}
+            {r.analysis?.conclusion && (
+              <p className="mt-4 text-sm leading-relaxed text-foreground/80 px-1">{r.analysis.conclusion}</p>
             )}
           </Panel>
         </div>

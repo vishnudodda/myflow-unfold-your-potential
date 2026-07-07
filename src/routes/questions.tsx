@@ -84,9 +84,17 @@ function Questions() {
     if (v === OTHER_ID) return (customText[qid] ?? "").trim().length > 0;
     return true;
   };
+  const isResolved = (qid: string) => {
+    const v = answers[qid];
+    if (!v) return false;
+    if (v === SKIP_ID) return true;
+    if (v === OTHER_ID) return (customText[qid] ?? "").trim().length > 0;
+    return true;
+  };
   const answeredCount = flatQs.filter((item) => isAnswered(item.id)).length;
+  const resolvedCount = flatQs.filter((item) => isResolved(item.id)).length;
   const hasCurrentAnswer = q ? isAnswered(q.id) : false;
-  const complete = totalQs > 0 && answeredCount === totalQs;
+  const complete = totalQs > 0 && resolvedCount === totalQs;
   const isLast = current === totalQs - 1;
 
   function buildFlatAnswers(ans: Record<string, string>, custom: Record<string, string>) {
@@ -146,10 +154,10 @@ function Questions() {
   }
 
   function goToUnanswered() {
-    const idx = flatQs.findIndex((item) => !isAnswered(item.id));
+    const idx = flatQs.findIndex((item) => !isResolved(item.id));
     if (idx >= 0) {
       setCurrent(idx);
-      toast.error("Please answer all questions before continuing.");
+      toast.error("Please answer or skip every question before continuing.");
     }
   }
 
@@ -262,6 +270,19 @@ function Questions() {
                   ← Back
                 </Button>
                 <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setAnswers((prev) => {
+                        const next = { ...prev, [q.id]: SKIP_ID };
+                        if (isLast) maybeKickoffAnalysis(next, customText);
+                        return next;
+                      });
+                      if (!isLast) setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 180);
+                    }}
+                  >
+                    Skip
+                  </Button>
                   {!isLast && (
                     <Button
                       variant="outline"
@@ -273,7 +294,7 @@ function Questions() {
                   )}
                   {(isLast || complete) && (
                     <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
-                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : "Answer all to analyze"}
+                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : "Answer or skip all to analyze"}
                     </Button>
                   )}
                 </div>
@@ -293,18 +314,21 @@ function Questions() {
                 <div className="mt-2 h-1.5 w-full bg-muted rounded-full overflow-hidden">
                   <div
                     className="h-full bg-primary transition-all"
-                    style={{ width: `${(answeredCount / totalQs) * 100}%` }}
+                    style={{ width: `${(resolvedCount / totalQs) * 100}%` }}
                   />
                 </div>
                 <div className="mt-5 grid grid-cols-5 gap-1.5">
                   {flatQs.map((item, i) => {
                     const answered = isAnswered(item.id);
+                    const skipped = answers[item.id] === SKIP_ID;
                     const active = i === current;
                     const base = "h-8 rounded-md text-[10px] font-mono flex items-center justify-center transition-all border";
                     const cls = active
                       ? "bg-primary text-primary-foreground border-primary ring-2 ring-primary/40"
                       : answered
                       ? "bg-emerald-500/15 text-emerald-700 border-emerald-500/40"
+                      : skipped
+                      ? "bg-amber-500/10 text-amber-700 border-amber-500/40"
                       : "bg-rose-500/10 text-rose-600 border-rose-500/30";
                     return (
                       <button
@@ -321,11 +345,12 @@ function Questions() {
                 </div>
                 <div className="mt-4 flex items-center gap-3 text-[10px] text-muted-foreground">
                   <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Answered</span>
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-amber-500" /> Skipped</span>
                   <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-rose-500" /> Pending</span>
                 </div>
                 {!complete && (
                   <p className="mt-4 text-[11px] text-muted-foreground">
-                    Answer every question to unlock <span className="text-primary font-semibold">Analyze ✧</span>.
+                    Answer or skip every question to unlock <span className="text-primary font-semibold">Analyze ✧</span>.
                   </p>
                 )}
               </div>
