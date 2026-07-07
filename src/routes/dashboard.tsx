@@ -57,7 +57,7 @@ function Dashboard() {
           <span className="inline-block text-[11px] font-mono uppercase tracking-widest bg-white/60 backdrop-blur px-3 py-1 rounded-full border border-border">
             Your snapshot ✦
           </span>
-          <h1 className="mt-4 font-display text-xl md:text-2xl font-bold tracking-tight whitespace-nowrap overflow-x-auto">
+          <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
             {session.name}, <span className="font-serif italic font-normal text-primary">{r.summary?.motivation || r.summary?.headline || "your journey starts here"}</span>
           </h1>
         </header>
