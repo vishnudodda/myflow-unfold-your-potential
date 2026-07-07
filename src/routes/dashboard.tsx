@@ -387,3 +387,10 @@ function stripNumbers(text: string): string {
     .replace(/\s+([.,;:!?])/g, "$1")
     .trim();
 }
+
+// Collapse motivation text to a single short line for the hero headline.
+function oneLine(text: string): string {
+  const first = text.split(/(?<=[.!?])\s+/)[0] ?? text;
+  const words = first.trim().split(/\s+/);
+  return words.length > 16 ? words.slice(0, 16).join(" ") + "…" : first.trim();
+}
