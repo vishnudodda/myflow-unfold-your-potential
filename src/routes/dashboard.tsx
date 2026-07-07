@@ -387,3 +387,21 @@ function stripNumbers(text: string): string {
     .replace(/\s+([.,;:!?])/g, "$1")
     .trim();
 }
+
+function shortMotivation(text: string, name: string): string {
+  if (!text) return "your journey starts here";
+  let t = String(text).trim();
+  const nameRe = new RegExp(`^(?:${name}[\\s,:—-]+)+`, "i");
+  t = t.replace(nameRe, "");
+  t = t.replace(new RegExp(`[,\\s]+${name}[,\\s]+`, "ig"), " ");
+  const firstSentence = t.split(/(?<=[.!?])\s/)[0] || t;
+  let out = firstSentence.trim();
+  if (out.length > 90) {
+    const cut = out.slice(0, 90);
+    const lastSpace = cut.lastIndexOf(" ");
+    out = (lastSpace > 40 ? cut.slice(0, lastSpace) : cut).replace(/[,;:—-]+$/, "");
+  }
+  if (!/[.!?]$/.test(out)) out += ".";
+  out = out.charAt(0).toLowerCase() + out.slice(1);
+  return out;
+}
