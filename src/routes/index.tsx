@@ -70,6 +70,7 @@ function Intro() {
     const ageNum = parseInt(age, 10);
     if (!name.trim() || !ageNum || ageNum < 10 || ageNum > 27) return;
     if (!education) return;
+    const finalEducation = education === "other" ? customEducation.trim() || "Other" : education;
     const finalSkills = Array.from(skills);
     const custom = customSkill.trim();
     if (skills.has("Other") && custom) finalSkills.push(custom);
