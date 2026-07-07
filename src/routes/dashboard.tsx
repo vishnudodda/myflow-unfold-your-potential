@@ -60,6 +60,9 @@ function Dashboard() {
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
             {session.name}, here's your <span className="font-serif italic font-normal text-primary">map</span>.
           </h1>
+          <p className="mt-4 font-display text-lg md:text-2xl font-medium text-foreground/80 text-balance max-w-3xl">
+            <span className="font-serif italic text-primary">{session.name}, you are brave</span> — and this is your map. Every step ahead is already yours to take. ✦
+          </p>
         </header>
 
         {/* Row 1: Role Models + Opportunities (swapped to the top) */}
@@ -67,7 +70,13 @@ function Dashboard() {
           <Panel title="Role Models" tone="lilac" emoji="✨">
             <div className="space-y-4">
               {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3 flex gap-3 items-start">
+                <a
+                  key={i}
+                  href={`https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(rm.name)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group rounded-xl bg-white/70 p-3 flex gap-3 items-start hover:bg-white transition-colors hover:-translate-y-0.5 transition-transform border border-transparent hover:border-primary/20"
+                >
                   {rm.photoUrl && (
                     <img
                       src={rm.photoUrl}
@@ -80,11 +89,14 @@ function Dashboard() {
                       }}
                     />
                   )}
-                  <div className="min-w-0">
-                    <div className="font-semibold text-sm">{rm.name}</div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-sm group-hover:text-primary flex items-center gap-1">
+                      {rm.name}
+                      <span className="text-[10px] font-mono uppercase text-primary opacity-0 group-hover:opacity-100 transition-opacity">View ↗</span>
+                    </div>
                     <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </Panel>
