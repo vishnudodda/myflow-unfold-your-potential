@@ -169,7 +169,7 @@ function Dashboard() {
               <div className="mt-8 flex flex-col items-center text-center gap-5">
                 <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink px-10 py-8 md:px-16 md:py-10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
                   <div className="font-mono text-7xl md:text-8xl font-bold text-paper leading-none tracking-tight">
-                    <AnimatedCounter value={expandToDigits(r.perspective.lessPrivileged?.number || r.perspective.statNumber)} duration={2600} />
+                    <AnimatedCounter value={formatAbbrev(r.perspective.lessPrivileged?.number || r.perspective.statNumber)} duration={2600} />
                   </div>
                   <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                 </div>
@@ -225,7 +225,36 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function expandToDigits(raw: string): string {
+function formatAbbrev(raw: string): string {
+  if (!raw) return "0";
+  const s = String(raw).trim();
+  // If already abbreviated (e.g. "244M", "1.2B"), normalize casing and return.
+  const abbrev = s.match(/^([\d,.]+)\s*(k|m|b|t|thousand|million|billion|trillion|lakh|crore)$/i);
+  if (abbrev) {
+    const num = abbrev[1];
+    const u = abbrev[2].toLowerCase();
+    const map: Record<string, string> = {
+      k: "K", thousand: "K",
+      m: "M", million: "M",
+      b: "B", billion: "B",
+      t: "T", trillion: "T",
+      lakh: "Lakh", crore: "Cr",
+    };
+    return `${num}${map[u] ?? u.toUpperCase()}`;
+  }
+  // Raw digits — collapse to a friendly abbreviation.
+  const n = parseFloat(s.replace(/,/g, ""));
+  if (isNaN(n)) return s;
+  const abs = Math.abs(n);
+  const fmt = (v: number) => (v >= 100 ? v.toFixed(0) : v.toFixed(1).replace(/\.0$/, ""));
+  if (abs >= 1e12) return `${fmt(n / 1e12)}T`;
+  if (abs >= 1e9) return `${fmt(n / 1e9)}B`;
+  if (abs >= 1e6) return `${fmt(n / 1e6)}M`;
+  if (abs >= 1e3) return `${fmt(n / 1e3)}K`;
+  return String(n);
+}
+
+function _unusedExpand(raw: string): string {
   if (!raw) return "0";
   const s = String(raw).trim();
   // If it contains any letter suffix (M, B, K, million, billion, thousand, crore, lakh)
