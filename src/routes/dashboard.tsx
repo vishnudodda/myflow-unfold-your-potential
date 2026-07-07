@@ -168,8 +168,8 @@ function Dashboard() {
               </h3>
               <div className="mt-8 flex flex-col items-center text-center gap-5">
                 <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink px-10 py-8 md:px-16 md:py-10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
-                  <div className="font-mono text-7xl md:text-8xl font-bold text-paper leading-none tracking-tight">
-                    <AnimatedCounter value={expandToDigits(r.perspective.lessPrivileged?.number || r.perspective.statNumber)} duration={2600} />
+                  <div className="font-mono text-6xl md:text-7xl font-bold text-paper leading-none tracking-tight">
+                    <AnimatedCounter value={formatShort(r.perspective.lessPrivileged?.number || r.perspective.statNumber)} duration={2600} />
                   </div>
                   <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                 </div>
@@ -225,10 +225,9 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function expandToDigits(raw: string): string {
+function formatShort(raw: string): string {
   if (!raw) return "0";
   const s = String(raw).trim();
-  // If it contains any letter suffix (M, B, K, million, billion, thousand, crore, lakh)
   const m = s.match(/([\d,.]+)\s*(million|billion|thousand|crore|lakh|k|m|b|t)?/i);
   if (!m) return s;
   const numRaw = parseFloat(m[1].replace(/,/g, ""));
@@ -246,8 +245,12 @@ function expandToDigits(raw: string): string {
     billion: 1_000_000_000,
     t: 1_000_000_000_000,
   };
-  const total = Math.round(numRaw * (mult[unit] ?? 1));
-  return total.toLocaleString("en-US");
+  const total = numRaw * (mult[unit] ?? 1);
+  const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+  if (total >= 1_000_000_000) return `${fmt(Math.round((total / 1_000_000_000) * 10) / 10)} billion`;
+  if (total >= 1_000_000) return `${fmt(Math.round((total / 1_000_000) * 10) / 10)} million`;
+  if (total >= 1_000) return `${fmt(Math.round((total / 1_000) * 10) / 10)} thousand`;
+  return String(Math.round(total));
 }
 
 
