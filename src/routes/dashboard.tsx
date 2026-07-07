@@ -58,7 +58,7 @@ function Dashboard() {
             Your snapshot ✦
           </span>
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            {session.name}, <span className="font-serif italic font-normal text-primary">{r.summary?.motivation || r.summary?.headline || "your journey starts here"}</span>
+           {session.name}, <span className="font-serif italic font-normal text-primary">{oneLine(r.summary?.motivation || r.summary?.headline || "your journey starts here")}</span>
           </h1>
         </header>
 
@@ -386,4 +386,11 @@ function stripNumbers(text: string): string {
     .replace(/\s{2,}/g, " ")
     .replace(/\s+([.,;:!?])/g, "$1")
     .trim();
+}
+
+// Collapse motivation text to a single short line for the hero headline.
+function oneLine(text: string): string {
+  const first = text.split(/(?<=[.!?])\s+/)[0] ?? text;
+  const words = first.trim().split(/\s+/);
+  return words.length > 16 ? words.slice(0, 16).join(" ") + "…" : first.trim();
 }
