@@ -166,8 +166,10 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       // Enrich role models with Wikipedia thumbnails; fallback to generated avatars.
       const enriched = await Promise.all(
         (parsed.roleModels ?? []).map(async (rm) => {
-          const photoUrl = await fetchWikiThumb(rm.name) ?? avatarFor(rm.name);
-          return { ...rm, photoUrl };
+          const wiki = await fetchWikiInfo(rm.name);
+          const photoUrl = wiki?.thumb ?? avatarFor(rm.name);
+          const wikiUrl = wiki?.url ?? `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(rm.name)}`;
+          return { ...rm, photoUrl, wikiUrl };
         })
       );
       parsed.roleModels = enriched;
@@ -177,7 +179,7 @@ export const analyzeGuest = createServerFn({ method: "POST" })
     }
   });
 
-async function fetchWikiThumb(name: string): Promise<string | undefined> {
+async function fetchWikiInfo(name: string): Promise<{ thumb?: string; url?: string } | undefined> {
   try {
     const slug = encodeURIComponent(name.trim().replace(/\s+/g, "_"));
     const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`, {
@@ -185,8 +187,11 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
       signal: AbortSignal.timeout(1500),
     });
     if (!res.ok) return undefined;
-    const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string } };
-    return j.thumbnail?.source ?? j.originalimage?.source;
+    const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string }; content_urls?: { desktop?: { page?: string } } };
+    return {
+      thumb: j.thumbnail?.source ?? j.originalimage?.source,
+      url: j.content_urls?.desktop?.page,
+    };
   } catch {
     return undefined;
   }
