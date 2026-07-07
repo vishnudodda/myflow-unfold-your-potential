@@ -58,7 +58,7 @@ function Dashboard() {
             Your snapshot ✦
           </span>
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            {session.name}, <span className="font-serif italic font-normal text-primary">{stripLeadingName(r.summary?.motivation || r.summary?.headline || "your journey starts here", session.name)}</span>
+            {session.name}, <span className="font-serif italic font-normal text-primary">{r.summary?.motivation || r.summary?.headline || "your journey starts here"}</span>
           </h1>
         </header>
 
@@ -386,14 +386,4 @@ function stripNumbers(text: string): string {
     .replace(/\s{2,}/g, " ")
     .replace(/\s+([.,;:!?])/g, "$1")
     .trim();
-}
-
-// If the AI-generated motivation begins with the user's name (e.g. "Ren, your blend..."),
-// strip that prefix so the headline doesn't read "Ren, Ren, your blend...".
-function stripLeadingName(text: string, name: string): string {
-  if (!text || !name) return text;
-  const first = name.trim().split(/\s+/)[0];
-  if (!first) return text;
-  const re = new RegExp(`^${first.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\\\$&")}[,\\s:—-]+`, "i");
-  return text.replace(re, "").replace(/^./, (c) => c.toLowerCase());
 }
