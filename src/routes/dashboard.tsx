@@ -225,32 +225,6 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function expandToDigits(raw: string): string {
-  if (!raw) return "0";
-  const s = String(raw).trim();
-  // If it contains any letter suffix (M, B, K, million, billion, thousand, crore, lakh)
-  const m = s.match(/([\d,.]+)\s*(million|billion|thousand|crore|lakh|k|m|b|t)?/i);
-  if (!m) return s;
-  const numRaw = parseFloat(m[1].replace(/,/g, ""));
-  if (isNaN(numRaw)) return s;
-  const unit = (m[2] || "").toLowerCase();
-  const mult: Record<string, number> = {
-    "": 1,
-    k: 1_000,
-    thousand: 1_000,
-    lakh: 100_000,
-    m: 1_000_000,
-    million: 1_000_000,
-    crore: 10_000_000,
-    b: 1_000_000_000,
-    billion: 1_000_000_000,
-    t: 1_000_000_000_000,
-  };
-  const total = Math.round(numRaw * (mult[unit] ?? 1));
-  return total.toLocaleString("en-US");
-}
-
-
 function downloadReport(session: Session) {
   const r = session.result;
   if (!r) return;
