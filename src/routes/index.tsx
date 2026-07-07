@@ -23,6 +23,7 @@ function Intro() {
   const [education, setEducation] = useState("");
   const [skills, setSkills] = useState<Set<string>>(new Set());
   const [customSkill, setCustomSkill] = useState("");
+  const [customEducation, setCustomEducation] = useState("");
   const [goal, setGoal] = useState("");
   const [oneLiner, setOneLiner] = useState("");
 
@@ -33,6 +34,7 @@ function Intro() {
     { value: "working", label: "Currently working a job" },
     { value: "job-hunting", label: "Looking for a job" },
     { value: "self-taught", label: "Self-taught / learning on my own" },
+    { value: "other", label: "Other" },
   ];
 
   const SKILL_OPTIONS = [
@@ -68,6 +70,7 @@ function Intro() {
     const ageNum = parseInt(age, 10);
     if (!name.trim() || !ageNum || ageNum < 10 || ageNum > 27) return;
     if (!education) return;
+    const finalEducation = education === "other" ? customEducation.trim() || "Other" : education;
     const finalSkills = Array.from(skills);
     const custom = customSkill.trim();
     if (skills.has("Other") && custom) finalSkills.push(custom);
@@ -76,9 +79,10 @@ function Intro() {
       JSON.stringify({
         name: name.trim(),
         age: ageNum,
-        education,
+        education: finalEducation,
         skills: finalSkills,
         customSkill: custom || undefined,
+        customEducation: education === "other" ? customEducation.trim() || undefined : undefined,
         goal: goal.trim() || undefined,
         oneLiner: oneLiner.trim() || undefined,
       }),
@@ -128,6 +132,13 @@ function Intro() {
                 ))}
               </SelectContent>
             </Select>
+            {education === "other" && (
+              <Input
+                value={customEducation}
+                onChange={(e) => setCustomEducation(e.target.value)}
+                placeholder="Describe your current stage, e.g. gap year, freelancer, founder"
+              />
+            )}
             <p className="text-xs text-muted-foreground">Helps us match real opportunities to your stage.</p>
           </div>
 
