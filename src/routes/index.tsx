@@ -34,6 +34,7 @@ function Intro() {
     { value: "working", label: "Currently working a job" },
     { value: "job-hunting", label: "Looking for a job" },
     { value: "self-taught", label: "Self-taught / learning on my own" },
+    { value: "other", label: "Other" },
   ];
 
   const SKILL_OPTIONS = [
