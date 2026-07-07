@@ -58,8 +58,11 @@ function Dashboard() {
             Your snapshot ✦
           </span>
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            {session.name}, here's your <span className="font-serif italic font-normal text-primary">map</span>.
+            Hey {session.name} — you're <span className="font-serif italic font-normal text-primary">brilliant</span>, and you're just getting started.
           </h1>
+          <p className="mt-3 text-sm md:text-base text-muted-foreground">
+            Here's your map below — built from everything you shared. ↓
+          </p>
         </header>
 
         {/* Row 1: Role Models + Opportunities (swapped to the top) */}
@@ -81,7 +84,14 @@ function Dashboard() {
                     />
                   )}
                   <div className="min-w-0">
-                    <div className="font-semibold text-sm">{rm.name}</div>
+                    <a
+                      href={`https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(rm.name)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-semibold text-sm text-primary hover:underline"
+                    >
+                      {rm.name} ↗
+                    </a>
                     <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
                   </div>
                 </div>
