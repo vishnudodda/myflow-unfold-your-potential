@@ -78,8 +78,14 @@ function Questions() {
   }, [data]);
   const totalQs = flatQs.length;
   const q = flatQs[current];
-  const answeredCount = flatQs.filter((item) => answers[item.id]).length;
-  const hasCurrentAnswer = q ? Boolean(answers[q.id]) : false;
+  const isAnswered = (qid: string) => {
+    const v = answers[qid];
+    if (!v || v === SKIP_ID) return false;
+    if (v === OTHER_ID) return (customText[qid] ?? "").trim().length > 0;
+    return true;
+  };
+  const answeredCount = flatQs.filter((item) => isAnswered(item.id)).length;
+  const hasCurrentAnswer = q ? isAnswered(q.id) : false;
   const complete = totalQs > 0 && answeredCount === totalQs;
   const isLast = current === totalQs - 1;
 
@@ -105,7 +111,13 @@ function Questions() {
 
   function maybeKickoffAnalysis(nextAnswers: Record<string, string>, nextCustom: Record<string, string>) {
     if (!session || !data) return;
-    if (Object.keys(nextAnswers).length !== totalQs) return;
+    const allDone = flatQs.every((item) => {
+      const v = nextAnswers[item.id];
+      if (!v || v === SKIP_ID) return false;
+      if (v === OTHER_ID) return (nextCustom[item.id] ?? "").trim().length > 0;
+      return true;
+    });
+    if (!allDone) return;
     if (analysisPromiseRef.current) return;
     analysisPromiseRef.current = analyzeFn({
       data: {
@@ -133,17 +145,17 @@ function Questions() {
     }
   }
 
-  function skip(qid: string) {
-    setAnswers((prev) => {
-      const next = { ...prev, [qid]: SKIP_ID };
-      if (isLast) maybeKickoffAnalysis(next, customText);
-      return next;
-    });
-    if (!isLast) setTimeout(() => setCurrent((c) => Math.min(c + 1, totalQs - 1)), 180);
+  function goToUnanswered() {
+    const idx = flatQs.findIndex((item) => !isAnswered(item.id));
+    if (idx >= 0) {
+      setCurrent(idx);
+      toast.error("Please answer all questions before continuing.");
+    }
   }
 
   async function onAnalyze() {
-    if (!complete || !session || !data) return;
+    if (!session || !data) return;
+    if (!complete) { goToUnanswered(); return; }
     setSubmitting(true);
     try {
       if (!analysisPromiseRef.current) {
@@ -199,14 +211,15 @@ function Questions() {
           </div>
         </div>
       )}
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-6xl">
         <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
 
         {isLoading || !q ? (
           <p className="mt-16 text-muted-foreground">Loading questions…</p>
         ) : (
-          <>
-            <div className="mt-8 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-muted-foreground">
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
+            <div>
+            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-muted-foreground">
               <span>{q.moduleTitle}</span>
               <span>{current + 1} / {totalQs}</span>
             </div>
@@ -249,9 +262,6 @@ function Questions() {
                   ← Back
                 </Button>
                 <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm" onClick={() => skip(q.id)}>
-                    Skip
-                  </Button>
                   {!isLast && (
                     <Button
                       variant="outline"
@@ -269,7 +279,58 @@ function Questions() {
                 </div>
               </div>
             </div>
-          </>
+            </div>
+
+            {/* Right-side progress panel */}
+            <aside className="hidden lg:block">
+              <div className="sticky top-8 rounded-2xl border border-border bg-card p-5">
+                <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                  Progress
+                </div>
+                <div className="mt-2 font-display text-lg font-semibold">
+                  Answered: {answeredCount}/{totalQs} Questions
+                </div>
+                <div className="mt-2 h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-primary transition-all"
+                    style={{ width: `${(answeredCount / totalQs) * 100}%` }}
+                  />
+                </div>
+                <div className="mt-5 grid grid-cols-5 gap-1.5">
+                  {flatQs.map((item, i) => {
+                    const answered = isAnswered(item.id);
+                    const active = i === current;
+                    const base = "h-8 rounded-md text-[10px] font-mono flex items-center justify-center transition-all border";
+                    const cls = active
+                      ? "bg-primary text-primary-foreground border-primary ring-2 ring-primary/40"
+                      : answered
+                      ? "bg-emerald-500/15 text-emerald-700 border-emerald-500/40"
+                      : "bg-rose-500/10 text-rose-600 border-rose-500/30";
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setCurrent(i)}
+                        title={item.text}
+                        className={`${base} ${cls}`}
+                      >
+                        Q{i + 1}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="mt-4 flex items-center gap-3 text-[10px] text-muted-foreground">
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Answered</span>
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-rose-500" /> Pending</span>
+                </div>
+                {!complete && (
+                  <p className="mt-4 text-[11px] text-muted-foreground">
+                    Answer every question to unlock <span className="text-primary font-semibold">Analyze ✧</span>.
+                  </p>
+                )}
+              </div>
+            </aside>
+          </div>
         )}
       </div>
     </main>
