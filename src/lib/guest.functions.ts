@@ -36,7 +36,8 @@ export const loadQuestions = createServerFn({ method: "POST" })
 
 export type DashboardResult = {
   summary: { headline: string; bullets: string[]; motivation?: string };
-  roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
+  tagline?: string;
+  roleModels: Array<{ name: string; why: string; photoUrl?: string; wikiUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
   podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
@@ -86,6 +87,7 @@ const SYSTEM_PROMPT = `You are MyFlow, a warm, sharp coach for young people (age
 CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly this shape:
 {
   "summary": { "headline": string, "bullets": string[3], "motivation": string },
+  "tagline": string,
   "roleModels": [ { "name": string, "why": string } ] (exactly 3),
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
   "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
@@ -116,6 +118,7 @@ Ground every field in the user's ACTUAL answers, goal, self-description, custom 
 
 Rules:
 - summary.motivation: 1–2 warm, personal sentences of encouragement addressed to the user by name.
+- tagline: ONE short punchy motivational line (max ~14 words) addressed to the user BY NAME. Must be UNIQUELY tailored to THIS person — pull a specific adjective/trait/pattern from their actual answers, skills, goal, or self-description. NEVER reuse the same adjective (e.g. "brave") for every user; vary the vibe (curious, sharp, steady, restless, kind, wild, focused, bold, thoughtful, unshakeable, quietly ambitious, playful, disciplined, inventive, grounded, fearless, etc.) based on what they revealed. Shape: "{Name}, you are {trait} — {tiny promise/direction}." e.g. "Aarav, you are relentlessly curious — and this is your map." Do NOT copy examples verbatim.
 - roleModels: MUST be tailored to the user's exact age band and goal — do NOT reuse the same 3 people for every user. For ages 10-14: relatable young achievers, teen prodigies, youth changemakers. For 15-18: high-school-era breakouts, teen founders, young athletes/creators aligned with their declared interests & skills. For 19-22 (college band): emerging entrepreneurs, researchers, creators, athletes whose breakthrough came at that age. For 23-27: early-career founders, industry mentors, professionals whose trajectory maps onto the user's goal. Prefer contemporary figures the user could realistically look up today. Vary by skills and goal — a coder gets different names than a writer or athlete.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
 - opportunities: MUST be matched to the user's education stage AND declared skills. If the user is in school, suggest scholarships, competitions, or teen fellowships. If in college, suggest internships and campus programs. If graduated / job-hunting, suggest entry-level jobs, apprenticeships, or paid fellowships they can apply to today. If already working, suggest next-step roles or upskilling programs. Even when the user only explored a couple of modules (e.g. Ability + Habits), lean on their skills list to still recommend concrete jobs / gigs / programs — never say "not enough info". opportunities.url must be a real https link (official program page, org site, or a reliable listing like Internshala / YourStory / opportunitydesk.org / LinkedIn Jobs search). Never invent a broken URL — if unsure, link to a search page on the org's site.
@@ -163,8 +166,10 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       // Enrich role models with Wikipedia thumbnails; fallback to generated avatars.
       const enriched = await Promise.all(
         (parsed.roleModels ?? []).map(async (rm) => {
-          const photoUrl = await fetchWikiThumb(rm.name) ?? avatarFor(rm.name);
-          return { ...rm, photoUrl };
+          const wiki = await fetchWikiInfo(rm.name);
+          const photoUrl = wiki?.thumb ?? avatarFor(rm.name);
+          const wikiUrl = wiki?.url ?? `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(rm.name)}`;
+          return { ...rm, photoUrl, wikiUrl };
         })
       );
       parsed.roleModels = enriched;
@@ -174,7 +179,7 @@ export const analyzeGuest = createServerFn({ method: "POST" })
     }
   });
 
-async function fetchWikiThumb(name: string): Promise<string | undefined> {
+async function fetchWikiInfo(name: string): Promise<{ thumb?: string; url?: string } | undefined> {
   try {
     const slug = encodeURIComponent(name.trim().replace(/\s+/g, "_"));
     const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`, {
@@ -182,8 +187,11 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
       signal: AbortSignal.timeout(1500),
     });
     if (!res.ok) return undefined;
-    const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string } };
-    return j.thumbnail?.source ?? j.originalimage?.source;
+    const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string }; content_urls?: { desktop?: { page?: string } } };
+    return {
+      thumb: j.thumbnail?.source ?? j.originalimage?.source,
+      url: j.content_urls?.desktop?.page,
+    };
   } catch {
     return undefined;
   }

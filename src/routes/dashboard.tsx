@@ -60,6 +60,14 @@ function Dashboard() {
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
             {session.name}, here's your <span className="font-serif italic font-normal text-primary">map</span>.
           </h1>
+          {r.tagline && (
+            <div className="mt-5 rounded-2xl border border-primary/25 bg-white/70 backdrop-blur px-5 py-4 shadow-[0_10px_40px_-25px_rgba(30,58,138,0.35)]">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-1">A line just for you ✧</div>
+              <p className="font-display text-lg md:text-2xl font-semibold text-balance italic text-foreground/90">
+                {r.tagline}
+              </p>
+            </div>
+          )}
         </header>
 
         {/* Row 1: Role Models + Opportunities (swapped to the top) */}
@@ -67,7 +75,13 @@ function Dashboard() {
           <Panel title="Role Models" tone="lilac" emoji="✨">
             <div className="space-y-4">
               {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3 flex gap-3 items-start">
+                <a
+                  key={i}
+                  href={rm.wikiUrl ?? `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(rm.name)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group rounded-xl bg-white/70 p-3 flex gap-3 items-start hover:bg-white transition-colors border border-transparent hover:border-primary/30"
+                >
                   {rm.photoUrl && (
                     <img
                       src={rm.photoUrl}
@@ -81,10 +95,12 @@ function Dashboard() {
                     />
                   )}
                   <div className="min-w-0">
-                    <div className="font-semibold text-sm">{rm.name}</div>
+                    <div className="font-semibold text-sm group-hover:text-primary transition-colors">
+                      {rm.name} <span className="text-[10px] font-mono uppercase text-primary/70">view ↗</span>
+                    </div>
                     <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </Panel>
