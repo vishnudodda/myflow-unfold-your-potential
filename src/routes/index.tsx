@@ -23,6 +23,7 @@ function Intro() {
   const [education, setEducation] = useState("");
   const [skills, setSkills] = useState<Set<string>>(new Set());
   const [customSkill, setCustomSkill] = useState("");
+  const [customEducation, setCustomEducation] = useState("");
   const [goal, setGoal] = useState("");
   const [oneLiner, setOneLiner] = useState("");
 
