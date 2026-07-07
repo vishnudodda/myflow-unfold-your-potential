@@ -57,12 +57,9 @@ function Dashboard() {
           <span className="inline-block text-[11px] font-mono uppercase tracking-widest bg-white/60 backdrop-blur px-3 py-1 rounded-full border border-border">
             Your snapshot ✦
           </span>
-          <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            {session.name}, here's your <span className="font-serif italic font-normal text-primary">map</span>.
+          <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance max-w-4xl">
+            <span className="font-serif italic font-normal text-primary">{session.name}, you are brave</span> — and this is your map. Every step ahead is already yours to take. ✦
           </h1>
-          <p className="mt-4 font-display text-lg md:text-2xl font-medium text-foreground/80 text-balance max-w-3xl">
-            <span className="font-serif italic text-primary">{session.name}, you are brave</span> — and this is your map. Every step ahead is already yours to take. ✦
-          </p>
         </header>
 
         {/* Row 1: Role Models + Opportunities (swapped to the top) */}
