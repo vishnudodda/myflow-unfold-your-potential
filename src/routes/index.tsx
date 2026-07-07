@@ -79,9 +79,10 @@ function Intro() {
       JSON.stringify({
         name: name.trim(),
         age: ageNum,
-        education,
+        education: finalEducation,
         skills: finalSkills,
         customSkill: custom || undefined,
+        customEducation: education === "other" ? customEducation.trim() || undefined : undefined,
         goal: goal.trim() || undefined,
         oneLiner: oneLiner.trim() || undefined,
       }),
