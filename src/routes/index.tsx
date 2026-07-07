@@ -132,6 +132,13 @@ function Intro() {
                 ))}
               </SelectContent>
             </Select>
+            {education === "other" && (
+              <Input
+                value={customEducation}
+                onChange={(e) => setCustomEducation(e.target.value)}
+                placeholder="Describe your current stage, e.g. gap year, freelancer, founder"
+              />
+            )}
             <p className="text-xs text-muted-foreground">Helps us match real opportunities to your stage.</p>
           </div>
 
