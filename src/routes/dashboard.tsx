@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { DashboardResult } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/animated-counter";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -26,6 +27,9 @@ type Session = {
 function Dashboard() {
   const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
+  const [activeRoleModel, setActiveRoleModel] = useState<
+    { name: string; why: string; photoUrl?: string; bio?: string; wikiUrl?: string } | null
+  >(null);
 
   useEffect(() => {
     const raw = localStorage.getItem("myflow.session");
@@ -67,7 +71,12 @@ function Dashboard() {
           <Panel title="Role Models" tone="lilac" emoji="✨">
             <div className="space-y-4">
               {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3 flex gap-3 items-start">
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setActiveRoleModel(rm)}
+                  className="w-full text-left rounded-xl bg-white/70 hover:bg-white p-3 flex gap-3 items-start transition border border-transparent hover:border-primary/30"
+                >
                   {rm.photoUrl && (
                     <img
                       src={rm.photoUrl}
@@ -80,11 +89,14 @@ function Dashboard() {
                       }}
                     />
                   )}
-                  <div className="min-w-0">
-                    <div className="font-semibold text-sm">{rm.name}</div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="font-semibold text-sm">{rm.name}</div>
+                      <span className="text-[10px] font-mono uppercase text-primary shrink-0">View profile →</span>
+                    </div>
                     <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </Panel>
@@ -193,6 +205,68 @@ function Dashboard() {
           </div>
         )}
       </div>
+
+      <Dialog open={!!activeRoleModel} onOpenChange={(o) => !o && setActiveRoleModel(null)}>
+        <DialogContent className="max-w-lg">
+          {activeRoleModel && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-4">
+                  {activeRoleModel.photoUrl && (
+                    <img
+                      src={activeRoleModel.photoUrl}
+                      alt={activeRoleModel.name}
+                      className="h-20 w-20 rounded-full object-cover border border-border bg-muted"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(activeRoleModel.name)}&background=e0e7ff&color=1e3a8a&size=256&bold=true`;
+                      }}
+                    />
+                  )}
+                  <div className="min-w-0 text-left">
+                    <DialogTitle className="font-display text-2xl">{activeRoleModel.name}</DialogTitle>
+                    <DialogDescription className="mt-1">{activeRoleModel.why}</DialogDescription>
+                  </div>
+                </div>
+              </DialogHeader>
+              <div className="mt-2 space-y-4">
+                {activeRoleModel.bio ? (
+                  <p className="text-sm leading-relaxed text-foreground/90">{activeRoleModel.bio}</p>
+                ) : (
+                  <p className="text-sm text-muted-foreground italic">No public bio available — try the link below to learn more.</p>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  {activeRoleModel.wikiUrl && (
+                    <a
+                      href={activeRoleModel.wikiUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-widest px-3 py-2 rounded-full bg-primary text-primary-foreground hover:opacity-90"
+                    >
+                      Read on Wikipedia ↗
+                    </a>
+                  )}
+                  <a
+                    href={`https://www.google.com/search?q=${encodeURIComponent(activeRoleModel.name)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-widest px-3 py-2 rounded-full border border-border hover:bg-muted"
+                  >
+                    Google ↗
+                  </a>
+                  <a
+                    href={`https://www.youtube.com/results?search_query=${encodeURIComponent(activeRoleModel.name + " interview")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-widest px-3 py-2 rounded-full border border-border hover:bg-muted"
+                  >
+                    YouTube ↗
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
