@@ -57,8 +57,8 @@ function Dashboard() {
           <span className="inline-block text-[11px] font-mono uppercase tracking-widest bg-white/60 backdrop-blur px-3 py-1 rounded-full border border-border">
             Your snapshot ✦
           </span>
-          <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance max-w-4xl">
-            <span className="font-serif italic font-normal text-primary">{session.name}, you are brave</span> — and this is your map. Every step ahead is already yours to take. ✦
+          <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
+            {session.name}, here's your <span className="font-serif italic font-normal text-primary">map</span>.
           </h1>
         </header>
 
@@ -67,13 +67,7 @@ function Dashboard() {
           <Panel title="Role Models" tone="lilac" emoji="✨">
             <div className="space-y-4">
               {(r.roleModels ?? []).map((rm, i) => (
-                <a
-                  key={i}
-                  href={`https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(rm.name)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group rounded-xl bg-white/70 p-3 flex gap-3 items-start hover:bg-white transition-colors hover:-translate-y-0.5 transition-transform border border-transparent hover:border-primary/20"
-                >
+                <div key={i} className="rounded-xl bg-white/70 p-3 flex gap-3 items-start">
                   {rm.photoUrl && (
                     <img
                       src={rm.photoUrl}
@@ -86,14 +80,11 @@ function Dashboard() {
                       }}
                     />
                   )}
-                  <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-sm group-hover:text-primary flex items-center gap-1">
-                      {rm.name}
-                      <span className="text-[10px] font-mono uppercase text-primary opacity-0 group-hover:opacity-100 transition-opacity">View ↗</span>
-                    </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-sm">{rm.name}</div>
                     <div className="text-xs text-muted-foreground mt-1">{rm.why}</div>
                   </div>
-                </a>
+                </div>
               ))}
             </div>
           </Panel>
