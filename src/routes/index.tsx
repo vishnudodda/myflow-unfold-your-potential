@@ -67,9 +67,8 @@ function Intro() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!isValid) return;
     const ageNum = parseInt(age, 10);
-    if (!name.trim() || !ageNum || ageNum < 10 || ageNum > 27) return;
-    if (!education) return;
     const finalEducation = education === "other" ? customEducation.trim() || "Other" : education;
     const finalSkills = Array.from(skills);
     const custom = customSkill.trim();
@@ -90,6 +89,16 @@ function Intro() {
     navigate({ to: "/pick" });
   }
 
+  const ageNum = parseInt(age, 10);
+  const hasName = name.trim().length > 0;
+  const hasAge = !!ageNum && ageNum >= 10 && ageNum <= 27;
+  const hasEducation = !!education && (education !== "other" || customEducation.trim().length > 0);
+  const hasSkills = skills.size > 0 && (!skills.has("Other") || customSkill.trim().length > 0);
+  const hasGoal = goal.trim().length > 0;
+  const hasOneLiner = oneLiner.trim().length > 0;
+  const isValid = hasName && hasAge && hasEducation && hasSkills && hasGoal && hasOneLiner;
+  const Req = () => <span className="text-red-500 ml-0.5" aria-hidden>*</span>;
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
       <div className="w-full max-w-lg py-12">
@@ -102,11 +111,12 @@ function Intro() {
         <form onSubmit={onSubmit} className="mt-8 space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Your name</Label>
+              <Label htmlFor="name">Your name<Req /></Label>
               <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Alex" />
+              {!hasName && name.length > 0 && <p className="text-xs text-red-500">Name is required.</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">Your age</Label>
+              <Label htmlFor="age">Your age<Req /></Label>
               <Select value={age} onValueChange={setAge}>
                 <SelectTrigger id="age">
                   <SelectValue placeholder="Pick your age" />
@@ -121,7 +131,7 @@ function Intro() {
           </div>
 
           <div className="space-y-2">
-            <Label>Where are you right now?</Label>
+            <Label>Where are you right now?<Req /></Label>
             <Select value={education} onValueChange={setEducation}>
               <SelectTrigger>
                 <SelectValue placeholder="Pick your current stage" />
@@ -144,7 +154,7 @@ function Intro() {
 
           <div className="space-y-3">
             <div>
-              <Label>Skills you already have</Label>
+              <Label>Skills you already have<Req /></Label>
               <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones.</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -168,19 +178,26 @@ function Intro() {
                 placeholder="Type your skill(s), e.g. music production, chess"
               />
             )}
+            {skills.size === 0 && <p className="text-xs text-red-500">Pick at least one skill.</p>}
+            {skills.has("Other") && customSkill.trim().length === 0 && (
+              <p className="text-xs text-red-500">Please describe your "Other" skill.</p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="goal">What is your current goal?</Label>
+            <Label htmlFor="goal">What is your current goal?<Req /></Label>
             <Input id="goal" value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Get into a great college, start a side project, land my first internship" />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="oneliner">Describe yourself in one line</Label>
+            <Label htmlFor="oneliner">Describe yourself in one line<Req /></Label>
             <Input id="oneliner" value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} placeholder="e.g. A curious builder who loves stories and startups" />
           </div>
 
-          <Button type="submit" className="w-full" size="lg" disabled={!education}>Continue</Button>
+          <Button type="submit" className="w-full" size="lg" disabled={!isValid}>Continue</Button>
+          {!isValid && (
+            <p className="text-xs text-muted-foreground text-center">Please fill all required fields to continue.</p>
+          )}
         </form>
       </div>
     </main>
