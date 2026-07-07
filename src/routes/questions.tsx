@@ -143,11 +143,7 @@ function Questions() {
   }
 
   async function onAnalyze() {
-    if (!complete) {
-      toast.error("Please answer all questions before continuing.");
-      return;
-    }
-    if (!session || !data) return;
+    if (!complete || !session || !data) return;
     setSubmitting(true);
     try {
       if (!analysisPromiseRef.current) {
@@ -203,15 +199,14 @@ function Questions() {
           </div>
         </div>
       )}
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-2xl">
         <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
 
         {isLoading || !q ? (
           <p className="mt-16 text-muted-foreground">Loading questions…</p>
         ) : (
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
-            <div>
-            <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-muted-foreground">
+          <>
+            <div className="mt-8 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-muted-foreground">
               <span>{q.moduleTitle}</span>
               <span>{current + 1} / {totalQs}</span>
             </div>
@@ -273,50 +268,8 @@ function Questions() {
                   )}
                 </div>
               </div>
-              {!complete && (
-                <p className="mt-3 text-xs text-muted-foreground text-right">
-                  Please answer all questions before continuing. ({answeredCount}/{totalQs})
-                </p>
-              )}
             </div>
-            </div>
-
-            {/* Right: progress panel */}
-            <aside className="lg:sticky lg:top-6 h-fit rounded-2xl border border-border bg-card/60 backdrop-blur p-4">
-              <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Progress</div>
-              <div className="mt-2 font-display text-lg font-bold">
-                Answered: {answeredCount}/{totalQs}
-              </div>
-              <div className="mt-2 flex items-center gap-3 text-[10px] font-mono uppercase text-muted-foreground">
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Done</span>
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-rose-500" /> Pending</span>
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-primary" /> Current</span>
-              </div>
-              <div className="mt-4 grid grid-cols-5 gap-2">
-                {flatQs.map((item, i) => {
-                  const ans = answers[item.id];
-                  const isDone = ans && ans !== SKIP_ID;
-                  const isCurrent = i === current;
-                  const cls = isCurrent
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : isDone
-                    ? "bg-emerald-500/15 text-emerald-700 border-emerald-500/40 hover:bg-emerald-500/25"
-                    : "bg-rose-500/10 text-rose-700 border-rose-500/30 hover:bg-rose-500/20";
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => setCurrent(i)}
-                      title={item.text}
-                      className={`text-[11px] font-mono py-1.5 rounded-md border transition ${cls}`}
-                    >
-                      Q{i + 1}
-                    </button>
-                  );
-                })}
-              </div>
-            </aside>
-          </div>
+          </>
         )}
       </div>
     </main>

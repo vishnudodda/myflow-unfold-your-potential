@@ -36,7 +36,7 @@ export const loadQuestions = createServerFn({ method: "POST" })
 
 export type DashboardResult = {
   summary: { headline: string; bullets: string[]; motivation?: string };
-  roleModels: Array<{ name: string; why: string; photoUrl?: string; bio?: string; wikiUrl?: string }>;
+  roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
   podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
@@ -163,13 +163,8 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       // Enrich role models with Wikipedia thumbnails; fallback to generated avatars.
       const enriched = await Promise.all(
         (parsed.roleModels ?? []).map(async (rm) => {
-          const info = await fetchWikiInfo(rm.name);
-          return {
-            ...rm,
-            photoUrl: info?.photoUrl ?? avatarFor(rm.name),
-            bio: info?.extract,
-            wikiUrl: info?.pageUrl,
-          };
+          const photoUrl = await fetchWikiThumb(rm.name) ?? avatarFor(rm.name);
+          return { ...rm, photoUrl };
         })
       );
       parsed.roleModels = enriched;
@@ -179,25 +174,16 @@ export const analyzeGuest = createServerFn({ method: "POST" })
     }
   });
 
-async function fetchWikiInfo(name: string): Promise<{ photoUrl?: string; extract?: string; pageUrl?: string } | undefined> {
+async function fetchWikiThumb(name: string): Promise<string | undefined> {
   try {
     const slug = encodeURIComponent(name.trim().replace(/\s+/g, "_"));
     const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`, {
       headers: { "accept": "application/json", "user-agent": "MyFlow/1.0" },
-      signal: AbortSignal.timeout(2000),
+      signal: AbortSignal.timeout(1500),
     });
     if (!res.ok) return undefined;
-    const j = (await res.json()) as {
-      thumbnail?: { source?: string };
-      originalimage?: { source?: string };
-      extract?: string;
-      content_urls?: { desktop?: { page?: string } };
-    };
-    return {
-      photoUrl: j.originalimage?.source ?? j.thumbnail?.source,
-      extract: j.extract,
-      pageUrl: j.content_urls?.desktop?.page,
-    };
+    const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string } };
+    return j.thumbnail?.source ?? j.originalimage?.source;
   } catch {
     return undefined;
   }
