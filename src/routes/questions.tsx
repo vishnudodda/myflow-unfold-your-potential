@@ -143,7 +143,11 @@ function Questions() {
   }
 
   async function onAnalyze() {
-    if (!complete || !session || !data) return;
+    if (!complete) {
+      toast.error("Please answer all questions before continuing.");
+      return;
+    }
+    if (!session || !data) return;
     setSubmitting(true);
     try {
       if (!analysisPromiseRef.current) {
