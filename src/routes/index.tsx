@@ -26,6 +26,17 @@ function Intro() {
   const [customEducation, setCustomEducation] = useState("");
   const [goal, setGoal] = useState("");
   const [oneLiner, setOneLiner] = useState("");
+  const [attempted, setAttempted] = useState(false);
+
+  const trimmedName = name.trim();
+  const nameValid = /^[A-Za-z][A-Za-z\s.'-]*$/.test(trimmedName);
+  const ageNum = parseInt(age, 10);
+  const ageValid = !!ageNum && ageNum >= 10 && ageNum <= 27;
+  const eduValid = !!education && (education !== "other" || customEducation.trim().length > 0);
+  const skillsValid = skills.size > 0 && (!skills.has("Other") || customSkill.trim().length > 0);
+  const goalValid = goal.trim().length > 0;
+  const oneLinerValid = oneLiner.trim().length > 0;
+  const formValid = nameValid && ageValid && eduValid && skillsValid && goalValid && oneLinerValid;
 
   const EDUCATION_OPTIONS = [
     { value: "in-school", label: "Currently in school" },
@@ -67,9 +78,8 @@ function Intro() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const ageNum = parseInt(age, 10);
-    if (!name.trim() || !ageNum || ageNum < 10 || ageNum > 27) return;
-    if (!education) return;
+    setAttempted(true);
+    if (!formValid) return;
     const finalEducation = education === "other" ? customEducation.trim() || "Other" : education;
     const finalSkills = Array.from(skills);
     const custom = customSkill.trim();
@@ -77,7 +87,7 @@ function Intro() {
     localStorage.setItem(
       "myflow.session",
       JSON.stringify({
-        name: name.trim(),
+        name: trimmedName,
         age: ageNum,
         education: finalEducation,
         skills: finalSkills,
@@ -89,6 +99,9 @@ function Intro() {
     );
     navigate({ to: "/pick" });
   }
+
+  const showErr = (ok: boolean) => attempted && !ok;
+  const Req = () => <span className="text-red-500 ml-0.5">*</span>;
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
@@ -102,11 +115,19 @@ function Intro() {
         <form onSubmit={onSubmit} className="mt-8 space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Your name</Label>
-              <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Alex" />
+              <Label htmlFor="name">Your name<Req /></Label>
+              <Input
+                id="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value.replace(/[^A-Za-z\s.'-]/g, ""))}
+                placeholder="e.g. Alex"
+                aria-invalid={showErr(nameValid)}
+              />
+              {showErr(nameValid) && <p className="text-xs text-red-500">Please enter a valid name (letters only).</p>}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="age">Your age</Label>
+              <Label htmlFor="age">Your age<Req /></Label>
               <Select value={age} onValueChange={setAge}>
                 <SelectTrigger id="age">
                   <SelectValue placeholder="Pick your age" />
@@ -117,11 +138,12 @@ function Intro() {
                   ))}
                 </SelectContent>
               </Select>
+              {showErr(ageValid) && <p className="text-xs text-red-500">Please pick your age.</p>}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label>Where are you right now?</Label>
+            <Label>Where are you right now?<Req /></Label>
             <Select value={education} onValueChange={setEducation}>
               <SelectTrigger>
                 <SelectValue placeholder="Pick your current stage" />
@@ -139,12 +161,13 @@ function Intro() {
                 placeholder="Describe your current stage, e.g. gap year, freelancer, founder"
               />
             )}
+            {showErr(eduValid) && <p className="text-xs text-red-500">Please tell us where you are right now.</p>}
             <p className="text-xs text-muted-foreground">Helps us match real opportunities to your stage.</p>
           </div>
 
           <div className="space-y-3">
             <div>
-              <Label>Skills you already have</Label>
+              <Label>Skills you already have<Req /></Label>
               <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones.</p>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -168,19 +191,22 @@ function Intro() {
                 placeholder="Type your skill(s), e.g. music production, chess"
               />
             )}
+            {showErr(skillsValid) && <p className="text-xs text-red-500">Pick at least one skill{skills.has("Other") ? " and describe your Other skill" : ""}.</p>}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="goal">What is your current goal?</Label>
+            <Label htmlFor="goal">What is your current goal?<Req /></Label>
             <Input id="goal" value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Get into a great college, start a side project, land my first internship" />
+            {showErr(goalValid) && <p className="text-xs text-red-500">Please share your current goal.</p>}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="oneliner">Describe yourself in one line</Label>
+            <Label htmlFor="oneliner">Describe yourself in one line<Req /></Label>
             <Input id="oneliner" value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} placeholder="e.g. A curious builder who loves stories and startups" />
+            {showErr(oneLinerValid) && <p className="text-xs text-red-500">Please describe yourself in one line.</p>}
           </div>
 
-          <Button type="submit" className="w-full" size="lg" disabled={!education}>Continue</Button>
+          <Button type="submit" className="w-full" size="lg" disabled={!formValid}>Continue</Button>
         </form>
       </div>
     </main>

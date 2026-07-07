@@ -199,8 +199,11 @@ function Questions() {
           </div>
         </div>
       )}
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-6xl">
         <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
+      </div>
+      <div className="mx-auto max-w-6xl mt-2 grid gap-8 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <div>
 
         {isLoading || !q ? (
           <p className="mt-16 text-muted-foreground">Loading questions…</p>
@@ -262,14 +265,67 @@ function Questions() {
                     </Button>
                   )}
                   {(isLast || complete) && (
-                    <Button size="lg" disabled={!complete || submitting} onClick={onAnalyze}>
-                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : "Answer all to analyze"}
+                    <Button
+                      size="lg"
+                      disabled={submitting}
+                      onClick={() => {
+                        if (!complete) {
+                          toast.error("Please answer all questions before continuing.");
+                          const firstUnanswered = flatQs.findIndex((it) => !answers[it.id]);
+                          if (firstUnanswered >= 0) setCurrent(firstUnanswered);
+                          return;
+                        }
+                        onAnalyze();
+                      }}
+                    >
+                      {submitting ? "Analyzing…" : complete ? "Analyze ✧" : `Answer all (${answeredCount}/${totalQs})`}
                     </Button>
                   )}
                 </div>
               </div>
             </div>
           </>
+        )}
+        </div>
+
+        {!isLoading && q && (
+          <aside className="lg:sticky lg:top-6 h-fit rounded-2xl border border-border bg-card/60 backdrop-blur p-4">
+            <div className="flex items-center justify-between">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">Progress</div>
+              <div className="text-xs font-mono text-foreground">{answeredCount}/{totalQs}</div>
+            </div>
+            <div className="mt-2 text-sm font-semibold">Answered: {answeredCount}/{totalQs} Questions</div>
+            <div className="mt-4 grid grid-cols-5 gap-2">
+              {flatQs.map((item, i) => {
+                const answered = Boolean(answers[item.id]) && answers[item.id] !== SKIP_ID;
+                const skipped = answers[item.id] === SKIP_ID;
+                const active = i === current;
+                const base = "aspect-square rounded-md text-[10px] font-mono font-semibold flex items-center justify-center border transition-all";
+                const ring = active ? "ring-2 ring-primary ring-offset-1 ring-offset-background scale-105 " : "";
+                const state = answered
+                  ? "bg-emerald-500/20 border-emerald-500 text-emerald-700"
+                  : skipped
+                    ? "bg-amber-500/15 border-amber-500 text-amber-700"
+                    : "bg-red-500/10 border-red-400 text-red-600";
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setCurrent(i)}
+                    className={`${base} ${ring}${state}`}
+                    title={item.text}
+                  >
+                    Q{i + 1}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-4 space-y-1.5 text-[11px] text-muted-foreground">
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm bg-emerald-500" /> Answered</div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm bg-red-400" /> Unanswered</div>
+              <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-sm bg-amber-500" /> Skipped</div>
+            </div>
+          </aside>
         )}
       </div>
     </main>
