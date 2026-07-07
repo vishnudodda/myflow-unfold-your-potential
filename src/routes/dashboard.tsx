@@ -169,7 +169,7 @@ function Dashboard() {
               <div className="mt-8 flex flex-col items-center text-center gap-5">
                 <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink px-10 py-8 md:px-16 md:py-10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
                   <div className="font-mono text-7xl md:text-8xl font-bold text-paper leading-none tracking-tight">
-                    <AnimatedCounter value={expandToDigits(r.perspective.lessPrivileged?.number || r.perspective.statNumber)} duration={2600} />
+                    <AnimatedCounter value={r.perspective.lessPrivileged?.number || r.perspective.statNumber} duration={2600} />
                   </div>
                   <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
                 </div>
