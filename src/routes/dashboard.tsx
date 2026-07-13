@@ -381,7 +381,7 @@ ${r.perspective.source ? `<div class="muted">Source: ${escapeHtml(r.perspective.
         image: { type: "jpeg", quality: 0.95 },
         html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ["css", "legacy"] },
+        // pagebreak handled by html2pdf defaults
       })
       .from(container)
       .save();
