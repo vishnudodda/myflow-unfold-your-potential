@@ -205,7 +205,7 @@ function Questions() {
               <div className="absolute inset-3 rounded-full bg-primary/10 animate-pulse" />
             </div>
             <h2 className="mt-8 font-display text-2xl font-bold tracking-tight">
-              Building your MyFlow ✧
+              Building your flow…
             </h2>
             <p key={loadingMsgIdx} className="mt-3 text-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-1 duration-500">
               {LOADING_MESSAGES[loadingMsgIdx]}
