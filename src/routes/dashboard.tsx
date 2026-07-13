@@ -227,6 +227,12 @@ const TONE_BG: Record<string, string> = {
   lemon: "bg-pastel-lemon",
 };
 
+const SUMMARY_SECTIONS: Array<{ label: string; emoji: string; className: string }> = [
+  { label: "Existing capabilities", emoji: "🌟", className: "bg-pastel-mint/70 border-pastel-mint" },
+  { label: "Improvements to unlock", emoji: "🚀", className: "bg-pastel-peach/70 border-pastel-peach" },
+  { label: "Motivation for you", emoji: "💛", className: "bg-pastel-lemon/70 border-pastel-lemon" },
+];
+
 function Panel({ title, tone, emoji, children }: { title: string; tone: keyof typeof TONE_BG; emoji?: string; children: React.ReactNode }) {
   return (
     <section className={`${TONE_BG[tone]} rounded-3xl border border-border p-5 shadow-[0_10px_40px_-20px_rgba(30,58,138,0.25)] transition-transform hover:-translate-y-0.5`}>
@@ -237,14 +243,6 @@ function Panel({ title, tone, emoji, children }: { title: string; tone: keyof ty
       <div className="mt-4">{children}</div>
     </section>
   );
-}
-
-function escapeHtml(s: string): string {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }
 
 function formatShort(raw: string): string {
