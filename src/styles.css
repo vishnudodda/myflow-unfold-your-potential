@@ -11,9 +11,9 @@
  */
 
 @theme {
-  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Newsreader', ui-serif, Georgia, serif;
-  --font-body: 'Albert Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-body: 'Work Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
@@ -71,17 +71,17 @@
 
 :root {
   --radius: 0.875rem;
-  /* Pastel Blue joyful palette */
-  --paper: oklch(0.985 0.012 240);        /* very light sky */
-  --ink: oklch(0.24 0.04 260);            /* deep indigo ink */
-  --stone-ink: oklch(0.30 0.05 260);
-  --amber: oklch(0.68 0.16 250);          /* primary blue */
+  /* Yellow & Black — high-contrast editorial */
+  --paper: oklch(0.985 0.02 95);          /* warm cream */
+  --ink: oklch(0.16 0.01 90);             /* near-black ink */
+  --stone-ink: oklch(0.24 0.01 90);
+  --amber: oklch(0.72 0.17 82);           /* deep mustard — readable on cream */
 
-  --pastel-blue: oklch(0.92 0.05 240);
-  --pastel-mint: oklch(0.92 0.06 170);
-  --pastel-peach: oklch(0.92 0.06 55);
-  --pastel-lilac: oklch(0.92 0.06 305);
-  --pastel-lemon: oklch(0.95 0.07 100);
+  --pastel-blue: oklch(0.96 0.09 95);     /* soft butter */
+  --pastel-mint: oklch(0.94 0.05 110);    /* lime cream */
+  --pastel-peach: oklch(0.92 0.10 75);    /* warm apricot */
+  --pastel-lilac: oklch(0.95 0.02 90);    /* dune */
+  --pastel-lemon: oklch(0.94 0.16 100);   /* lemon */
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -90,17 +90,17 @@
   --popover: oklch(1 0 0);
   --popover-foreground: var(--ink);
   --primary: var(--amber);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.955 0.02 240);
+  --primary-foreground: oklch(0.985 0.02 95);
+  --secondary: oklch(0.955 0.02 95);
   --secondary-foreground: var(--ink);
-  --muted: oklch(0.955 0.02 240);
-  --muted-foreground: oklch(0.48 0.04 260);
-  --accent: oklch(0.945 0.03 240);
+  --muted: oklch(0.955 0.02 95);
+  --muted-foreground: oklch(0.42 0.02 90);
+  --accent: oklch(0.945 0.05 95);
   --accent-foreground: var(--ink);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.24 0.04 260 / 0.12);
-  --input: oklch(0.24 0.04 260 / 0.16);
+  --border: oklch(0.16 0.01 90 / 0.14);
+  --input: oklch(0.16 0.01 90 / 0.18);
   --ring: var(--amber);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
