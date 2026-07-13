@@ -263,7 +263,7 @@ function formatShort(raw: string): string {
 }
 
 
-function downloadReport(session: Session) {
+async function downloadReport(session: Session) {
   const r = session.result;
   if (!r) return;
   const a = r.analysis;
@@ -364,18 +364,30 @@ ${r.perspective.source ? `<div class="muted">Source: ${escapeHtml(r.perspective.
 </div>` : ""}
 
 </body></html>`;
-  const blob = new Blob([html], { type: "text/html;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a2 = document.createElement("a");
-  a2.href = url;
-  a2.download = `myflow-report-${session.name.replace(/\s+/g, "-").toLowerCase()}.html`;
-  document.body.appendChild(a2);
-  a2.click();
-  document.body.removeChild(a2);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  // Also open in a new tab for immediate print-to-PDF
-  const w = window.open("", "_blank");
-  if (w) { w.document.write(html); w.document.close(); }
+  // Render HTML off-screen and convert to PDF client-side.
+  const container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.left = "-10000px";
+  container.style.top = "0";
+  container.style.width = "820px";
+  container.innerHTML = html;
+  document.body.appendChild(container);
+  try {
+    const html2pdf = (await import("html2pdf.js")).default;
+    await html2pdf()
+      .set({
+        margin: [10, 10, 10, 10],
+        filename: `myflow-report-${session.name.replace(/\s+/g, "-").toLowerCase()}.pdf`,
+        image: { type: "jpeg", quality: 0.95 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        // pagebreak handled by html2pdf defaults
+      })
+      .from(container)
+      .save();
+  } finally {
+    document.body.removeChild(container);
+  }
 }
 
 // Removes standalone numbers/percentages from a sentence so the Perspective
