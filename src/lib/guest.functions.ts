@@ -170,11 +170,75 @@ export const analyzeGuest = createServerFn({ method: "POST" })
         })
       );
       parsed.roleModels = enriched;
+      // Validation: enforce India-specific perspective content.
+      if (parsed.perspective) {
+        parsed.perspective = sanitizePerspective(parsed.perspective);
+      }
       return { result: parsed };
     } catch {
       throw new Error("AI returned an invalid response. Please try again.");
     }
   });
+
+// ---- Perspective validation: India-only guardrail ----
+const GLOBAL_TERMS = [
+  "worldwide", "world wide", "global", "globally", "across the world",
+  "around the world", "the world", "world's", "world population",
+  "internationally", "international", "planet", "earth",
+];
+const INDIA_TERMS = [
+  "india", "indian", "bharat", "udise", "nsso", "niti aayog", "aser",
+  "unicef india", "world bank india", "ilo india", "mospi", "plfs",
+  "ministry of education india", "government of india", "crore", "lakh", "₹",
+];
+
+function hasGlobal(text: string): boolean {
+  const t = text.toLowerCase();
+  return GLOBAL_TERMS.some((g) => new RegExp(`\\b${g}\\b`, "i").test(t));
+}
+function hasIndia(text: string): boolean {
+  const t = text.toLowerCase();
+  return INDIA_TERMS.some((g) => t.includes(g));
+}
+function scrubGlobal(text: string): string {
+  let out = text;
+  for (const g of GLOBAL_TERMS) {
+    out = out.replace(new RegExp(`\\b${g}\\b`, "gi"), "in India");
+  }
+  // Collapse duplicates like "in India in India"
+  out = out.replace(/(in India)(\s+in India)+/gi, "in India");
+  return out;
+}
+function ensureIndia(text: string, fallbackSuffix = " (India)"): string {
+  const cleaned = scrubGlobal(text);
+  return hasIndia(cleaned) ? cleaned : `${cleaned.replace(/\s+$/, "")}${fallbackSuffix}`;
+}
+
+type Perspective = NonNullable<DashboardResult["perspective"]>;
+function sanitizePerspective(p: Perspective): Perspective {
+  const cleanedFacts = (p.facts ?? []).map((f) => ({
+    number: f.number,
+    label: ensureIndia(f.label ?? "", " in India"),
+    detail: ensureIndia(f.detail ?? ""),
+  }));
+  const lp = p.lessPrivileged ?? { number: "", label: "", message: "" };
+  const source = p.source ? scrubGlobal(p.source) : p.source;
+  const validSource = source && hasIndia(source) ? source : "Ministry of Education India / UDISE+";
+  return {
+    headline: ensureIndia(p.headline ?? ""),
+    stat: ensureIndia(p.stat ?? "", " in India"),
+    statNumber: p.statNumber,
+    source: validSource,
+    message: scrubGlobal(p.message ?? ""),
+    simpleMeaning: scrubGlobal(p.simpleMeaning ?? ""),
+    lessPrivileged: {
+      number: lp.number,
+      label: ensureIndia(lp.label ?? "", " in India"),
+      message: scrubGlobal(lp.message ?? ""),
+    },
+    facts: cleanedFacts,
+  };
+}
 
 async function fetchWikiThumb(name: string): Promise<string | undefined> {
   try {
