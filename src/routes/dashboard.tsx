@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { DashboardResult } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/animated-counter";
+import { jsPDF } from "jspdf";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -45,9 +46,12 @@ function Dashboard() {
           <Link to="/" className="font-display text-xl font-bold tracking-tighter">MYFLOW</Link>
           <div className="flex items-center gap-2">
             <Button variant="default" size="sm" className="rounded-full" onClick={() => downloadReport(session)}>
-              ↓ Download Report
+              ↓ Download PDF
             </Button>
-            <Button variant="outline" size="sm" className="rounded-full" onClick={() => { localStorage.removeItem("myflow.session"); navigate({ to: "/" }); }}>
+            <Button variant="outline" size="sm" className="rounded-full" onClick={() => {
+              try { localStorage.removeItem("myflow.session"); } catch { /* ignore */ }
+              window.location.assign("/");
+            }}>
               Start over
             </Button>
           </div>
@@ -113,11 +117,20 @@ function Dashboard() {
         <div className="mt-4">
           <Panel title="Summary" tone="blue" emoji="💫">
             <p className="font-display text-xl md:text-2xl font-semibold text-balance">{r.summary?.headline}</p>
-            <ul className="mt-4 grid md:grid-cols-2 gap-3">
-              {(r.summary?.bullets ?? []).map((b, i) => (
-                <li key={i} className="rounded-xl bg-white/70 p-4 text-sm leading-relaxed">{b}</li>
-              ))}
-            </ul>
+            <div className="mt-4 grid md:grid-cols-3 gap-3">
+              {SUMMARY_SECTIONS.map((sec, i) => {
+                const body = (r.summary?.bullets ?? [])[i];
+                if (!body) return null;
+                return (
+                  <div key={sec.label} className={`rounded-2xl border p-5 ${sec.className}`}>
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-primary flex items-center gap-1.5">
+                      <span>{sec.emoji}</span> {sec.label}
+                    </div>
+                    <p className="mt-2 text-sm leading-relaxed text-foreground/90">{body}</p>
+                  </div>
+                );
+              })}
+            </div>
             {r.summary?.motivation && (
               <div className="mt-4 rounded-xl bg-primary/10 border border-primary/20 p-5">
                 <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-2">A note for you ✧</div>
