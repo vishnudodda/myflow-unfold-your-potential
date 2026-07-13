@@ -1,7 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,7 +26,7 @@ function Intro() {
   const [customEducation, setCustomEducation] = useState("");
   const [goal, setGoal] = useState("");
   const [oneLiner, setOneLiner] = useState("");
-  const [step, setStep] = useState(0);
+  const [touched, setTouched] = useState(false);
 
   const EDUCATION_OPTIONS = [
     { value: "in-school", label: "Currently in school" },
@@ -72,21 +75,12 @@ function Intro() {
   const skillsValid = nonOtherSkills.length > 0 || (skills.has("Other") && customSkill.trim().length > 0);
   const goalValid = goal.trim().length > 0;
   const oneLinerValid = oneLiner.trim().length > 0;
+  const formValid = nameValid && ageValid && educationValid && skillsValid && goalValid && oneLinerValid;
 
-  const steps = useMemo(() => [
-    { key: "name", valid: nameValid, tone: "peach" },
-    { key: "age", valid: ageValid, tone: "lemon" },
-    { key: "education", valid: educationValid, tone: "mint" },
-    { key: "skills", valid: skillsValid, tone: "blue" },
-    { key: "goal", valid: goalValid, tone: "lilac" },
-    { key: "oneLiner", valid: oneLinerValid, tone: "peach" },
-  ] as const, [nameValid, ageValid, educationValid, skillsValid, goalValid, oneLinerValid]);
-
-  const current = steps[step];
-  const isLast = step === steps.length - 1;
-  const progress = ((step + (current.valid ? 1 : 0)) / steps.length) * 100;
-
-  function finish() {
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setTouched(true);
+    if (!formValid) return;
     const finalEducation = education === "other" ? customEducation.trim() || "Other" : education;
     const finalSkills = Array.from(skills);
     const custom = customSkill.trim();
@@ -107,177 +101,117 @@ function Intro() {
     navigate({ to: "/pick" });
   }
 
-  function next() {
-    if (!current.valid) return;
-    if (isLast) finish();
-    else setStep((s) => s + 1);
-  }
-
-  const toneBg: Record<string, string> = {
-    peach: "from-pastel-peach via-paper to-pastel-lemon",
-    lemon: "from-pastel-lemon via-paper to-pastel-mint",
-    mint: "from-pastel-mint via-paper to-pastel-blue",
-    blue: "from-pastel-blue via-paper to-pastel-lilac",
-    lilac: "from-pastel-lilac via-paper to-pastel-peach",
-  };
-
   return (
-    <main className={`min-h-screen flex flex-col items-center justify-center bg-gradient-to-br ${toneBg[current.tone]} text-foreground px-6 transition-colors duration-700`}>
-      <div className="w-full max-w-xl py-10">
-        <div className="flex items-center justify-between">
-          <span className="font-display text-xl font-bold tracking-tighter">MYFLOW ✿</span>
-          <span className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">
-            {step + 1} / {steps.length}
-          </span>
-        </div>
-        <div className="mt-4 h-1.5 w-full bg-white/60 rounded-full overflow-hidden">
-          <div className="h-full bg-primary transition-all duration-500" style={{ width: `${progress}%` }} />
-        </div>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
+      <div className="w-full max-w-lg py-12">
+        <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
+        <h1 className="mt-8 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
+          The map to your <span className="font-serif italic font-normal text-primary">authentic</span> future.
+        </h1>
+        <p className="mt-4 text-muted-foreground">Tell us a little about you to begin.</p>
 
-        <div key={step} className="mt-10 animate-in fade-in slide-in-from-bottom-3 duration-500">
-          {step === 0 && (
-            <QuestionCard emoji="👋" question="What's your name?" hint="Just so we can make this feel like yours.">
+        <form onSubmit={onSubmit} className="mt-8 space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Your name <span className="text-destructive">*</span></Label>
               <Input
-                autoFocus
+                id="name"
+                required
                 value={name}
                 onChange={(e) => setName(e.target.value.replace(/[^A-Za-z\s'-]/g, ""))}
-                onKeyDown={(e) => e.key === "Enter" && next()}
                 placeholder="e.g. Alex"
-                className="h-14 text-lg rounded-2xl bg-white"
               />
-            </QuestionCard>
-          )}
-          {step === 1 && (
-            <QuestionCard emoji="🎂" question={`Nice to meet you${trimmedName ? ", " + trimmedName : ""}. How old are you?`} hint="Pick your age.">
-              <div className="grid grid-cols-6 gap-2">
-                {AGE_OPTIONS.map((a) => {
-                  const on = age === String(a);
-                  return (
-                    <button
-                      key={a}
-                      type="button"
-                      onClick={() => setAge(String(a))}
-                      className={`h-12 rounded-xl border font-mono text-sm transition-all ${on ? "border-primary bg-primary text-primary-foreground scale-105" : "border-border bg-white hover:bg-muted"}`}
-                    >
-                      {a}
-                    </button>
-                  );
-                })}
-              </div>
-            </QuestionCard>
-          )}
-          {step === 2 && (
-            <QuestionCard emoji="🎓" question="Where are you right now?" hint="Helps us match real opportunities to your stage.">
-              <div className="grid gap-2">
-                {EDUCATION_OPTIONS.map((o) => {
-                  const on = education === o.value;
-                  return (
-                    <button
-                      key={o.value}
-                      type="button"
-                      onClick={() => setEducation(o.value)}
-                      className={`text-left p-4 rounded-xl border transition-all ${on ? "border-primary bg-primary/10 scale-[1.01]" : "border-border bg-white hover:bg-muted"}`}
-                    >
-                      {o.label}
-                    </button>
-                  );
-                })}
-                {education === "other" && (
-                  <Input
-                    autoFocus
-                    value={customEducation}
-                    onChange={(e) => setCustomEducation(e.target.value)}
-                    placeholder="Describe your current stage"
-                    className="mt-1 bg-white"
-                  />
-                )}
-              </div>
-            </QuestionCard>
-          )}
-          {step === 3 && (
-            <QuestionCard emoji="✨" question="Skills you already have" hint="Pick any that feel true — even basic ones.">
-              <div className="flex flex-wrap gap-2">
-                {[...SKILL_OPTIONS, "Other"].map((s) => {
-                  const on = skills.has(s);
-                  return (
-                    <button
-                      key={s}
-                      type="button"
-                      onClick={() => toggleSkill(s)}
-                      className={`px-4 py-2 rounded-full border text-sm transition-all ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-white hover:bg-muted"}`}
-                    >
-                      {s}
-                    </button>
-                  );
-                })}
-              </div>
-              {skills.has("Other") && (
-                <Input
-                  value={customSkill}
-                  onChange={(e) => setCustomSkill(e.target.value)}
-                  placeholder="Type your skill(s), e.g. music production, chess"
-                  className="mt-3 bg-white"
-                />
+              {touched && !nameValid && (
+                <p className="text-xs text-destructive">Letters only, please.</p>
               )}
-            </QuestionCard>
-          )}
-          {step === 4 && (
-            <QuestionCard emoji="🎯" question="What's your current goal?" hint="Big or small — anything you're working towards.">
-              <Input
-                autoFocus
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && next()}
-                placeholder="e.g. Land my first internship"
-                className="h-14 text-lg rounded-2xl bg-white"
-              />
-            </QuestionCard>
-          )}
-          {step === 5 && (
-            <QuestionCard emoji="💫" question="Describe yourself in one line." hint="A line about you helps us personalise things.">
-              <Input
-                autoFocus
-                value={oneLiner}
-                onChange={(e) => setOneLiner(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && next()}
-                placeholder="e.g. A curious builder who loves stories and startups"
-                className="h-14 text-lg rounded-2xl bg-white"
-              />
-            </QuestionCard>
-          )}
-
-          <div className="mt-6 flex items-center justify-between">
-            <Button
-              variant="ghost"
-              disabled={step === 0}
-              onClick={() => setStep((s) => Math.max(0, s - 1))}
-            >
-              ← Back
-            </Button>
-            <Button
-              size="lg"
-              className="rounded-full px-8"
-              disabled={!current.valid}
-              onClick={next}
-            >
-              {isLast ? "Continue ✧" : "Next →"}
-            </Button>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">Your age <span className="text-destructive">*</span></Label>
+              <Select value={age} onValueChange={setAge}>
+                <SelectTrigger id="age">
+                  <SelectValue placeholder="Pick your age" />
+                </SelectTrigger>
+                <SelectContent className="max-h-64">
+                  {AGE_OPTIONS.map((a) => (
+                    <SelectItem key={a} value={String(a)}>{a}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {touched && !ageValid && <p className="text-xs text-destructive">Please pick your age.</p>}
+            </div>
           </div>
-        </div>
+
+          <div className="space-y-2">
+            <Label>Where are you right now? <span className="text-destructive">*</span></Label>
+            <Select value={education} onValueChange={setEducation}>
+              <SelectTrigger>
+                <SelectValue placeholder="Pick your current stage" />
+              </SelectTrigger>
+              <SelectContent>
+                {EDUCATION_OPTIONS.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {education === "other" && (
+              <Input
+                value={customEducation}
+                onChange={(e) => setCustomEducation(e.target.value)}
+                placeholder="Describe your current stage, e.g. gap year, freelancer, founder"
+              />
+            )}
+            {touched && !educationValid && (
+              <p className="text-xs text-destructive">Please tell us where you are.</p>
+            )}
+            <p className="text-xs text-muted-foreground">Helps us match real opportunities to your stage.</p>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <Label>Skills you already have <span className="text-destructive">*</span></Label>
+              <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones.</p>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {[...SKILL_OPTIONS, "Other"].map((s) => {
+                const on = skills.has(s);
+                return (
+                  <label
+                    key={s}
+                    className={`flex items-center gap-2 rounded-lg border p-2.5 text-sm cursor-pointer transition-colors ${on ? "border-primary bg-primary/5" : "border-border hover:bg-muted"}`}
+                  >
+                    <Checkbox checked={on} onCheckedChange={() => toggleSkill(s)} />
+                    <span>{s}</span>
+                  </label>
+                );
+              })}
+            </div>
+            {skills.has("Other") && (
+              <Input
+                value={customSkill}
+                onChange={(e) => setCustomSkill(e.target.value)}
+                placeholder="Type your skill(s), e.g. music production, chess"
+              />
+            )}
+            {touched && !skillsValid && (
+              <p className="text-xs text-destructive">Pick at least one skill.</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="goal">What is your current goal? <span className="text-destructive">*</span></Label>
+            <Input id="goal" value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Get into a great college, start a side project, land my first internship" />
+            {touched && !goalValid && <p className="text-xs text-destructive">Share a goal, big or small.</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="oneliner">Describe yourself in one line <span className="text-destructive">*</span></Label>
+            <Input id="oneliner" value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} placeholder="e.g. A curious builder who loves stories and startups" />
+            {touched && !oneLinerValid && <p className="text-xs text-destructive">A line about you helps us personalise things.</p>}
+          </div>
+
+          <Button type="submit" className="w-full" size="lg" disabled={!formValid}>Continue</Button>
+        </form>
       </div>
     </main>
-  );
-}
-
-function QuestionCard({ emoji, question, hint, children }: { emoji: string; question: string; hint?: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-3xl border border-border bg-white/70 backdrop-blur-sm p-6 md:p-8 shadow-[0_20px_60px_-30px_rgba(30,30,60,0.3)]">
-      <div className="text-4xl">{emoji}</div>
-      <h1 className="mt-3 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
-        {question}
-      </h1>
-      {hint && <p className="mt-2 text-sm text-muted-foreground">{hint}</p>}
-      <div className="mt-6">{children}</div>
-    </div>
   );
 }
