@@ -123,21 +123,22 @@ function Intro() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden bg-gradient-to-br from-pastel-lemon via-pastel-peach to-pastel-lilac">
-      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-pastel-mint blur-3xl opacity-70" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-pastel-blue blur-3xl opacity-70" />
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden bg-background text-foreground">
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+      <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-amber blur-3xl opacity-25" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-amber blur-3xl opacity-20" />
 
       <div className="relative w-full max-w-xl py-12">
         <div className="flex items-center justify-between">
-          <span className="font-display text-xl font-bold tracking-tighter">MYFLOW ✦</span>
+          <span className="font-display text-xl font-bold tracking-tighter"><span className="text-amber">MYFLOW</span> ✦</span>
           <span className="text-[11px] font-mono uppercase tracking-widest text-foreground/60">Step {step + 1} / {total}</span>
         </div>
 
-        <div className="mt-4 h-1.5 w-full rounded-full bg-white/60 overflow-hidden">
+        <div className="mt-4 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
           <div className="h-full bg-primary transition-all duration-500" style={{ width: `${((step + (current.valid ? 1 : 0)) / total) * 100}%` }} />
         </div>
 
-        <div key={step} className="mt-10 rounded-3xl bg-white/80 backdrop-blur border border-white shadow-[0_20px_60px_-25px_rgba(30,58,138,0.25)] p-6 md:p-8 animate-in fade-in slide-in-from-bottom-2 duration-400">
+        <div key={step} className="mt-10 rounded-3xl bg-card/90 backdrop-blur border border-amber/30 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.35)] p-6 md:p-8 animate-in fade-in slide-in-from-bottom-2 duration-400">
           <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-balance">
             {current.label}
           </h1>
@@ -151,7 +152,7 @@ function Intro() {
                 onChange={(e) => { setError(null); setName(e.target.value.replace(/[^A-Za-z\s'-]/g, "")); }}
                 onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
                 placeholder="e.g. Alex"
-                className="h-12 text-lg bg-white"
+                className="h-12 text-lg bg-background/60 border-amber/30"
               />
             )}
 
@@ -164,7 +165,7 @@ function Intro() {
                       key={a}
                       type="button"
                       onClick={() => { setError(null); setAge(String(a)); }}
-                      className={`h-12 rounded-xl border font-display font-semibold transition-all ${on ? "bg-primary text-primary-foreground border-primary scale-[1.05] shadow" : "bg-white hover:bg-pastel-lemon border-border"}`}
+                      className={`h-12 rounded-xl border font-display font-semibold transition-all ${on ? "bg-primary text-primary-foreground border-primary scale-[1.05] shadow-[0_0_20px_-4px_var(--amber)]" : "bg-background/60 hover:bg-amber/10 hover:border-amber/50 border-border"}`}
                     >{a}</button>
                   );
                 })}
@@ -180,7 +181,7 @@ function Intro() {
                       key={o.value}
                       type="button"
                       onClick={() => { setError(null); setEducation(o.value); }}
-                      className={`w-full text-left p-4 rounded-xl border transition-all ${on ? "bg-primary/20 border-primary" : "bg-white hover:bg-pastel-blue border-border"}`}
+                      className={`w-full text-left p-4 rounded-xl border transition-all ${on ? "bg-primary/20 border-primary text-foreground" : "bg-background/60 hover:bg-amber/10 hover:border-amber/50 border-border"}`}
                     >{o.label}</button>
                   );
                 })}
@@ -189,7 +190,7 @@ function Intro() {
                     value={customEducation}
                     onChange={(e) => setCustomEducation(e.target.value)}
                     placeholder="Describe your current stage, e.g. gap year, freelancer"
-                    className="bg-white"
+                    className="bg-background/60 border-amber/30"
                   />
                 )}
               </div>
@@ -203,7 +204,7 @@ function Intro() {
                     return (
                       <label
                         key={s}
-                        className={`flex items-center gap-2 rounded-xl border p-3 text-sm cursor-pointer transition-all ${on ? "border-primary bg-primary/15" : "border-border bg-white hover:bg-pastel-mint/60"}`}
+                        className={`flex items-center gap-2 rounded-xl border p-3 text-sm cursor-pointer transition-all ${on ? "border-primary bg-primary/15" : "border-border bg-background/60 hover:bg-amber/10 hover:border-amber/50"}`}
                       >
                         <Checkbox checked={on} onCheckedChange={() => { setError(null); toggleSkill(s); }} />
                         <span>{s}</span>
@@ -216,7 +217,7 @@ function Intro() {
                     value={customSkill}
                     onChange={(e) => setCustomSkill(e.target.value)}
                     placeholder="Type your skill(s), e.g. music production, chess"
-                    className="bg-white"
+                    className="bg-background/60 border-amber/30"
                   />
                 )}
               </div>
@@ -229,7 +230,7 @@ function Intro() {
                 onChange={(e) => { setError(null); setGoal(e.target.value); }}
                 onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
                 placeholder="e.g. Get into a great college, land my first internship"
-                className="h-12 text-base bg-white"
+                className="h-12 text-base bg-background/60 border-amber/30"
               />
             )}
 
@@ -240,7 +241,7 @@ function Intro() {
                 onChange={(e) => { setError(null); setOneLiner(e.target.value); }}
                 onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
                 placeholder="e.g. A curious builder who loves stories and startups"
-                className="h-12 text-base bg-white"
+                className="h-12 text-base bg-background/60 border-amber/30"
               />
             )}
 
