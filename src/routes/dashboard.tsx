@@ -279,114 +279,167 @@ function downloadReport(session: Session) {
   if (!r) return;
   const a = r.analysis;
   const answers = session.answersFlat ?? [];
-  const html = `<!doctype html>
-<html><head><meta charset="utf-8"><title>MyFlow Report — ${escapeHtml(session.name)}</title>
-<style>
-  @page { margin: 20mm; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; color:#0f172a; line-height:1.55; max-width: 820px; margin: 32px auto; padding: 0 24px; }
-  h1 { font-size: 32px; margin: 0 0 4px; letter-spacing: -0.02em; }
-  h2 { font-size: 20px; margin: 28px 0 10px; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; color:#1e3a8a; }
-  h3 { font-size: 15px; margin: 16px 0 6px; color:#334155; text-transform: uppercase; letter-spacing: .08em; }
-  .muted { color:#64748b; font-size: 13px; }
-  .grid { display:grid; grid-template-columns: 160px 1fr; gap: 6px 16px; font-size: 14px; }
-  ul { padding-left: 20px; margin: 6px 0; }
-  li { margin: 3px 0; font-size: 14px; }
-  .card { background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:14px 16px; margin: 8px 0; }
-  .qa { margin: 10px 0; padding: 10px 12px; border-left:3px solid #c7d2fe; background:#f8fafc; border-radius:6px; font-size:13px; }
-  .qa .q { font-weight:600; color:#1e3a8a; }
-  .qa .a { margin-top:2px; }
-  .skipped { color:#94a3b8; font-style:italic; }
-  .rm { display:flex; gap:12px; align-items:flex-start; margin:8px 0; }
-  .rm img { width:56px; height:56px; border-radius:50%; object-fit:cover; border:1px solid #e5e7eb; }
-  header { border-bottom: 3px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 24px; }
-  .brand { font-size:12px; letter-spacing:.2em; color:#1e3a8a; font-weight:700; }
-  @media print { .noprint { display:none } body { margin: 0; } }
-  .noprint { position: fixed; top: 16px; right: 16px; }
-  .noprint button { background:#1e3a8a; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; font-size:13px; }
-</style></head><body>
-<div class="noprint"><button onclick="window.print()">Print / Save as PDF</button></div>
-<header>
-  <div class="brand">MYFLOW · PERSONAL REPORT</div>
-  <h1>${escapeHtml(session.name)}'s MyFlow snapshot</h1>
-  <div class="muted">Generated ${new Date().toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' })}</div>
-</header>
 
-<h2>Your profile</h2>
-<div class="grid">
-  <div class="muted">Name</div><div>${escapeHtml(session.name)}</div>
-  <div class="muted">Age</div><div>${session.age}</div>
-  <div class="muted">Stage</div><div>${escapeHtml(session.education ?? "—")}</div>
-  <div class="muted">Skills</div><div>${(session.skills ?? []).map(escapeHtml).join(", ") || "—"}</div>
-  ${session.customSkill ? `<div class="muted">Custom skills</div><div>${escapeHtml(session.customSkill)}</div>` : ""}
-  <div class="muted">Current goal</div><div>${escapeHtml(session.goal ?? "—")}</div>
-  <div class="muted">One-line self</div><div>${escapeHtml(session.oneLiner ?? "—")}</div>
-</div>
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const margin = 48;
+  const contentW = pageW - margin * 2;
+  let y = margin;
 
-<h2>Summary</h2>
-<div class="card"><strong>${escapeHtml(r.summary?.headline ?? "")}</strong>
-<ul>${(r.summary?.bullets ?? []).map(b => `<li>${escapeHtml(b)}</li>`).join("")}</ul>
-${r.summary?.motivation ? `<p><em>${escapeHtml(r.summary.motivation)}</em></p>` : ""}
-</div>
+  const ensureRoom = (need: number) => {
+    if (y + need > pageH - margin) {
+      doc.addPage();
+      y = margin;
+    }
+  };
+  const writeParagraph = (text: string, opts?: { size?: number; bold?: boolean; color?: [number, number, number]; gap?: number }) => {
+    const size = opts?.size ?? 11;
+    doc.setFont("helvetica", opts?.bold ? "bold" : "normal");
+    doc.setFontSize(size);
+    doc.setTextColor(...(opts?.color ?? [40, 40, 55]));
+    const lines = doc.splitTextToSize(String(text ?? ""), contentW) as string[];
+    for (const line of lines) {
+      ensureRoom(size + 4);
+      doc.text(line, margin, y);
+      y += size + 4;
+    }
+    y += opts?.gap ?? 4;
+  };
+  const writeH2 = (t: string) => {
+    ensureRoom(28);
+    doc.setFillColor(255, 214, 51);
+    doc.rect(margin, y - 12, 4, 18, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(15);
+    doc.setTextColor(30, 30, 60);
+    doc.text(t, margin + 12, y);
+    y += 14;
+    doc.setDrawColor(230, 230, 235);
+    doc.line(margin, y, pageW - margin, y);
+    y += 12;
+  };
+  const writeKV = (k: string, v: string) => {
+    ensureRoom(16);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(90, 90, 110);
+    doc.text(k, margin, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(30, 30, 55);
+    const lines = doc.splitTextToSize(v || "—", contentW - 130) as string[];
+    for (let i = 0; i < lines.length; i++) {
+      if (i > 0) { y += 13; ensureRoom(13); }
+      doc.text(lines[i], margin + 130, y);
+    }
+    y += 16;
+  };
 
-${a ? `
-<h2>Personality analysis</h2>
-<p>${escapeHtml(a.personality)}</p>
-<h3>Motivations</h3><p>${escapeHtml(a.motivations)}</p>
-<h3>Learning style</h3><p>${escapeHtml(a.learningStyle)}</p>
-<h3>Interests</h3><ul>${a.interests.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+  // Header band
+  doc.setFillColor(255, 214, 51);
+  doc.rect(0, 0, pageW, 80, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
+  doc.setTextColor(40, 40, 55);
+  doc.text("MYFLOW · PERSONAL REPORT", margin, 34);
+  doc.setFontSize(22);
+  doc.text(`${session.name}'s MyFlow snapshot`, margin, 62);
+  y = 110;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(110, 110, 130);
+  doc.text(
+    `Generated ${new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}`,
+    margin,
+    y,
+  );
+  y += 22;
 
-<h2>Strengths</h2>
-<ul>${a.strengths.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+  writeH2("Your profile");
+  writeKV("Name", session.name);
+  writeKV("Age", String(session.age));
+  writeKV("Stage", session.education ?? "—");
+  writeKV("Skills", (session.skills ?? []).join(", ") || "—");
+  if (session.customSkill) writeKV("Custom skills", session.customSkill);
+  writeKV("Current goal", session.goal ?? "—");
+  writeKV("One-line self", session.oneLiner ?? "—");
 
-<h2>Growth areas</h2>
-<ul>${a.growthAreas.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
+  writeH2("Summary");
+  if (r.summary?.headline) writeParagraph(r.summary.headline, { size: 13, bold: true, color: [20, 20, 40] });
+  const bullets = r.summary?.bullets ?? [];
+  const sectionLabels = ["Existing capabilities", "Improvements to unlock", "Motivation for you"];
+  bullets.forEach((b, i) => {
+    writeParagraph(sectionLabels[i] ?? `Note ${i + 1}`, { size: 10, bold: true, color: [180, 120, 0], gap: 2 });
+    writeParagraph(b, { size: 11, gap: 8 });
+  });
+  if (r.summary?.motivation) writeParagraph(r.summary.motivation, { size: 11, color: [60, 60, 90] });
 
-${a.blindSpots?.length ? `<h3>Potential blind spots</h3><ul>${a.blindSpots.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : ""}
+  if (a) {
+    writeH2("Personality analysis");
+    writeParagraph(a.personality);
+    writeParagraph("Motivations", { size: 10, bold: true, color: [90, 90, 110], gap: 2 });
+    writeParagraph(a.motivations);
+    writeParagraph("Learning style", { size: 10, bold: true, color: [90, 90, 110], gap: 2 });
+    writeParagraph(a.learningStyle);
+    if (a.interests?.length) writeParagraph("Interests: " + a.interests.join(", "));
+    writeH2("Strengths");
+    a.strengths.forEach((s) => writeParagraph("• " + s, { gap: 2 }));
+    writeH2("Growth areas");
+    a.growthAreas.forEach((s) => writeParagraph("• " + s, { gap: 2 }));
+    if (a.blindSpots?.length) {
+      writeParagraph("Potential blind spots", { size: 10, bold: true, color: [90, 90, 110], gap: 2 });
+      a.blindSpots.forEach((s) => writeParagraph("• " + s, { gap: 2 }));
+    }
+    writeH2("Career insights");
+    writeParagraph(a.careerInsights);
+  }
 
-<h2>Career insights</h2>
-<p>${escapeHtml(a.careerInsights)}</p>
-` : ""}
+  writeH2("Role models");
+  (r.roleModels ?? []).forEach((rm) => {
+    writeParagraph(rm.name, { size: 12, bold: true, gap: 2 });
+    writeParagraph(rm.why, { size: 10, color: [90, 90, 110] });
+  });
 
-<h2>Recommended role models</h2>
-${(r.roleModels ?? []).map(rm => `<div class="rm">${rm.photoUrl ? `<img src="${escapeHtml(rm.photoUrl)}" alt="">` : ""}<div><strong>${escapeHtml(rm.name)}</strong><div class="muted">${escapeHtml(rm.why)}</div></div></div>`).join("")}
+  writeH2("Roadmap");
+  (r.roadmap ?? []).forEach((m) => writeParagraph(`• ${m.horizon}: ${m.action}`, { gap: 2 }));
 
-<h2>Roadmap</h2>
-<ul>${(r.roadmap ?? []).map(m => `<li><strong>${escapeHtml(m.horizon)}:</strong> ${escapeHtml(m.action)}</li>`).join("")}</ul>
+  writeH2("Opportunities");
+  (r.opportunities ?? []).forEach((o) => {
+    writeParagraph(`${o.title} (${o.confidence})`, { size: 12, bold: true, gap: 2 });
+    writeParagraph(`${o.org} · ${o.stipend}`, { size: 10, color: [90, 90, 110], gap: 2 });
+    if (o.url) writeParagraph(o.url, { size: 9, color: [80, 90, 160] });
+  });
 
-<h2>Opportunities</h2>
-${(r.opportunities ?? []).map(o => `<div class="card"><strong>${escapeHtml(o.title)}</strong> <span class="muted">· ${escapeHtml(o.confidence)}</span><div class="muted">${escapeHtml(o.org)} · ${escapeHtml(o.stipend)}</div>${o.url ? `<div class="muted" style="word-break:break-all">${escapeHtml(o.url)}</div>` : ""}</div>`).join("")}
+  writeH2("Podcasts");
+  (r.podcasts ?? []).forEach((p) => {
+    writeParagraph(`${p.title} — ${p.host}`, { size: 12, bold: true, gap: 2 });
+    writeParagraph(p.pitch, { size: 10, gap: 2 });
+    if (p.url) writeParagraph(p.url, { size: 9, color: [80, 90, 160] });
+  });
 
-<h2>Podcasts to listen to</h2>
-${(r.podcasts ?? []).map(p => `<div class="card"><strong>${escapeHtml(p.title)}</strong> <span class="muted">by ${escapeHtml(p.host)}</span><div>${escapeHtml(p.pitch)}</div>${p.url ? `<div class="muted" style="word-break:break-all">${escapeHtml(p.url)}</div>` : ""}</div>`).join("")}
+  if (r.perspective) {
+    writeH2("Perspective");
+    writeParagraph(r.perspective.headline, { size: 13, bold: true });
+    writeParagraph(r.perspective.lessPrivileged?.number || r.perspective.statNumber, { size: 22, bold: true, color: [20, 20, 40] });
+    writeParagraph(r.perspective.lessPrivileged?.label || r.perspective.stat, { size: 10, color: [90, 90, 110] });
+    writeParagraph(r.perspective.lessPrivileged?.message || r.perspective.simpleMeaning || r.perspective.message);
+    if (r.perspective.source) writeParagraph("Source: " + r.perspective.source, { size: 9, color: [130, 130, 150] });
+  }
 
-${answers.length ? `
-<h2>Your questionnaire responses</h2>
-${answers.map((x, i) => `<div class="qa"><div class="q">${i+1}. ${escapeHtml(x.question)}</div>${x.skipped ? `<div class="a skipped">Skipped</div>` : `<div class="a">${escapeHtml(x.answer ?? "")}${x.custom ? ` — "${escapeHtml(x.custom)}"` : ""}</div>`}</div>`).join("")}
-` : ""}
+  if (answers.length) {
+    writeH2("Your questionnaire responses");
+    answers.forEach((x, i) => {
+      writeParagraph(`${i + 1}. ${x.question}`, { size: 10, bold: true, color: [60, 60, 90], gap: 2 });
+      writeParagraph(x.skipped ? "(Skipped)" : `${x.answer ?? ""}${x.custom ? ` — "${x.custom}"` : ""}`, { size: 10, gap: 6 });
+    });
+  }
 
-${a ? `<h2>A note to close</h2><p><em>${escapeHtml(a.conclusion)}</em></p>` : ""}
+  if (a?.conclusion) {
+    writeH2("A note to close");
+    writeParagraph(a.conclusion, { size: 11, color: [60, 60, 90] });
+  }
 
-${r.perspective ? `<h2>Perspective</h2>
-<div class="card"><strong>${escapeHtml(r.perspective.headline)}</strong>
-<p style="font-size:28px; font-weight:700; color:#1e3a8a; margin:8px 0;">${escapeHtml(r.perspective.lessPrivileged?.number || r.perspective.statNumber)}</p>
-<div class="muted">${escapeHtml(r.perspective.lessPrivileged?.label || r.perspective.stat)}</div>
-<p>${escapeHtml(r.perspective.lessPrivileged?.message || r.perspective.simpleMeaning || r.perspective.message)}</p>
-${r.perspective.source ? `<div class="muted">Source: ${escapeHtml(r.perspective.source)}</div>` : ""}
-</div>` : ""}
-
-</body></html>`;
-  const blob = new Blob([html], { type: "text/html;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a2 = document.createElement("a");
-  a2.href = url;
-  a2.download = `myflow-report-${session.name.replace(/\s+/g, "-").toLowerCase()}.html`;
-  document.body.appendChild(a2);
-  a2.click();
-  document.body.removeChild(a2);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  // Also open in a new tab for immediate print-to-PDF
-  const w = window.open("", "_blank");
-  if (w) { w.document.write(html); w.document.close(); }
+  doc.save(`myflow-report-${session.name.replace(/\s+/g, "-").toLowerCase()}.pdf`);
 }
 
 // Removes standalone numbers/percentages from a sentence so the Perspective
