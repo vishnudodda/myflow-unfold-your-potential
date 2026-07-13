@@ -75,7 +75,7 @@
   --paper: oklch(0.985 0.02 95);          /* warm cream */
   --ink: oklch(0.16 0.01 90);             /* near-black ink */
   --stone-ink: oklch(0.24 0.01 90);
-  --amber: oklch(0.86 0.19 95);           /* vivid yellow accent */
+  --amber: oklch(0.72 0.17 82);           /* deep mustard — readable on cream */
 
   --pastel-blue: oklch(0.96 0.09 95);     /* soft butter */
   --pastel-mint: oklch(0.94 0.05 110);    /* lime cream */
@@ -90,7 +90,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: var(--ink);
   --primary: var(--amber);
-  --primary-foreground: oklch(0.16 0.01 90);
+  --primary-foreground: oklch(0.985 0.02 95);
   --secondary: oklch(0.955 0.02 95);
   --secondary-foreground: var(--ink);
   --muted: oklch(0.955 0.02 95);
