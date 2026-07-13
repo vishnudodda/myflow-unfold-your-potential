@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +26,7 @@ function Intro() {
   const [customEducation, setCustomEducation] = useState("");
   const [goal, setGoal] = useState("");
   const [oneLiner, setOneLiner] = useState("");
+  const [step, setStep] = useState(0);
   const [touched, setTouched] = useState(false);
 
   const EDUCATION_OPTIONS = [
@@ -77,9 +78,26 @@ function Intro() {
   const oneLinerValid = oneLiner.trim().length > 0;
   const formValid = nameValid && ageValid && educationValid && skillsValid && goalValid && oneLinerValid;
 
-  function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const steps = useMemo(() => [
+    { key: "name", valid: nameValid, label: "Your name" },
+    { key: "age", valid: ageValid, label: "Your age" },
+    { key: "education", valid: educationValid, label: "Where you are" },
+    { key: "skills", valid: skillsValid, label: "Your skills" },
+    { key: "goal", valid: goalValid, label: "Your goal" },
+    { key: "oneLiner", valid: oneLinerValid, label: "One line about you" },
+  ], [nameValid, ageValid, educationValid, skillsValid, goalValid, oneLinerValid]);
+  const isLast = step === steps.length - 1;
+  const currentValid = steps[step].valid;
+
+  function goNext() {
     setTouched(true);
+    if (!currentValid) return;
+    setTouched(false);
+    if (!isLast) setStep((s) => s + 1);
+    else submit();
+  }
+
+  function submit() {
     if (!formValid) return;
     const finalEducation = education === "other" ? customEducation.trim() || "Other" : education;
     const finalSkills = Array.from(skills);
@@ -102,115 +120,115 @@ function Intro() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-pastel-lilac via-pastel-blue to-pastel-mint text-foreground px-6">
       <div className="w-full max-w-lg py-12">
-        <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
-        <h1 className="mt-8 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
+        <span className="font-display text-xl font-bold tracking-tighter text-primary">MYFLOW</span>
+        <h1 className="mt-6 font-display text-3xl md:text-4xl font-bold tracking-tight text-balance">
           The map to your <span className="font-serif italic font-normal text-primary">authentic</span> future.
         </h1>
-        <p className="mt-4 text-muted-foreground">Tell us a little about you to begin.</p>
 
-        <form onSubmit={onSubmit} className="mt-8 space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Your name <span className="text-destructive">*</span></Label>
+        {/* Progress dots */}
+        <div className="mt-8 flex items-center gap-2">
+          {steps.map((s, i) => (
+            <div
+              key={s.key}
+              className={`h-1.5 flex-1 rounded-full transition-all ${i < step ? "bg-primary" : i === step ? "bg-primary/70" : "bg-white/60"}`}
+            />
+          ))}
+        </div>
+        <p className="mt-3 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+          Question {step + 1} of {steps.length}
+        </p>
+
+        <div key={step} className="mt-8 rounded-3xl bg-white/80 backdrop-blur border border-white/60 shadow-[0_20px_60px_-30px_rgba(80,60,180,0.35)] p-6 md:p-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          {step === 0 && (
+            <div className="space-y-3">
+              <Label htmlFor="name" className="font-display text-xl">What's your name?</Label>
               <Input
                 id="name"
-                required
+                autoFocus
                 value={name}
                 onChange={(e) => setName(e.target.value.replace(/[^A-Za-z\s'-]/g, ""))}
-                placeholder="e.g. Alex"
+                onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
+                placeholder="e.g. Aarav"
+                className="text-lg"
               />
-              {touched && !nameValid && (
-                <p className="text-xs text-destructive">Letters only, please.</p>
-              )}
+              {touched && !nameValid && <p className="text-xs text-destructive">Letters only, please.</p>}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="age">Your age <span className="text-destructive">*</span></Label>
+          )}
+
+          {step === 1 && (
+            <div className="space-y-3">
+              <Label className="font-display text-xl">How old are you, {trimmedName || "friend"}?</Label>
               <Select value={age} onValueChange={setAge}>
-                <SelectTrigger id="age">
-                  <SelectValue placeholder="Pick your age" />
-                </SelectTrigger>
+                <SelectTrigger className="text-lg h-12"><SelectValue placeholder="Pick your age" /></SelectTrigger>
                 <SelectContent className="max-h-64">
-                  {AGE_OPTIONS.map((a) => (
-                    <SelectItem key={a} value={String(a)}>{a}</SelectItem>
-                  ))}
+                  {AGE_OPTIONS.map((a) => (<SelectItem key={a} value={String(a)}>{a}</SelectItem>))}
                 </SelectContent>
               </Select>
               {touched && !ageValid && <p className="text-xs text-destructive">Please pick your age.</p>}
             </div>
-          </div>
+          )}
 
-          <div className="space-y-2">
-            <Label>Where are you right now? <span className="text-destructive">*</span></Label>
-            <Select value={education} onValueChange={setEducation}>
-              <SelectTrigger>
-                <SelectValue placeholder="Pick your current stage" />
-              </SelectTrigger>
-              <SelectContent>
-                {EDUCATION_OPTIONS.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {education === "other" && (
-              <Input
-                value={customEducation}
-                onChange={(e) => setCustomEducation(e.target.value)}
-                placeholder="Describe your current stage, e.g. gap year, freelancer, founder"
-              />
-            )}
-            {touched && !educationValid && (
-              <p className="text-xs text-destructive">Please tell us where you are.</p>
-            )}
-            <p className="text-xs text-muted-foreground">Helps us match real opportunities to your stage.</p>
-          </div>
-
-          <div className="space-y-3">
-            <div>
-              <Label>Skills you already have <span className="text-destructive">*</span></Label>
-              <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones.</p>
+          {step === 2 && (
+            <div className="space-y-3">
+              <Label className="font-display text-xl">Where are you right now?</Label>
+              <Select value={education} onValueChange={setEducation}>
+                <SelectTrigger className="text-lg h-12"><SelectValue placeholder="Pick your current stage" /></SelectTrigger>
+                <SelectContent>
+                  {EDUCATION_OPTIONS.map((o) => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+                </SelectContent>
+              </Select>
+              {education === "other" && (
+                <Input value={customEducation} onChange={(e) => setCustomEducation(e.target.value)} placeholder="Describe your current stage" />
+              )}
+              {touched && !educationValid && <p className="text-xs text-destructive">Please tell us where you are.</p>}
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              {[...SKILL_OPTIONS, "Other"].map((s) => {
-                const on = skills.has(s);
-                return (
-                  <label
-                    key={s}
-                    className={`flex items-center gap-2 rounded-lg border p-2.5 text-sm cursor-pointer transition-colors ${on ? "border-primary bg-primary/5" : "border-border hover:bg-muted"}`}
-                  >
-                    <Checkbox checked={on} onCheckedChange={() => toggleSkill(s)} />
-                    <span>{s}</span>
-                  </label>
-                );
-              })}
+          )}
+
+          {step === 3 && (
+            <div className="space-y-3">
+              <Label className="font-display text-xl">Which skills feel true for you?</Label>
+              <p className="text-xs text-muted-foreground">Pick any — even basic ones.</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[...SKILL_OPTIONS, "Other"].map((s) => {
+                  const on = skills.has(s);
+                  return (
+                    <label key={s} className={`flex items-center gap-2 rounded-lg border p-2.5 text-sm cursor-pointer transition-colors ${on ? "border-primary bg-primary/10" : "border-border hover:bg-muted"}`}>
+                      <Checkbox checked={on} onCheckedChange={() => toggleSkill(s)} />
+                      <span>{s}</span>
+                    </label>
+                  );
+                })}
+              </div>
+              {skills.has("Other") && (
+                <Input value={customSkill} onChange={(e) => setCustomSkill(e.target.value)} placeholder="Type your skill(s)" />
+              )}
+              {touched && !skillsValid && <p className="text-xs text-destructive">Pick at least one skill.</p>}
             </div>
-            {skills.has("Other") && (
-              <Input
-                value={customSkill}
-                onChange={(e) => setCustomSkill(e.target.value)}
-                placeholder="Type your skill(s), e.g. music production, chess"
-              />
-            )}
-            {touched && !skillsValid && (
-              <p className="text-xs text-destructive">Pick at least one skill.</p>
-            )}
-          </div>
+          )}
 
-          <div className="space-y-2">
-            <Label htmlFor="goal">What is your current goal? <span className="text-destructive">*</span></Label>
-            <Input id="goal" value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Get into a great college, start a side project, land my first internship" />
-            {touched && !goalValid && <p className="text-xs text-destructive">Share a goal, big or small.</p>}
-          </div>
+          {step === 4 && (
+            <div className="space-y-3">
+              <Label htmlFor="goal" className="font-display text-xl">What's your current goal?</Label>
+              <Input id="goal" autoFocus value={goal} onChange={(e) => setGoal(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") goNext(); }} placeholder="e.g. Land my first internship" className="text-lg" />
+              {touched && !goalValid && <p className="text-xs text-destructive">Share a goal, big or small.</p>}
+            </div>
+          )}
 
-          <div className="space-y-2">
-            <Label htmlFor="oneliner">Describe yourself in one line <span className="text-destructive">*</span></Label>
-            <Input id="oneliner" value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} placeholder="e.g. A curious builder who loves stories and startups" />
-            {touched && !oneLinerValid && <p className="text-xs text-destructive">A line about you helps us personalise things.</p>}
-          </div>
+          {step === 5 && (
+            <div className="space-y-3">
+              <Label htmlFor="oneliner" className="font-display text-xl">Describe yourself in one line.</Label>
+              <Input id="oneliner" autoFocus value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") goNext(); }} placeholder="e.g. A curious builder who loves stories" className="text-lg" />
+              {touched && !oneLinerValid && <p className="text-xs text-destructive">A line about you helps us personalise things.</p>}
+            </div>
+          )}
 
-          <Button type="submit" className="w-full" size="lg" disabled={!formValid}>Continue</Button>
-        </form>
+          <div className="mt-8 flex items-center justify-between">
+            <Button type="button" variant="ghost" disabled={step === 0} onClick={() => { setTouched(false); setStep((s) => Math.max(0, s - 1)); }}>← Back</Button>
+            <Button type="button" size="lg" onClick={goNext}>{isLast ? "Continue ✧" : "Next →"}</Button>
+          </div>
+        </div>
       </div>
     </main>
   );
