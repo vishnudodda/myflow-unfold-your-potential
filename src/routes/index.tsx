@@ -2,9 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,7 +24,8 @@ function Intro() {
   const [customEducation, setCustomEducation] = useState("");
   const [goal, setGoal] = useState("");
   const [oneLiner, setOneLiner] = useState("");
-  const [touched, setTouched] = useState(false);
+  const [step, setStep] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const EDUCATION_OPTIONS = [
     { value: "in-school", label: "Currently in school" },
@@ -77,9 +76,31 @@ function Intro() {
   const oneLinerValid = oneLiner.trim().length > 0;
   const formValid = nameValid && ageValid && educationValid && skillsValid && goalValid && oneLinerValid;
 
-  function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setTouched(true);
+  const stepsMeta = [
+    { key: "name", label: "First, what's your name?", helper: "We'll use this to make things personal.", valid: nameValid, errorMsg: "Letters only, please." },
+    { key: "age", label: "How old are you?", helper: "Pick the number that fits you today.", valid: ageValid, errorMsg: "Please pick your age." },
+    { key: "education", label: "Where are you right now in life?", helper: "Helps us match real opportunities to your stage.", valid: educationValid, errorMsg: "Please tell us where you are." },
+    { key: "skills", label: "Which skills already feel true for you?", helper: "Pick any that fit — even the basic ones count.", valid: skillsValid, errorMsg: "Pick at least one skill." },
+    { key: "goal", label: "What's your current goal?", helper: "Big or small — just say what's on your mind.", valid: goalValid, errorMsg: "Share a goal, big or small." },
+    { key: "oneLiner", label: "Describe yourself in one line.", helper: "One honest line about you helps us personalise things.", valid: oneLinerValid, errorMsg: "Give us one line about you." },
+  ] as const;
+
+  const total = stepsMeta.length;
+  const current = stepsMeta[step];
+
+  function goNext() {
+    if (!current.valid) { setError(current.errorMsg); return; }
+    setError(null);
+    if (step < total - 1) setStep(step + 1);
+    else submit();
+  }
+
+  function goBack() {
+    setError(null);
+    if (step > 0) setStep(step - 1);
+  }
+
+  function submit() {
     if (!formValid) return;
     const finalEducation = education === "other" ? customEducation.trim() || "Other" : education;
     const finalSkills = Array.from(skills);
@@ -102,115 +123,137 @@ function Intro() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground px-6">
-      <div className="w-full max-w-lg py-12">
-        <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
-        <h1 className="mt-8 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-          The map to your <span className="font-serif italic font-normal text-primary">authentic</span> future.
-        </h1>
-        <p className="mt-4 text-muted-foreground">Tell us a little about you to begin.</p>
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden bg-gradient-to-br from-pastel-lemon via-pastel-peach to-pastel-lilac">
+      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-pastel-mint blur-3xl opacity-70" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-pastel-blue blur-3xl opacity-70" />
 
-        <form onSubmit={onSubmit} className="mt-8 space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Your name <span className="text-destructive">*</span></Label>
+      <div className="relative w-full max-w-xl py-12">
+        <div className="flex items-center justify-between">
+          <span className="font-display text-xl font-bold tracking-tighter">MYFLOW ✦</span>
+          <span className="text-[11px] font-mono uppercase tracking-widest text-foreground/60">Step {step + 1} / {total}</span>
+        </div>
+
+        <div className="mt-4 h-1.5 w-full rounded-full bg-white/60 overflow-hidden">
+          <div className="h-full bg-primary transition-all duration-500" style={{ width: `${((step + (current.valid ? 1 : 0)) / total) * 100}%` }} />
+        </div>
+
+        <div key={step} className="mt-10 rounded-3xl bg-white/80 backdrop-blur border border-white shadow-[0_20px_60px_-25px_rgba(30,58,138,0.25)] p-6 md:p-8 animate-in fade-in slide-in-from-bottom-2 duration-400">
+          <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-balance">
+            {current.label}
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground">{current.helper}</p>
+
+          <div className="mt-6">
+            {current.key === "name" && (
               <Input
-                id="name"
-                required
+                autoFocus
                 value={name}
-                onChange={(e) => setName(e.target.value.replace(/[^A-Za-z\s'-]/g, ""))}
+                onChange={(e) => { setError(null); setName(e.target.value.replace(/[^A-Za-z\s'-]/g, "")); }}
+                onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
                 placeholder="e.g. Alex"
+                className="h-12 text-lg bg-white"
               />
-              {touched && !nameValid && (
-                <p className="text-xs text-destructive">Letters only, please.</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="age">Your age <span className="text-destructive">*</span></Label>
-              <Select value={age} onValueChange={setAge}>
-                <SelectTrigger id="age">
-                  <SelectValue placeholder="Pick your age" />
-                </SelectTrigger>
-                <SelectContent className="max-h-64">
-                  {AGE_OPTIONS.map((a) => (
-                    <SelectItem key={a} value={String(a)}>{a}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {touched && !ageValid && <p className="text-xs text-destructive">Please pick your age.</p>}
-            </div>
-          </div>
+            )}
 
-          <div className="space-y-2">
-            <Label>Where are you right now? <span className="text-destructive">*</span></Label>
-            <Select value={education} onValueChange={setEducation}>
-              <SelectTrigger>
-                <SelectValue placeholder="Pick your current stage" />
-              </SelectTrigger>
-              <SelectContent>
-                {EDUCATION_OPTIONS.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {education === "other" && (
+            {current.key === "age" && (
+              <div className="grid grid-cols-6 gap-2">
+                {AGE_OPTIONS.map((a) => {
+                  const on = age === String(a);
+                  return (
+                    <button
+                      key={a}
+                      type="button"
+                      onClick={() => { setError(null); setAge(String(a)); }}
+                      className={`h-12 rounded-xl border font-display font-semibold transition-all ${on ? "bg-primary text-primary-foreground border-primary scale-[1.05] shadow" : "bg-white hover:bg-pastel-lemon border-border"}`}
+                    >{a}</button>
+                  );
+                })}
+              </div>
+            )}
+
+            {current.key === "education" && (
+              <div className="space-y-2">
+                {EDUCATION_OPTIONS.map((o) => {
+                  const on = education === o.value;
+                  return (
+                    <button
+                      key={o.value}
+                      type="button"
+                      onClick={() => { setError(null); setEducation(o.value); }}
+                      className={`w-full text-left p-4 rounded-xl border transition-all ${on ? "bg-primary/20 border-primary" : "bg-white hover:bg-pastel-blue border-border"}`}
+                    >{o.label}</button>
+                  );
+                })}
+                {education === "other" && (
+                  <Input
+                    value={customEducation}
+                    onChange={(e) => setCustomEducation(e.target.value)}
+                    placeholder="Describe your current stage, e.g. gap year, freelancer"
+                    className="bg-white"
+                  />
+                )}
+              </div>
+            )}
+
+            {current.key === "skills" && (
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  {[...SKILL_OPTIONS, "Other"].map((s) => {
+                    const on = skills.has(s);
+                    return (
+                      <label
+                        key={s}
+                        className={`flex items-center gap-2 rounded-xl border p-3 text-sm cursor-pointer transition-all ${on ? "border-primary bg-primary/15" : "border-border bg-white hover:bg-pastel-mint/60"}`}
+                      >
+                        <Checkbox checked={on} onCheckedChange={() => { setError(null); toggleSkill(s); }} />
+                        <span>{s}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                {skills.has("Other") && (
+                  <Input
+                    value={customSkill}
+                    onChange={(e) => setCustomSkill(e.target.value)}
+                    placeholder="Type your skill(s), e.g. music production, chess"
+                    className="bg-white"
+                  />
+                )}
+              </div>
+            )}
+
+            {current.key === "goal" && (
               <Input
-                value={customEducation}
-                onChange={(e) => setCustomEducation(e.target.value)}
-                placeholder="Describe your current stage, e.g. gap year, freelancer, founder"
+                autoFocus
+                value={goal}
+                onChange={(e) => { setError(null); setGoal(e.target.value); }}
+                onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
+                placeholder="e.g. Get into a great college, land my first internship"
+                className="h-12 text-base bg-white"
               />
             )}
-            {touched && !educationValid && (
-              <p className="text-xs text-destructive">Please tell us where you are.</p>
-            )}
-            <p className="text-xs text-muted-foreground">Helps us match real opportunities to your stage.</p>
-          </div>
 
-          <div className="space-y-3">
-            <div>
-              <Label>Skills you already have <span className="text-destructive">*</span></Label>
-              <p className="text-xs text-muted-foreground mt-1">Pick any that feel true — even basic ones.</p>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {[...SKILL_OPTIONS, "Other"].map((s) => {
-                const on = skills.has(s);
-                return (
-                  <label
-                    key={s}
-                    className={`flex items-center gap-2 rounded-lg border p-2.5 text-sm cursor-pointer transition-colors ${on ? "border-primary bg-primary/5" : "border-border hover:bg-muted"}`}
-                  >
-                    <Checkbox checked={on} onCheckedChange={() => toggleSkill(s)} />
-                    <span>{s}</span>
-                  </label>
-                );
-              })}
-            </div>
-            {skills.has("Other") && (
+            {current.key === "oneLiner" && (
               <Input
-                value={customSkill}
-                onChange={(e) => setCustomSkill(e.target.value)}
-                placeholder="Type your skill(s), e.g. music production, chess"
+                autoFocus
+                value={oneLiner}
+                onChange={(e) => { setError(null); setOneLiner(e.target.value); }}
+                onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
+                placeholder="e.g. A curious builder who loves stories and startups"
+                className="h-12 text-base bg-white"
               />
             )}
-            {touched && !skillsValid && (
-              <p className="text-xs text-destructive">Pick at least one skill.</p>
-            )}
+
+            {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="goal">What is your current goal? <span className="text-destructive">*</span></Label>
-            <Input id="goal" value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Get into a great college, start a side project, land my first internship" />
-            {touched && !goalValid && <p className="text-xs text-destructive">Share a goal, big or small.</p>}
+          <div className="mt-8 flex items-center justify-between">
+            <Button variant="ghost" disabled={step === 0} onClick={goBack}>← Back</Button>
+            <Button size="lg" className="rounded-full px-6" onClick={goNext}>
+              {step === total - 1 ? "Let's go ✦" : "Next →"}
+            </Button>
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="oneliner">Describe yourself in one line <span className="text-destructive">*</span></Label>
-            <Input id="oneliner" value={oneLiner} onChange={(e) => setOneLiner(e.target.value)} placeholder="e.g. A curious builder who loves stories and startups" />
-            {touched && !oneLinerValid && <p className="text-xs text-destructive">A line about you helps us personalise things.</p>}
-          </div>
-
-          <Button type="submit" className="w-full" size="lg" disabled={!formValid}>Continue</Button>
-        </form>
+        </div>
       </div>
     </main>
   );
