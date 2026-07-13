@@ -215,11 +215,11 @@ function Dashboard() {
 }
 
 const TONE_BG: Record<string, string> = {
-  blue: "bg-pastel-blue",
-  mint: "bg-pastel-mint",
-  peach: "bg-pastel-peach",
-  lilac: "bg-pastel-lilac",
-  lemon: "bg-pastel-lemon",
+  blue: "bg-card",
+  mint: "bg-card",
+  peach: "bg-card",
+  lilac: "bg-card",
+  lemon: "bg-card",
 };
 
 const SUMMARY_SECTIONS: Array<{ label: string; emoji: string; className: string }> = [
