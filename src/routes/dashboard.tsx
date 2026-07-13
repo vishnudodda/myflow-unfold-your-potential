@@ -40,7 +40,10 @@ function Dashboard() {
   const r = session.result;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-pastel-blue via-background to-pastel-lilac text-foreground px-6 py-10">
+    <main className="min-h-screen bg-background text-foreground px-6 py-10 relative overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+      <div aria-hidden className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-amber blur-3xl opacity-20" />
+      <div className="relative">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between">
           <Link to="/" className="font-display text-xl font-bold tracking-tighter">MYFLOW</Link>
@@ -58,7 +61,7 @@ function Dashboard() {
         </div>
 
         <header className="mt-10">
-          <span className="inline-block text-[11px] font-mono uppercase tracking-widest bg-white/60 backdrop-blur px-3 py-1 rounded-full border border-border">
+          <span className="inline-block text-[11px] font-mono uppercase tracking-widest bg-amber/10 text-amber backdrop-blur px-3 py-1 rounded-full border border-amber/30">
             Your snapshot ✦
           </span>
           <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
@@ -71,7 +74,7 @@ function Dashboard() {
           <Panel title="Role Models" tone="lilac" emoji="✨">
             <div className="space-y-4">
               {(r.roleModels ?? []).map((rm, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3 flex gap-3 items-start">
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3 flex gap-3 items-start">
                   {rm.photoUrl && (
                     <img
                       src={rm.photoUrl}
@@ -96,10 +99,10 @@ function Dashboard() {
           <Panel title="Opportunities" tone="mint" emoji="🌱">
             <div className="space-y-3">
               {(r.opportunities ?? []).map((o, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3">
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3">
                   <div className="flex items-center justify-between gap-2">
                     <div className="font-semibold text-sm">{o.title}</div>
-                    <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/15 text-primary" : o.confidence === "Medium" ? "bg-pastel-peach text-foreground" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
+                    <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/20 text-primary border border-primary/40" : o.confidence === "Medium" ? "bg-amber/10 text-amber border border-amber/30" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">{o.org} · {o.stipend}</div>
                   {o.url && (
@@ -137,15 +140,6 @@ function Dashboard() {
                 <p className="text-base italic text-foreground/90 leading-relaxed">{r.summary.motivation}</p>
               </div>
             )}
-            {r.analysis?.careerInsights && (
-              <div className="mt-4 rounded-xl bg-white/60 border border-border p-5">
-                <div className="text-[10px] font-mono uppercase tracking-widest text-foreground/60 mb-2">The bigger picture</div>
-                <p className="text-sm leading-relaxed text-foreground/85">{r.analysis.careerInsights}</p>
-              </div>
-            )}
-            {r.analysis?.conclusion && (
-              <p className="mt-4 text-sm leading-relaxed text-foreground/80 px-1">{r.analysis.conclusion}</p>
-            )}
           </Panel>
         </div>
 
@@ -154,7 +148,7 @@ function Dashboard() {
           <Panel title="Roadmap" tone="peach" emoji="🛤️">
             <ol className="space-y-3">
               {(r.roadmap ?? []).map((m, i) => (
-                <li key={i} className="rounded-xl bg-white/70 p-3">
+                <li key={i} className="rounded-xl bg-card/80 border border-border p-3">
                   <div className="text-[10px] font-mono uppercase tracking-widest text-primary">{m.horizon}</div>
                   <div className="mt-0.5 text-sm">{m.action}</div>
                 </li>
@@ -165,7 +159,7 @@ function Dashboard() {
           <Panel title="Podcasts" tone="lemon" emoji="🎧">
             <div className="space-y-3">
               {(r.podcasts ?? []).map((p, i) => (
-                <div key={i} className="rounded-xl bg-white/70 p-3">
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="font-semibold text-sm">{p.title}</div>
                     {p.url && (
@@ -183,7 +177,7 @@ function Dashboard() {
         {/* Perspective — motivational stats */}
         {r.perspective && (
           <div className="mt-8">
-            <div className="rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-pastel-lilac to-pastel-blue p-6 md:p-8 shadow-[0_20px_60px_-25px_rgba(30,58,138,0.35)]">
+            <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/15 via-card to-card p-6 md:p-8 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.35)]">
               <div className="text-[11px] font-mono uppercase tracking-widest text-primary">Perspective ✧</div>
               <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
                 You're already ahead of millions — this is your head start ✦
@@ -215,6 +209,7 @@ function Dashboard() {
           </div>
         )}
       </div>
+      </div>
     </main>
   );
 }
@@ -228,17 +223,17 @@ const TONE_BG: Record<string, string> = {
 };
 
 const SUMMARY_SECTIONS: Array<{ label: string; emoji: string; className: string }> = [
-  { label: "Existing capabilities", emoji: "🌟", className: "bg-pastel-mint/70 border-pastel-mint" },
-  { label: "Improvements to unlock", emoji: "🚀", className: "bg-pastel-peach/70 border-pastel-peach" },
-  { label: "Motivation for you", emoji: "💛", className: "bg-pastel-lemon/70 border-pastel-lemon" },
+  { label: "Existing capabilities", emoji: "🌟", className: "bg-card border-amber/30" },
+  { label: "Improvements to unlock", emoji: "🚀", className: "bg-card border-amber/30" },
+  { label: "Motivation for you", emoji: "💛", className: "bg-card border-amber/30" },
 ];
 
 function Panel({ title, tone, emoji, children }: { title: string; tone: keyof typeof TONE_BG; emoji?: string; children: React.ReactNode }) {
   return (
-    <section className={`${TONE_BG[tone]} rounded-3xl border border-border p-5 shadow-[0_10px_40px_-20px_rgba(30,58,138,0.25)] transition-transform hover:-translate-y-0.5`}>
+    <section className={`${TONE_BG[tone]} rounded-3xl border border-amber/20 p-5 shadow-[0_10px_40px_-20px_rgba(255,209,0,0.25)] transition-transform hover:-translate-y-0.5`}>
       <div className="flex items-center gap-2">
         <span className="text-lg leading-none">{emoji}</span>
-        <div className="text-xs font-mono uppercase tracking-widest text-foreground/70">{title}</div>
+        <div className="text-xs font-mono uppercase tracking-widest text-amber">{title}</div>
       </div>
       <div className="mt-4">{children}</div>
     </section>
