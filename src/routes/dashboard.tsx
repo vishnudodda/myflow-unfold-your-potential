@@ -177,7 +177,11 @@ function Dashboard() {
         {/* Perspective — motivational stats */}
         {r.perspective && (
           <div className="mt-8">
-            <PerspectiveFunnel source={r.perspective.source} />
+            <PerspectiveFunnel
+              source={r.perspective.source}
+              userStepValue={r.perspective.lessPrivileged?.number || r.perspective.statNumber}
+              userStepLabel={r.perspective.lessPrivileged?.label || r.perspective.stat}
+            />
           </div>
         )}
       </div>
