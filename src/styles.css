@@ -193,6 +193,48 @@
 @utility animate-aurora-b { animation: auroraB 18s ease-in-out infinite; }
 @utility animate-aurora-c { animation: auroraC 22s ease-in-out infinite; }
 
+/* Gold flow background */
+@keyframes goldFloat {
+  0%   { transform: translate3d(0,0,0); opacity: 0; }
+  15%  { opacity: var(--tw-opacity, 0.7); }
+  50%  { transform: translate3d(20px,-40px,0); }
+  85%  { opacity: var(--tw-opacity, 0.7); }
+  100% { transform: translate3d(-10px,-90px,0); opacity: 0; }
+}
+@keyframes goldDriftA {
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(80px,60px,0) scale(1.1); }
+}
+@keyframes goldDriftB {
+  0%,100% { transform: translate3d(0,0,0) scale(1.05); }
+  50% { transform: translate3d(-90px,-40px,0) scale(0.95); }
+}
+@keyframes goldDriftC {
+  0%,100% { transform: translate3d(0,0,0) scale(0.95); }
+  50% { transform: translate3d(40px,-70px,0) scale(1.15); }
+}
+@keyframes goldStreamFlow {
+  0%   { stroke-dashoffset: 1200; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { stroke-dashoffset: -1200; opacity: 0; }
+}
+
+@utility animate-gold-float { animation: goldFloat linear infinite; }
+@utility animate-gold-drift-a { animation: goldDriftA 16s ease-in-out infinite; }
+@utility animate-gold-drift-b { animation: goldDriftB 20s ease-in-out infinite; }
+@utility animate-gold-drift-c { animation: goldDriftC 24s ease-in-out infinite; }
+
+.gold-stream {
+  stroke-dasharray: 260 1400;
+  animation: goldStreamFlow linear infinite;
+}
+.gold-stream-1 { animation-duration: 11s; animation-delay: 0s; }
+.gold-stream-2 { animation-duration: 14s; animation-delay: -3s; }
+.gold-stream-3 { animation-duration: 17s; animation-delay: -6s; }
+.gold-stream-4 { animation-duration: 13s; animation-delay: -9s; }
+.gold-stream-5 { animation-duration: 19s; animation-delay: -2s; }
+
 .perspective-aurora {
   background:
     radial-gradient(1200px 400px at 20% 0%, rgba(255,209,0,0.10), transparent 60%),
