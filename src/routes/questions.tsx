@@ -195,7 +195,7 @@ function Questions() {
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground px-6 py-12">
+    <main className="min-h-screen text-foreground px-6 py-12">
       {submitting && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pastel-lilac via-background to-pastel-blue backdrop-blur-sm">
           <div className="max-w-md w-full mx-auto px-6 text-center">

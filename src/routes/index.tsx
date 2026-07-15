@@ -3,8 +3,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { GoldFlowBackground } from "@/components/gold-flow-background";
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -124,9 +122,7 @@ function Intro() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden bg-background text-foreground">
-      <GoldFlowBackground />
-
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden text-foreground">
       <div className="relative w-full max-w-xl py-12">
         <div className="flex items-center justify-between">
           <span className="font-display text-xl font-bold tracking-tighter"><span className="text-amber">MYFLOW</span> ✦</span>

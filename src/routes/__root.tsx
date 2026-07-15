@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
+import { GoldFlowBackground } from "@/components/gold-flow-background";
 
 function NotFoundComponent() {
   return (
@@ -138,6 +139,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <div className="fixed inset-0 -z-10 bg-background">
+        <GoldFlowBackground />
+      </div>
       <Outlet />
       <Toaster />
     </QueryClientProvider>

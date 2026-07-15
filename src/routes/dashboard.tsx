@@ -40,7 +40,7 @@ function Dashboard() {
   const r = session.result;
 
   return (
-    <main className="min-h-screen bg-background text-foreground px-6 py-10 relative overflow-hidden">
+    <main className="min-h-screen text-foreground px-6 py-10 relative overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
       <div aria-hidden className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-amber blur-3xl opacity-20" />
       <div className="relative">
