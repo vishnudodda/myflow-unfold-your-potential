@@ -176,3 +176,26 @@
 @utility animate-reveal {
   animation: revealUp 0.8s cubic-bezier(0.19, 1, 0.22, 1) both;
 }
+
+@keyframes auroraA {
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(60px,40px,0) scale(1.15); }
+}
+@keyframes auroraB {
+  0%,100% { transform: translate3d(0,0,0) scale(1.05); }
+  50% { transform: translate3d(-70px,-30px,0) scale(0.9); }
+}
+@keyframes auroraC {
+  0%,100% { transform: translate3d(0,0,0) scale(0.95); }
+  50% { transform: translate3d(30px,-50px,0) scale(1.2); }
+}
+@utility animate-aurora-a { animation: auroraA 14s ease-in-out infinite; }
+@utility animate-aurora-b { animation: auroraB 18s ease-in-out infinite; }
+@utility animate-aurora-c { animation: auroraC 22s ease-in-out infinite; }
+
+.perspective-aurora {
+  background:
+    radial-gradient(1200px 400px at 20% 0%, rgba(255,209,0,0.10), transparent 60%),
+    radial-gradient(800px 500px at 100% 100%, rgba(255,209,0,0.08), transparent 60%),
+    linear-gradient(160deg, oklch(0.16 0.01 90) 0%, oklch(0.13 0.01 90) 100%);
+}
