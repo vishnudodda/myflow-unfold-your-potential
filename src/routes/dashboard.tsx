@@ -190,11 +190,22 @@ function Dashboard() {
   );
 }
 
-function PerspectiveFunnel({ source }: { source?: string }) {
+function PerspectiveFunnel({
+  source,
+  userStepValue,
+  userStepLabel,
+}: {
+  source?: string;
+  userStepValue?: string;
+  userStepLabel?: string;
+}) {
   const steps = [
     { value: "1.4 Billion", label: "Indians" },
     { value: "320 Million", label: "Young People" },
-    { value: "32 Million", label: "College Students" },
+    {
+      value: userStepValue?.trim() || "32 Million",
+      label: userStepLabel?.trim() || "College Students",
+    },
     { value: "You", label: "", isYou: true },
   ];
   const [index, setIndex] = useState(0);
@@ -212,8 +223,15 @@ function PerspectiveFunnel({ source }: { source?: string }) {
   const restart = () => { setDone(false); setIndex(0); };
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card to-card p-6 md:p-10 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.4)]">
-      <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/20 blur-3xl pointer-events-none" />
+    <div className="perspective-aurora relative overflow-hidden rounded-3xl border border-primary/30 p-6 md:p-10 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.4)]">
+      {/* Animated aurora background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-primary/25 blur-3xl animate-aurora-a" />
+        <div className="absolute top-1/3 -right-24 h-[380px] w-[380px] rounded-full bg-amber/20 blur-3xl animate-aurora-b" />
+        <div className="absolute -bottom-32 left-1/3 h-[360px] w-[360px] rounded-full bg-primary/15 blur-3xl animate-aurora-c" />
+        <div className="absolute inset-0 opacity-[0.18] mix-blend-screen [background-image:radial-gradient(rgba(255,209,0,0.35)_1px,transparent_1px)] [background-size:22px_22px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/70" />
+      </div>
       <div className="text-[11px] font-mono uppercase tracking-widest text-primary">Perspective ✧</div>
       <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
         Zoom in on where you stand ✦
@@ -268,16 +286,9 @@ function PerspectiveFunnel({ source }: { source?: string }) {
               Source · {source}
             </div>
           )}
-          <div className="flex gap-3">
-            <Button onClick={restart} variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10">
-              Replay
-            </Button>
-            <a href="#top">
-              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Continue Your Journey →
-              </Button>
-            </a>
-          </div>
+          <Button onClick={restart} variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10">
+            Replay
+          </Button>
         </div>
       )}
     </div>
