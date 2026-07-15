@@ -177,11 +177,7 @@ function Dashboard() {
         {/* Perspective — motivational stats */}
         {r.perspective && (
           <div className="mt-8">
-            <PerspectiveFunnel
-              source={r.perspective.source}
-              dynamicValue={formatShort(r.perspective.lessPrivileged?.number || r.perspective.statNumber)}
-              dynamicLabel={r.perspective.lessPrivileged?.label || r.perspective.stat || "College Students"}
-            />
+            <PerspectiveFunnel source={r.perspective.source} />
           </div>
         )}
       </div>
@@ -190,19 +186,11 @@ function Dashboard() {
   );
 }
 
-function PerspectiveFunnel({
-  source,
-  dynamicValue,
-  dynamicLabel,
-}: {
-  source?: string;
-  dynamicValue: string;
-  dynamicLabel: string;
-}) {
+function PerspectiveFunnel({ source }: { source?: string }) {
   const steps = [
     { value: "1.4 Billion", label: "Indians" },
     { value: "320 Million", label: "Young People" },
-    { value: dynamicValue, label: dynamicLabel },
+    { value: "32 Million", label: "College Students" },
     { value: "You", label: "", isYou: true },
   ];
   const [index, setIndex] = useState(0);
@@ -276,9 +264,16 @@ function PerspectiveFunnel({
               Source · {source}
             </div>
           )}
-          <Button onClick={restart} variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10">
-            Replay
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={restart} variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10">
+              Replay
+            </Button>
+            <a href="#top">
+              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                Continue Your Journey →
+              </Button>
+            </a>
+          </div>
         </div>
       )}
     </div>
