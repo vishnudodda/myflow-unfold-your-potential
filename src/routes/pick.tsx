@@ -42,7 +42,7 @@ function Pick() {
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground px-6 py-12">
+    <main className="min-h-screen text-foreground px-6 py-12">
       <div className="mx-auto max-w-3xl">
         <span className="font-display text-xl font-bold tracking-tighter">MYFLOW</span>
         <h1 className="mt-8 font-display text-3xl md:text-4xl font-bold tracking-tight text-balance">
