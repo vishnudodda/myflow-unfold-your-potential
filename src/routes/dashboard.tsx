@@ -177,40 +177,106 @@ function Dashboard() {
         {/* Perspective — motivational stats */}
         {r.perspective && (
           <div className="mt-8">
-            <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/15 via-card to-card p-6 md:p-8 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.35)]">
-              <div className="text-[11px] font-mono uppercase tracking-widest text-primary">Perspective ✧</div>
-              <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
-                You're already ahead of millions — this is your head start ✦
-              </h3>
-              <div className="mt-8 flex flex-col items-center text-center gap-5">
-                <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-b from-ink/90 to-ink px-10 py-8 md:px-16 md:py-10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)]">
-                  <div className="font-mono text-6xl md:text-7xl font-bold text-paper leading-none tracking-tight">
-                    <AnimatedCounter value={formatShort(r.perspective.lessPrivileged?.number || r.perspective.statNumber)} duration={2600} />
-                  </div>
-                  <div className="absolute inset-x-0 top-1/2 h-px bg-white/10" />
-                </div>
-                <div className="text-xs md:text-sm font-mono uppercase tracking-widest text-primary max-w-xl">
-                  {r.perspective.lessPrivileged ? "young people you're already ahead of — your head start ✦" : r.perspective.stat}
-                </div>
-                <p className="text-sm md:text-base text-foreground/85 leading-relaxed max-w-2xl">
-                  {stripNumbers(
-                    r.perspective.lessPrivileged?.message ||
-                      r.perspective.simpleMeaning ||
-                      r.perspective.message
-                  )}
-                </p>
-                {r.perspective.source && (
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                    Source · {r.perspective.source}
-                  </div>
-                )}
-              </div>
-            </div>
+            <PerspectiveFunnel source={r.perspective.source} />
           </div>
         )}
       </div>
       </div>
     </main>
+  );
+}
+
+function PerspectiveFunnel({ source }: { source?: string }) {
+  const steps = [
+    { value: "1.4 Billion", label: "Indians" },
+    { value: "320 Million", label: "Young People" },
+    { value: "32 Million", label: "College Students" },
+    { value: "You", label: "", isYou: true },
+  ];
+  const [index, setIndex] = useState(0);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (index >= steps.length - 1) {
+      const t = setTimeout(() => setDone(true), 600);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => setIndex((i) => i + 1), 1400);
+    return () => clearTimeout(t);
+  }, [index]);
+
+  const restart = () => { setDone(false); setIndex(0); };
+
+  return (
+    <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card to-card p-6 md:p-10 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.4)]">
+      <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/20 blur-3xl pointer-events-none" />
+      <div className="text-[11px] font-mono uppercase tracking-widest text-primary">Perspective ✧</div>
+      <h3 className="mt-2 font-display text-2xl md:text-3xl font-bold tracking-tight text-balance">
+        Zoom in on where you stand ✦
+      </h3>
+
+      <div className="mt-10 flex flex-col items-center gap-3 min-h-[280px] justify-center">
+        {steps.slice(0, index + 1).map((s, i) => {
+          const isCurrent = i === index;
+          const isYou = s.isYou;
+          return (
+            <div key={i} className="flex flex-col items-center gap-2 w-full">
+              <div
+                key={`step-${i}`}
+                className={`text-center transition-all duration-700 ${
+                  isCurrent ? "animate-scale-in" : "opacity-40 scale-90"
+                }`}
+                style={isYou && isCurrent ? {
+                  textShadow: "0 0 40px var(--amber), 0 0 80px rgba(255,209,0,0.4)",
+                } : undefined}
+              >
+                <div
+                  className={`font-display font-bold tracking-tight leading-none ${
+                    isYou
+                      ? "text-6xl md:text-8xl text-primary"
+                      : "text-3xl md:text-5xl text-foreground"
+                  }`}
+                >
+                  {s.value}
+                </div>
+                {s.label && (
+                  <div className="mt-2 text-xs md:text-sm font-mono uppercase tracking-widest text-muted-foreground">
+                    {s.label}
+                  </div>
+                )}
+              </div>
+              {i < index && (
+                <div className="text-primary/60 text-2xl animate-fade-in">↓</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {done && (
+        <div className="mt-8 flex flex-col items-center text-center gap-5 animate-fade-in">
+          <p className="text-base md:text-lg text-foreground/90 leading-relaxed max-w-2xl text-balance">
+            You're among the few who have the opportunity to pursue higher education.
+            Your future won't be defined by getting into college, but by what you choose to build from here.
+          </p>
+          {source && (
+            <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+              Source · {source}
+            </div>
+          )}
+          <div className="flex gap-3">
+            <Button onClick={restart} variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10">
+              Replay
+            </Button>
+            <a href="#top">
+              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                Continue Your Journey →
+              </Button>
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
