@@ -124,9 +124,7 @@ function Intro() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden bg-background text-foreground">
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{ backgroundImage: "linear-gradient(var(--amber) 1px, transparent 1px), linear-gradient(90deg, var(--amber) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
-      <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-amber blur-3xl opacity-25" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-amber blur-3xl opacity-20" />
+      <GoldFlowBackground />
 
       <div className="relative w-full max-w-xl py-12">
         <div className="flex items-center justify-between">
