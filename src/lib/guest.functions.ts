@@ -148,6 +148,7 @@ export const analyzeGuest = createServerFn({ method: "POST" })
     const userMsg = [
       `Name: ${data.name}`,
       `Age: ${data.age}`,
+      `Age band: ${ageBand(data.age)} — role models MUST come from this exact band, not older icons.`,
       data.education ? `Current stage: ${data.education}` : `Current stage: (not provided)`,
       `Existing skills: ${(data.skills && data.skills.length) ? data.skills.join(", ") : "(none declared)"}`,
       data.customSkill ? `Custom skills (typed): ${data.customSkill}` : `Custom skills: (none)`,
@@ -266,4 +267,11 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
 function avatarFor(name: string): string {
   const n = encodeURIComponent(name);
   return `https://ui-avatars.com/api/?name=${n}&background=e0e7ff&color=1e3a8a&size=256&bold=true`;
+}
+
+function ageBand(age: number): string {
+  if (age <= 14) return "10-14 (teen prodigy band)";
+  if (age <= 18) return "15-18 (high-school breakout band)";
+  if (age <= 22) return "19-22 (college-era emerging talent band)";
+  return "23-27 (early-career founder/professional band)";
 }
