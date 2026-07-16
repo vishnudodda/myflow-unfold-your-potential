@@ -203,11 +203,19 @@ function PerspectiveFunnel({
   userStepValue,
   userStepLabel,
   belowYou,
+  name,
+  skills,
+  interests,
+  strengths,
 }: {
   source?: string;
   userStepValue?: string;
   userStepLabel?: string;
   belowYou?: Array<{ number: string; label: string; detail: string; category: "uneducated" | "unemployed" | "unskilled" }>;
+  name?: string;
+  skills?: string[];
+  interests?: string[];
+  strengths?: string[];
 }) {
   const steps = [
     { value: "1.4 Billion", label: "Indians" },
