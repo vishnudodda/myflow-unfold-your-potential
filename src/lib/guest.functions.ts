@@ -39,7 +39,7 @@ export type DashboardResult = {
   roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
-  podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
+  podcasts: Array<{ title: string; host: string; pitch: string; url?: string; thumbnailUrl?: string }>;
   analysis?: {
     personality: string;
     strengths: string[];
@@ -60,6 +60,7 @@ export type DashboardResult = {
     simpleMeaning: string;
     lessPrivileged: { number: string; label: string; message: string };
     facts: Array<{ number: string; label: string; detail: string }>;
+    belowYou?: Array<{ number: string; label: string; detail: string; category: "uneducated" | "unemployed" | "unskilled" }>;
   };
 };
 
@@ -89,7 +90,7 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
   "roleModels": [ { "name": string, "why": string } ] (exactly 3),
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
   "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
-  "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string } ] (exactly 3),
+  "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string, "thumbnailUrl": string } ] (exactly 3),
   "analysis": {
     "personality": string (2-3 sentences describing personality patterns),
     "strengths": string[] (3-5 concrete strengths grounded in the answers),
@@ -109,7 +110,8 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
     "message": string,
     "simpleMeaning": string,
     "lessPrivileged": { "number": string, "label": string, "message": string },
-    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
+    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3),
+    "belowYou": [ { "number": string, "label": string, "detail": string, "category": "uneducated"|"unemployed"|"unskilled" } ] (exactly 3, one per category, in that order)
   }
 }
 Ground every field in the user's ACTUAL answers, goal, self-description, custom skills, and any free-text "Other" responses. When a question is marked SKIPPED, treat it as a signal (they weren't sure or it didn't apply) — never fabricate an answer for it. Adapt intelligently to whatever they DID share, however sparse. No generic filler. No disclaimers.
@@ -126,7 +128,9 @@ Rules:
   • Age 19-22: emerging Indian entrepreneurs, athletes, creators whose breakthrough came in college years (e.g. Neeraj Chopra, PV Sindhu, Ritesh Agarwal, Prajakta Koli).
   • Age 23-27: early-career Indian founders and professionals (e.g. Kunal Shah, Nithin Kamath, Aman Gupta, Falguni Nayar, Byju Raveendran, Bhavish Aggarwal) whose trajectory maps to the user's goal.
   Vary by skills — a coder gets different names than a writer, athlete, or designer. Never invent a person; if unsure, pick a widely-known Indian figure whose name is easy to Google-verify.
+  AGE-EXACT PRIORITY: at least 2 of the 3 role models MUST have had their breakthrough within ±3 years of the user's current age, so the user sees "someone my age already did this". The 3rd may be slightly older to show trajectory. Never pick a role model whose famous work happened more than 10 years past the user's age.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
+- podcasts.thumbnailUrl: a real, direct https image URL of the show's cover art (Spotify i.scdn.co CDN, Apple Podcasts is1-ssl.mzstatic.com CDN, or the show's official site). Square art preferred. If you cannot recall a real cover URL, return an empty string "" — the app will render a fallback tile. NEVER invent a URL that looks plausible but doesn't exist.
 - opportunities: MUST be INDIA-BASED and matched to the user's education stage AND declared skills. Stipends in INR (₹). For school students: Indian scholarships, olympiads, and youth programs (KVPY successor INSPIRE, NTSE, Atal Tinkering Labs, Kishore Vaigyanik Protsahan Yojana, Pratham, Ashoka Youth Venture). For college students: Indian internships and fellowships (Internshala, LinkedIn India, SIP programs at TCS/Infosys/Flipkart/Zomato, IIT/IIM summer schools, Young India Fellowship, Teach For India, Gandhi Fellowship). For graduated / job-hunting: Indian entry-level roles, apprenticeships and paid fellowships (NASSCOM FutureSkills, Naukri, LinkedIn India Jobs, Chief of Staff programs at Indian startups). For working users: next-step Indian roles or upskilling (upGrad, Scaler, Newton School, GreatLearning). opportunities.url MUST be a real https link on an Indian site or a global site's India page (internshala.com, unstop.com, naukri.com, linkedin.com/jobs India, buddy4study.com, vidyalakshmi.co.in, official program pages). Stipend format: use "₹" with an INR range (e.g. "₹15,000–25,000/month" or "Unpaid" or "₹2 LPA"). Never invent a broken URL — if unsure, link to a search page on the Indian site.
 - perspective: a motivating "put things in context" panel.
   • MUST be INDIA-SPECIFIC — every number, label, and source must refer to India (Indian children, Indian youth, Indian workforce), NOT global/world figures.
@@ -137,6 +141,11 @@ Rules:
   • message: 2 warm sentences that turn the Indian stat into gratitude + fuel for the user by name — not pity.
   • lessPrivileged: a concrete count of YOUNG PEOPLE IN INDIA with FEWER opportunities than the user (Indian schooling, internet access in India, safety, food, healthcare — pick the axis that fits their answers). number is a big India-only figure (e.g. "32 million", "1.5 crore"), label is a short tag naming Indian kids/youth (e.g. "kids in India out of school right now"), message is 1–2 kid-friendly sentences addressed to the user by name framing it as motivation.
   • facts are 3 additional grounding stats about India (number + short label + one-line detail), each from a real India-focused source above.
+  • belowYou: EXACTLY 3 India-only counts of young people the user is now ahead of, one per category and in this exact order:
+      1. category "uneducated" — number of Indian children/youth currently out of school or without basic literacy (UDISE+, ASER, UNICEF India).
+      2. category "unemployed" — number of unemployed Indian youth in the 15–29 band (PLFS / MoSPI / ILO India).
+      3. category "unskilled" — number of Indian youth without formal vocational or job-ready skills (NSSO / PLFS skill module / NSDC).
+     Each item: number is a big India-only figure (e.g. "32 million", "1.5 crore"); label is a short human tag ("kids out of school in India"); detail is ONE short sentence a 10-year-old can understand that names the source. These are the three counts shown to the user under "YOU" — never omit any category, never fabricate numbers.
   Prefer recent figures (last 5 years). Never fabricate — if unsure, use a widely-cited Indian figure. Do NOT use global/worldwide numbers anywhere in perspective.`;
 
 export const analyzeGuest = createServerFn({ method: "POST" })
@@ -229,6 +238,12 @@ function sanitizePerspective(p: Perspective): Perspective {
     label: ensureIndia(f.label ?? "", " in India"),
     detail: ensureIndia(f.detail ?? ""),
   }));
+  const cleanedBelowYou = (p.belowYou ?? []).map((b) => ({
+    number: b.number,
+    label: ensureIndia(b.label ?? "", " in India"),
+    detail: ensureIndia(b.detail ?? ""),
+    category: b.category,
+  }));
   const lp = p.lessPrivileged ?? { number: "", label: "", message: "" };
   const source = p.source ? scrubGlobal(p.source) : p.source;
   const validSource = source && hasIndia(source) ? source : "Ministry of Education India / UDISE+";
@@ -245,6 +260,7 @@ function sanitizePerspective(p: Perspective): Perspective {
       message: scrubGlobal(lp.message ?? ""),
     },
     facts: cleanedFacts,
+    belowYou: cleanedBelowYou,
   };
 }
 

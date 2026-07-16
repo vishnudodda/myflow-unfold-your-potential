@@ -159,15 +159,18 @@ function Dashboard() {
           <Panel title="Podcasts" tone="lemon" emoji="🎧">
             <div className="space-y-3">
               {(r.podcasts ?? []).map((p, i) => (
-                <div key={i} className="rounded-xl bg-card/80 border border-border p-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="font-semibold text-sm">{p.title}</div>
-                    {p.url && (
-                      <a href={p.url} target="_blank" rel="noreferrer" className="text-[10px] font-mono uppercase text-primary hover:underline shrink-0">Listen ↗</a>
-                    )}
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3 flex gap-3 items-start">
+                  <PodcastThumb title={p.title} url={p.thumbnailUrl} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="font-semibold text-sm truncate">{p.title}</div>
+                      {p.url && (
+                        <a href={p.url} target="_blank" rel="noreferrer" className="text-[10px] font-mono uppercase text-primary hover:underline shrink-0">Listen ↗</a>
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground">by {p.host}</div>
+                    <div className="text-xs mt-1">{p.pitch}</div>
                   </div>
-                  <div className="text-xs text-muted-foreground">by {p.host}</div>
-                  <div className="text-xs mt-1">{p.pitch}</div>
                 </div>
               ))}
             </div>
@@ -181,6 +184,7 @@ function Dashboard() {
               source={r.perspective.source}
               userStepValue={r.perspective.lessPrivileged?.number || r.perspective.statNumber}
               userStepLabel={r.perspective.lessPrivileged?.label || r.perspective.stat}
+              belowYou={r.perspective.belowYou}
             />
           </div>
         )}
@@ -194,10 +198,12 @@ function PerspectiveFunnel({
   source,
   userStepValue,
   userStepLabel,
+  belowYou,
 }: {
   source?: string;
   userStepValue?: string;
   userStepLabel?: string;
+  belowYou?: Array<{ number: string; label: string; detail: string; category: "uneducated" | "unemployed" | "unskilled" }>;
 }) {
   const steps = [
     { value: "1.4 Billion", label: "Indians" },
@@ -299,6 +305,27 @@ function PerspectiveFunnel({
             You're among the few who have the opportunity to pursue higher education.
             Your future won't be defined by getting into college, but by what you choose to build from here.
           </p>
+          {belowYou && belowYou.length > 0 && (
+            <div className="w-full max-w-3xl">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-3">
+                Young people in India you're now ahead of ✧
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {belowYou.map((b, i) => (
+                  <div key={i} className="rounded-2xl border border-primary/30 bg-card/70 backdrop-blur p-4 text-left">
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-amber">
+                      {CATEGORY_LABEL[b.category] ?? b.category}
+                    </div>
+                    <div className="mt-1 font-display text-3xl md:text-4xl font-bold text-primary leading-none">
+                      {b.number}
+                    </div>
+                    <div className="mt-2 text-xs font-semibold text-foreground/90">{b.label}</div>
+                    <div className="mt-1 text-[11px] text-muted-foreground leading-relaxed">{b.detail}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {source && (
             <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
               Source · {source}
@@ -306,6 +333,38 @@ function PerspectiveFunnel({
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+const CATEGORY_LABEL: Record<string, string> = {
+  uneducated: "Out of school 📚",
+  unemployed: "Without a job 💼",
+  unskilled: "Without job-ready skills 🛠️",
+};
+
+function PodcastThumb({ title, url }: { title: string; url?: string }) {
+  const [broken, setBroken] = useState(false);
+  const initials = title
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("") || "🎧";
+  if (url && !broken) {
+    return (
+      <img
+        src={url}
+        alt={title}
+        loading="lazy"
+        onError={() => setBroken(true)}
+        className="h-14 w-14 rounded-lg object-cover border border-border shrink-0 bg-muted"
+      />
+    );
+  }
+  return (
+    <div className="h-14 w-14 rounded-lg shrink-0 border border-primary/30 bg-gradient-to-br from-amber/30 to-primary/20 flex items-center justify-center font-display font-bold text-primary text-sm">
+      {initials}
     </div>
   );
 }
