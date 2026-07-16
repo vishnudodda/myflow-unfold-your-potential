@@ -39,7 +39,7 @@ export type DashboardResult = {
   roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
-  podcasts: Array<{ title: string; host: string; pitch: string; url?: string; thumbnailUrl?: string }>;
+  podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
   analysis?: {
     personality: string;
     strengths: string[];
@@ -60,12 +60,6 @@ export type DashboardResult = {
     simpleMeaning: string;
     lessPrivileged: { number: string; label: string; message: string };
     facts: Array<{ number: string; label: string; detail: string }>;
-    belowYou?: {
-      uneducated: { number: string; label: string };
-      unemployed: { number: string; label: string };
-      skillless: { number: string; label: string };
-    };
-    motivation?: string;
   };
 };
 
@@ -115,13 +109,7 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
     "message": string,
     "simpleMeaning": string,
     "lessPrivileged": { "number": string, "label": string, "message": string },
-    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3),
-    "belowYou": {
-      "uneducated": { "number": string, "label": string },
-      "unemployed": { "number": string, "label": string },
-      "skillless":  { "number": string, "label": string }
-    },
-    "motivation": string
+    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
   }
 }
 Ground every field in the user's ACTUAL answers, goal, self-description, custom skills, and any free-text "Other" responses. When a question is marked SKIPPED, treat it as a signal (they weren't sure or it didn't apply) — never fabricate an answer for it. Adapt intelligently to whatever they DID share, however sparse. No generic filler. No disclaimers.
@@ -149,8 +137,6 @@ Rules:
   • message: 2 warm sentences that turn the Indian stat into gratitude + fuel for the user by name — not pity.
   • lessPrivileged: a concrete count of YOUNG PEOPLE IN INDIA with FEWER opportunities than the user (Indian schooling, internet access in India, safety, food, healthcare — pick the axis that fits their answers). number is a big India-only figure (e.g. "32 million", "1.5 crore"), label is a short tag naming Indian kids/youth (e.g. "kids in India out of school right now"), message is 1–2 kid-friendly sentences addressed to the user by name framing it as motivation.
   • facts are 3 additional grounding stats about India (number + short label + one-line detail), each from a real India-focused source above.
-  • belowYou: 3 India-specific counts of young people WORSE OFF than the user, one per axis: uneducated (out of school / never finished), unemployed (youth without a job), skillless (youth without formal skill training / NEET). Each is { number: big India figure like "32 million" or "1.5 crore", label: short human tag like "young Indians out of school" }. Ground each in a real India source (UDISE+, PLFS, NSSO, NSDC, ILO India).
-  • motivation: ONE highlight-worthy sentence (max 22 words) addressed to the user BY NAME, personalized to their goal/skills, that reframes those numbers as fuel — same meaning as "you're among the few with the chance to build something; make it count", but rewritten fresh for THIS person. Never reuse a template.
   Prefer recent figures (last 5 years). Never fabricate — if unsure, use a widely-cited Indian figure. Do NOT use global/worldwide numbers anywhere in perspective.`;
 
 export const analyzeGuest = createServerFn({ method: "POST" })
@@ -192,11 +178,6 @@ export const analyzeGuest = createServerFn({ method: "POST" })
         })
       );
       parsed.roleModels = enriched;
-      // Derive podcast thumbnails from URLs when the model didn't provide one.
-      parsed.podcasts = (parsed.podcasts ?? []).map((p) => ({
-        ...p,
-        thumbnailUrl: p.thumbnailUrl || derivePodcastThumb(p.url) || avatarFor(p.title || p.host || "Podcast"),
-      }));
       // Validation: enforce India-specific perspective content.
       if (parsed.perspective) {
         parsed.perspective = sanitizePerspective(parsed.perspective);
@@ -251,14 +232,6 @@ function sanitizePerspective(p: Perspective): Perspective {
   const lp = p.lessPrivileged ?? { number: "", label: "", message: "" };
   const source = p.source ? scrubGlobal(p.source) : p.source;
   const validSource = source && hasIndia(source) ? source : "Ministry of Education India / UDISE+";
-  const by = p.belowYou;
-  const cleanedBelowYou = by
-    ? {
-        uneducated: { number: by.uneducated?.number ?? "", label: ensureIndia(by.uneducated?.label ?? "young Indians out of school", " in India") },
-        unemployed: { number: by.unemployed?.number ?? "", label: ensureIndia(by.unemployed?.label ?? "young Indians without jobs", " in India") },
-        skillless:  { number: by.skillless?.number  ?? "", label: ensureIndia(by.skillless?.label  ?? "young Indians without formal skills", " in India") },
-      }
-    : undefined;
   return {
     headline: ensureIndia(p.headline ?? ""),
     stat: ensureIndia(p.stat ?? "", " in India"),
@@ -272,8 +245,6 @@ function sanitizePerspective(p: Perspective): Perspective {
       message: scrubGlobal(lp.message ?? ""),
     },
     facts: cleanedFacts,
-    belowYou: cleanedBelowYou,
-    motivation: p.motivation ? scrubGlobal(p.motivation) : undefined,
   };
 }
 
@@ -295,27 +266,4 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
 function avatarFor(name: string): string {
   const n = encodeURIComponent(name);
   return `https://ui-avatars.com/api/?name=${n}&background=e0e7ff&color=1e3a8a&size=256&bold=true`;
-}
-
-function derivePodcastThumb(url?: string): string | undefined {
-  if (!url) return undefined;
-  try {
-    const u = new URL(url);
-    const host = u.hostname.replace(/^www\./, "");
-    // YouTube
-    if (host.includes("youtube.com") || host === "youtu.be") {
-      let id: string | null = null;
-      if (host === "youtu.be") id = u.pathname.slice(1).split("/")[0] || null;
-      else if (u.pathname.startsWith("/watch")) id = u.searchParams.get("v");
-      else {
-        const m = u.pathname.match(/\/(embed|shorts|live)\/([^/]+)/);
-        if (m) id = m[2];
-      }
-      if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-    }
-    // Fallback: high-res favicon for the show's site (Spotify/Apple/official).
-    return `https://www.google.com/s2/favicons?domain=${host}&sz=128`;
-  } catch {
-    return undefined;
-  }
 }

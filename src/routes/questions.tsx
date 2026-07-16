@@ -28,7 +28,6 @@ function Questions() {
   const [submitting, setSubmitting] = useState(false);
   const [current, setCurrent] = useState(0);
   const [loadingMsgIdx, setLoadingMsgIdx] = useState(0);
-  const [calcPct, setCalcPct] = useState(0);
   const analysisPromiseRef = useRef<Promise<{ result: unknown }> | null>(null);
 
   const LOADING_MESSAGES = [
@@ -45,18 +44,6 @@ function Questions() {
     const id = setInterval(() => {
       setLoadingMsgIdx((i) => (i + 1) % LOADING_MESSAGES.length);
     }, 1600);
-    return () => clearInterval(id);
-  }, [submitting]);
-
-  useEffect(() => {
-    if (!submitting) { setCalcPct(0); return; }
-    // Animated calculation counter that eases toward 96% while we wait.
-    const start = Date.now();
-    const id = setInterval(() => {
-      const elapsed = (Date.now() - start) / 1000;
-      const eased = 96 * (1 - Math.exp(-elapsed / 6));
-      setCalcPct(Math.min(96, Math.round(eased)));
-    }, 80);
     return () => clearInterval(id);
   }, [submitting]);
 
@@ -215,11 +202,7 @@ function Questions() {
             <div className="relative mx-auto h-24 w-24">
               <div className="absolute inset-0 rounded-full border-4 border-primary/20" />
               <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin" />
-              <div className="absolute inset-3 rounded-full bg-primary/10 animate-pulse flex items-center justify-center">
-                <span className="font-display text-lg font-bold text-primary tabular-nums">
-                  {calcPct}%
-                </span>
-              </div>
+              <div className="absolute inset-3 rounded-full bg-primary/10 animate-pulse" />
             </div>
             <h2 className="mt-8 font-display text-2xl font-bold tracking-tight">
               Building your flow…
@@ -228,10 +211,7 @@ function Questions() {
               {LOADING_MESSAGES[loadingMsgIdx]}
             </p>
             <div className="mt-6 h-1.5 w-full bg-muted rounded-full overflow-hidden">
-              <div className="h-full bg-primary transition-all duration-200" style={{ width: `${calcPct}%` }} />
-            </div>
-            <div className="mt-2 text-[11px] font-mono uppercase tracking-widest text-primary tabular-nums">
-              Calculating · {calcPct}%
+              <div className="h-full bg-primary animate-pulse" style={{ width: "70%" }} />
             </div>
             <p className="mt-4 text-[11px] font-mono uppercase tracking-widest text-muted-foreground">
               This takes ~10–20 seconds
