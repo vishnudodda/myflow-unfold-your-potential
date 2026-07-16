@@ -305,13 +305,15 @@ function PerspectiveFunnel({
             You're among the few who have the opportunity to pursue higher education.
             Your future won't be defined by getting into college, but by what you choose to build from here.
           </p>
-          {belowYou && belowYou.length > 0 && (
+          {(() => {
+            const items = belowYou && belowYou.length > 0 ? belowYou : DEFAULT_BELOW_YOU;
+            return (
             <div className="w-full max-w-3xl">
               <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-3">
                 Young people in India you're now ahead of ✧
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {belowYou.map((b, i) => (
+                {items.map((b, i) => (
                   <div key={i} className="rounded-2xl border border-primary/30 bg-card/70 backdrop-blur p-4 text-left">
                     <div className="text-[10px] font-mono uppercase tracking-widest text-amber">
                       {CATEGORY_LABEL[b.category] ?? b.category}
@@ -325,7 +327,8 @@ function PerspectiveFunnel({
                 ))}
               </div>
             </div>
-          )}
+            );
+          })()}
           {source && (
             <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
               Source · {source}
@@ -342,6 +345,27 @@ const CATEGORY_LABEL: Record<string, string> = {
   unemployed: "Without a job 💼",
   unskilled: "Without job-ready skills 🛠️",
 };
+
+const DEFAULT_BELOW_YOU: Array<{ number: string; label: string; detail: string; category: "uneducated" | "unemployed" | "unskilled" }> = [
+  {
+    category: "uneducated",
+    number: "32 Million",
+    label: "Kids out of school in India",
+    detail: "Indian children aged 6–17 currently not enrolled in any school (UDISE+ / UNICEF India).",
+  },
+  {
+    category: "unemployed",
+    number: "33 Million",
+    label: "Unemployed youth in India",
+    detail: "Indians aged 15–29 without a job (PLFS, MoSPI).",
+  },
+  {
+    category: "unskilled",
+    number: "300 Million",
+    label: "Youth without job-ready skills",
+    detail: "Indian workforce lacking formal vocational training (NSSO / NSDC).",
+  },
+];
 
 function PodcastThumb({ title, url }: { title: string; url?: string }) {
   const [broken, setBroken] = useState(false);
