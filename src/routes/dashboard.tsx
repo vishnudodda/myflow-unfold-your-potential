@@ -326,11 +326,6 @@ function PerspectiveFunnel({
               </div>
             </div>
           )}
-          <div className="mt-2 rounded-2xl border border-amber/40 bg-gradient-to-r from-amber/20 via-primary/15 to-amber/20 p-5 shadow-[0_0_30px_-8px_rgba(255,209,0,0.35)] max-w-3xl animate-fade-in">
-            <p className="text-base md:text-lg font-semibold text-foreground text-center leading-relaxed">
-              <span className="text-primary">✦</span> Every step you take now puts you ahead of millions. Keep moving — your future is being built today. <span className="text-primary">✦</span>
-            </p>
-          </div>
           {source && (
             <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
               Source · {source}
