@@ -238,6 +238,12 @@ function sanitizePerspective(p: Perspective): Perspective {
     label: ensureIndia(f.label ?? "", " in India"),
     detail: ensureIndia(f.detail ?? ""),
   }));
+  const cleanedBelowYou = (p.belowYou ?? []).map((b) => ({
+    number: b.number,
+    label: ensureIndia(b.label ?? "", " in India"),
+    detail: ensureIndia(b.detail ?? ""),
+    category: b.category,
+  }));
   const lp = p.lessPrivileged ?? { number: "", label: "", message: "" };
   const source = p.source ? scrubGlobal(p.source) : p.source;
   const validSource = source && hasIndia(source) ? source : "Ministry of Education India / UDISE+";
@@ -254,6 +260,7 @@ function sanitizePerspective(p: Perspective): Perspective {
       message: scrubGlobal(lp.message ?? ""),
     },
     facts: cleanedFacts,
+    belowYou: cleanedBelowYou,
   };
 }
 
