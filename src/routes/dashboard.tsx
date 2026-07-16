@@ -301,6 +301,10 @@ function PerspectiveFunnel({
 
       {done && (
         <div className="mt-8 flex flex-col items-center text-center gap-5 animate-fade-in">
+          <p className="text-base md:text-lg text-foreground/90 leading-relaxed max-w-2xl text-balance">
+            You're among the few who have the opportunity to pursue higher education.
+            Your future won't be defined by getting into college, but by what you choose to build from here.
+          </p>
           {belowYou && belowYou.length > 0 && (
             <div className="w-full max-w-3xl">
               <div className="text-[10px] font-mono uppercase tracking-widest text-primary mb-3">
@@ -322,10 +326,6 @@ function PerspectiveFunnel({
               </div>
             </div>
           )}
-          <p className="text-base md:text-lg text-foreground/90 leading-relaxed max-w-2xl text-balance">
-            You're among the few who have the opportunity to pursue higher education.
-            Your future won't be defined by getting into college, but by what you choose to build from here.
-          </p>
           {source && (
             <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
               Source · {source}
