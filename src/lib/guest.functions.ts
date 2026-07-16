@@ -1,11 +1,28 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { generateText } from "ai";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 import { createLovableAiGatewayProvider } from "./ai-gateway.server";
 
+function publicClient() {
+  const url = process.env.SUPABASE_URL!;
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
+  return createClient<Database>(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false, storage: undefined },
+    global: {
+      fetch: (input, init) => {
+        const h = new Headers(init?.headers);
+        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+        h.set("apikey", key);
+        return fetch(input, { ...init, headers: h });
+      },
+    },
+  });
+}
+
 export const listAssessments = createServerFn({ method: "GET" }).handler(async () => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data } = await supabaseAdmin
+  const { data } = await publicClient()
     .from("assessments")
     .select("slug, title, description")
     .order("sort_order", { ascending: true, nullsFirst: false });
@@ -15,8 +32,7 @@ export const listAssessments = createServerFn({ method: "GET" }).handler(async (
 export const loadQuestions = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ slugs: z.array(z.string()).min(1) }).parse(d))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: asmts } = await supabaseAdmin
+    const { data: asmts } = await publicClient()
       .from("assessments")
       .select("id, slug, title, questions(id, text, sort_order, question_options(id, label, sort_order))")
       .in("slug", data.slugs);
