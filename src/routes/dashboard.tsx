@@ -185,10 +185,6 @@ function Dashboard() {
               userStepValue={r.perspective.lessPrivileged?.number || r.perspective.statNumber}
               userStepLabel={r.perspective.lessPrivileged?.label || r.perspective.stat}
               belowYou={r.perspective.belowYou}
-              name={session.name}
-              skills={[...(session.skills ?? []), ...(session.customSkill ? [session.customSkill] : [])]}
-              interests={r.analysis?.interests}
-              strengths={r.analysis?.strengths}
             />
           </div>
         )}
@@ -203,19 +199,11 @@ function PerspectiveFunnel({
   userStepValue,
   userStepLabel,
   belowYou,
-  name,
-  skills,
-  interests,
-  strengths,
 }: {
   source?: string;
   userStepValue?: string;
   userStepLabel?: string;
   belowYou?: Array<{ number: string; label: string; detail: string; category: "uneducated" | "unemployed" | "unskilled" }>;
-  name?: string;
-  skills?: string[];
-  interests?: string[];
-  strengths?: string[];
 }) {
   const steps = [
     { value: "1.4 Billion", label: "Indians" },
@@ -343,7 +331,6 @@ function PerspectiveFunnel({
               Source · {source}
             </div>
           )}
-          <MotivationCard name={name} skills={skills} interests={interests} strengths={strengths} />
         </div>
       )}
     </div>
@@ -355,89 +342,6 @@ const CATEGORY_LABEL: Record<string, string> = {
   unemployed: "Without a job 💼",
   unskilled: "Without job-ready skills 🛠️",
 };
-
-function MotivationCard({
-  name,
-  skills,
-  interests,
-  strengths,
-}: {
-  name?: string;
-  skills?: string[];
-  interests?: string[];
-  strengths?: string[];
-}) {
-  const [msg] = useState(() => pickMotivation({ name, skills, interests, strengths }));
-  return (
-    <div
-      role="note"
-      className="w-full max-w-3xl mt-2 rounded-2xl border border-amber-300/70 bg-gradient-to-br from-amber-100 to-yellow-50 p-5 md:p-6 shadow-[0_10px_30px_-15px_rgba(234,179,8,0.55)] text-left"
-    >
-      <p className="text-[15px] md:text-base leading-relaxed font-semibold text-amber-950">
-        {msg}
-      </p>
-    </div>
-  );
-}
-
-function pickMotivation(ctx: { name?: string; skills?: string[]; interests?: string[]; strengths?: string[] }): string {
-  const name = (ctx.name ?? "").trim();
-  const skill = pickOne([...(ctx.skills ?? []), ...(ctx.strengths ?? [])].filter(Boolean));
-  const interest = pickOne((ctx.interests ?? []).filter(Boolean));
-  const focus = skill || interest || "your strengths";
-  const you = name ? name : "You";
-  const youLower = name ? name : "you";
-
-  const icons = ["✨", "⭐", "🚀", "💛", "🌟", "🔥", "🌱"];
-  const openers = [
-    `Many people are still searching for direction —`,
-    `Countless people are still discovering their strengths —`,
-    `While others are still figuring out where to start,`,
-    `A lot of people spend years looking for clarity —`,
-    `Some people wait a lifetime to understand themselves —`,
-    `Plenty of people are still asking "what am I good at?" —`,
-    `Most people never pause to look inward —`,
-    `Many are still hunting for their spark —`,
-    `A great number of people are still standing at the starting line —`,
-    `While others drift, ${youLower} chose to reflect —`,
-  ];
-  const cores = [
-    `${you} already know something about ${focus}, and that's a real head start.`,
-    `${you} have already begun sharpening ${focus} — that quiet effort compounds.`,
-    `${you} took the step of looking inward, and ${focus} is already becoming an edge.`,
-    `${you} are already investing in ${focus}, and that's rarer than it looks.`,
-    `the fact that ${youLower} recognise ${focus} in ${name ? "yourself" : "yourself"} is a genuine advantage.`,
-    `${you} have named ${focus} as ${name ? "your" : "a"} direction — that alone puts ${youLower} ahead.`,
-    `${you} are already building on ${focus}, one small rep at a time.`,
-    `${you} chose to grow ${focus} instead of waiting for the "right moment".`,
-    `${you} showed up for ${focus} today, and small consistent moves add up.`,
-    `${you} are turning ${focus} from a hobby into an identity — that shift matters.`,
-  ];
-  const closers = [
-    `Keep going — momentum is on your side.`,
-    `Keep investing in yourself; the next version of ${youLower} is being built right now.`,
-    `Stay curious, stay consistent — that's the whole secret.`,
-    `Trust the process and keep stacking small wins.`,
-    `Protect your focus and don't compare your chapter 1 to anyone's chapter 10.`,
-    `That's your advantage — lean into it.`,
-    `Keep going, quietly and confidently.`,
-    `Small steps today become big proof tomorrow.`,
-    `The path is yours — walk it at your pace.`,
-    `Keep building. Future ${you} is cheering ${name ? "you" : "yourself"} on.`,
-  ];
-
-  const icon = icons[Math.floor(Math.random() * icons.length)];
-  const o = openers[Math.floor(Math.random() * openers.length)];
-  const c = cores[Math.floor(Math.random() * cores.length)];
-  const z = closers[Math.floor(Math.random() * closers.length)];
-  // 7 * 10 * 10 * 10 = 7000 combinations, well above the 100-variation floor.
-  return `${icon} ${o} ${c} ${z}`;
-}
-
-function pickOne<T>(arr: T[]): T | undefined {
-  if (!arr || arr.length === 0) return undefined;
-  return arr[Math.floor(Math.random() * arr.length)];
-}
 
 function PodcastThumb({ title, url }: { title: string; url?: string }) {
   const [broken, setBroken] = useState(false);
