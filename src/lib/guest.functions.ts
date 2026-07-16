@@ -90,7 +90,7 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
   "roleModels": [ { "name": string, "why": string } ] (exactly 3),
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
   "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
-  "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string } ] (exactly 3),
+  "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string, "thumbnailUrl": string } ] (exactly 3),
   "analysis": {
     "personality": string (2-3 sentences describing personality patterns),
     "strengths": string[] (3-5 concrete strengths grounded in the answers),
@@ -110,7 +110,8 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
     "message": string,
     "simpleMeaning": string,
     "lessPrivileged": { "number": string, "label": string, "message": string },
-    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
+    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3),
+    "belowYou": [ { "number": string, "label": string, "detail": string, "category": "uneducated"|"unemployed"|"unskilled" } ] (exactly 3, one per category, in that order)
   }
 }
 Ground every field in the user's ACTUAL answers, goal, self-description, custom skills, and any free-text "Other" responses. When a question is marked SKIPPED, treat it as a signal (they weren't sure or it didn't apply) — never fabricate an answer for it. Adapt intelligently to whatever they DID share, however sparse. No generic filler. No disclaimers.
