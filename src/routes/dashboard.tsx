@@ -210,20 +210,38 @@ function PerspectiveFunnel({
   ];
   const [index, setIndex] = useState(0);
   const [done, setDone] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+          setIndex(0);
+          setDone(false);
+        }
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasStarted]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
     if (index >= steps.length - 1) {
       const t = setTimeout(() => setDone(true), 600);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => setIndex((i) => i + 1), 1400);
     return () => clearTimeout(t);
-  }, [index]);
-
-  const restart = () => { setDone(false); setIndex(0); };
+  }, [index, hasStarted]);
 
   return (
-    <div className="perspective-aurora relative overflow-hidden rounded-3xl border border-primary/30 p-6 md:p-10 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.4)]">
+    <div ref={containerRef} className="perspective-aurora relative overflow-hidden rounded-3xl border border-primary/30 p-6 md:p-10 shadow-[0_20px_60px_-25px_rgba(255,209,0,0.4)]">
       {/* Animated aurora background */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-primary/25 blur-3xl animate-aurora-a" />
@@ -286,9 +304,6 @@ function PerspectiveFunnel({
               Source · {source}
             </div>
           )}
-          <Button onClick={restart} variant="outline" size="sm" className="border-primary/40 text-primary hover:bg-primary/10">
-            Replay
-          </Button>
         </div>
       )}
     </div>
