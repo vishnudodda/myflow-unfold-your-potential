@@ -115,7 +115,13 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
     "message": string,
     "simpleMeaning": string,
     "lessPrivileged": { "number": string, "label": string, "message": string },
-    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3)
+    "facts": [ { "number": string, "label": string, "detail": string } ] (exactly 3),
+    "belowYou": {
+      "uneducated": { "number": string, "label": string },
+      "unemployed": { "number": string, "label": string },
+      "skillless":  { "number": string, "label": string }
+    },
+    "motivation": string
   }
 }
 Ground every field in the user's ACTUAL answers, goal, self-description, custom skills, and any free-text "Other" responses. When a question is marked SKIPPED, treat it as a signal (they weren't sure or it didn't apply) — never fabricate an answer for it. Adapt intelligently to whatever they DID share, however sparse. No generic filler. No disclaimers.
@@ -143,6 +149,8 @@ Rules:
   • message: 2 warm sentences that turn the Indian stat into gratitude + fuel for the user by name — not pity.
   • lessPrivileged: a concrete count of YOUNG PEOPLE IN INDIA with FEWER opportunities than the user (Indian schooling, internet access in India, safety, food, healthcare — pick the axis that fits their answers). number is a big India-only figure (e.g. "32 million", "1.5 crore"), label is a short tag naming Indian kids/youth (e.g. "kids in India out of school right now"), message is 1–2 kid-friendly sentences addressed to the user by name framing it as motivation.
   • facts are 3 additional grounding stats about India (number + short label + one-line detail), each from a real India-focused source above.
+  • belowYou: 3 India-specific counts of young people WORSE OFF than the user, one per axis: uneducated (out of school / never finished), unemployed (youth without a job), skillless (youth without formal skill training / NEET). Each is { number: big India figure like "32 million" or "1.5 crore", label: short human tag like "young Indians out of school" }. Ground each in a real India source (UDISE+, PLFS, NSSO, NSDC, ILO India).
+  • motivation: ONE highlight-worthy sentence (max 22 words) addressed to the user BY NAME, personalized to their goal/skills, that reframes those numbers as fuel — same meaning as "you're among the few with the chance to build something; make it count", but rewritten fresh for THIS person. Never reuse a template.
   Prefer recent figures (last 5 years). Never fabricate — if unsure, use a widely-cited Indian figure. Do NOT use global/worldwide numbers anywhere in perspective.`;
 
 export const analyzeGuest = createServerFn({ method: "POST" })
