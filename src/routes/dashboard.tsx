@@ -185,6 +185,10 @@ function Dashboard() {
               userStepValue={r.perspective.lessPrivileged?.number || r.perspective.statNumber}
               userStepLabel={r.perspective.lessPrivileged?.label || r.perspective.stat}
               belowYou={r.perspective.belowYou}
+              name={session.name}
+              skills={[...(session.skills ?? []), ...(session.customSkill ? [session.customSkill] : [])]}
+              interests={r.analysis?.interests}
+              strengths={r.analysis?.strengths}
             />
           </div>
         )}
