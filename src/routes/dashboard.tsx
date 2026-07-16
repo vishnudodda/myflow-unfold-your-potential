@@ -310,6 +310,18 @@ function PerspectiveFunnel({
             You're among the few who have the opportunity to pursue higher education.
             Your future won't be defined by getting into college, but by what you choose to build from here.
           </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-3xl mt-2">
+            {BELOW_YOU_STATS.map((s) => (
+              <div key={s.label} className="rounded-2xl border border-amber/30 bg-card/70 backdrop-blur px-4 py-5 text-center">
+                <div className="font-display text-2xl md:text-3xl font-bold text-primary leading-none">{s.number}</div>
+                <div className="mt-2 text-[11px] font-mono uppercase tracking-widest text-amber">{s.label}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{s.detail}</div>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs md:text-sm text-muted-foreground max-w-2xl">
+            Millions in India don't get the chance you have today. Use it well.
+          </p>
           {source && (
             <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
               Source · {source}
@@ -319,6 +331,21 @@ function PerspectiveFunnel({
       )}
     </div>
   );
+}
+
+const BELOW_YOU_STATS: Array<{ number: string; label: string; detail: string }> = [
+  { number: "34 Million", label: "Uneducated", detail: "Indian children out of school (UNESCO / UDISE+)" },
+  { number: "40 Million+", label: "Unemployed", detail: "Young Indians without a job (CMIE / PLFS)" },
+  { number: "500 Million", label: "Skill-less", detail: "Indians without formal skill training (NSDC)" },
+];
+
+function podcastThumb(url: string | undefined, title: string): string {
+  if (url) {
+    // YouTube
+    const yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+    if (yt) return `https://img.youtube.com/vi/${yt[1]}/hqdefault.jpg`;
+  }
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(title)}&background=1a1a1a&color=ffd633&size=256&bold=true`;
 }
 
 const TONE_BG: Record<string, string> = {
