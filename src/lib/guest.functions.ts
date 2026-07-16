@@ -178,6 +178,14 @@ export const analyzeGuest = createServerFn({ method: "POST" })
         })
       );
       parsed.roleModels = enriched;
+      // Enrich podcasts with iTunes artwork thumbnails.
+      const enrichedPodcasts = await Promise.all(
+        (parsed.podcasts ?? []).map(async (p) => {
+          const thumbnailUrl = await fetchPodcastArt(p.title, p.host);
+          return { ...p, thumbnailUrl };
+        })
+      );
+      parsed.podcasts = enrichedPodcasts;
       // Validation: enforce India-specific perspective content.
       if (parsed.perspective) {
         parsed.perspective = sanitizePerspective(parsed.perspective);
