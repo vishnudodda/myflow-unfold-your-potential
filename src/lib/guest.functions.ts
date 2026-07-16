@@ -246,6 +246,14 @@ function sanitizePerspective(p: Perspective): Perspective {
   const lp = p.lessPrivileged ?? { number: "", label: "", message: "" };
   const source = p.source ? scrubGlobal(p.source) : p.source;
   const validSource = source && hasIndia(source) ? source : "Ministry of Education India / UDISE+";
+  const by = p.belowYou;
+  const cleanedBelowYou = by
+    ? {
+        uneducated: { number: by.uneducated?.number ?? "", label: ensureIndia(by.uneducated?.label ?? "young Indians out of school", " in India") },
+        unemployed: { number: by.unemployed?.number ?? "", label: ensureIndia(by.unemployed?.label ?? "young Indians without jobs", " in India") },
+        skillless:  { number: by.skillless?.number  ?? "", label: ensureIndia(by.skillless?.label  ?? "young Indians without formal skills", " in India") },
+      }
+    : undefined;
   return {
     headline: ensureIndia(p.headline ?? ""),
     stat: ensureIndia(p.stat ?? "", " in India"),
@@ -259,6 +267,8 @@ function sanitizePerspective(p: Perspective): Perspective {
       message: scrubGlobal(lp.message ?? ""),
     },
     facts: cleanedFacts,
+    belowYou: cleanedBelowYou,
+    motivation: p.motivation ? scrubGlobal(p.motivation) : undefined,
   };
 }
 
