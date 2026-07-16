@@ -271,6 +271,22 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
   }
 }
 
+async function fetchPodcastArt(title: string, host?: string): Promise<string | undefined> {
+  const term = encodeURIComponent(`${title} ${host ?? ""}`.trim());
+  try {
+    const res = await fetch(`https://itunes.apple.com/search?term=${term}&entity=podcast&limit=1`, {
+      headers: { accept: "application/json" },
+      signal: AbortSignal.timeout(1800),
+    });
+    if (!res.ok) return undefined;
+    const j = (await res.json()) as { results?: Array<{ artworkUrl600?: string; artworkUrl100?: string }> };
+    const art = j.results?.[0];
+    return art?.artworkUrl600 ?? art?.artworkUrl100;
+  } catch {
+    return undefined;
+  }
+}
+
 function avatarFor(name: string): string {
   const n = encodeURIComponent(name);
   return `https://ui-avatars.com/api/?name=${n}&background=e0e7ff&color=1e3a8a&size=256&bold=true`;
