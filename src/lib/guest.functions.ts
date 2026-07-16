@@ -192,6 +192,11 @@ export const analyzeGuest = createServerFn({ method: "POST" })
         })
       );
       parsed.roleModels = enriched;
+      // Derive podcast thumbnails from URLs when the model didn't provide one.
+      parsed.podcasts = (parsed.podcasts ?? []).map((p) => ({
+        ...p,
+        thumbnailUrl: p.thumbnailUrl || derivePodcastThumb(p.url) || avatarFor(p.title || p.host || "Podcast"),
+      }));
       // Validation: enforce India-specific perspective content.
       if (parsed.perspective) {
         parsed.perspective = sanitizePerspective(parsed.perspective);
@@ -290,4 +295,27 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
 function avatarFor(name: string): string {
   const n = encodeURIComponent(name);
   return `https://ui-avatars.com/api/?name=${n}&background=e0e7ff&color=1e3a8a&size=256&bold=true`;
+}
+
+function derivePodcastThumb(url?: string): string | undefined {
+  if (!url) return undefined;
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    // YouTube
+    if (host.includes("youtube.com") || host === "youtu.be") {
+      let id: string | null = null;
+      if (host === "youtu.be") id = u.pathname.slice(1).split("/")[0] || null;
+      else if (u.pathname.startsWith("/watch")) id = u.searchParams.get("v");
+      else {
+        const m = u.pathname.match(/\/(embed|shorts|live)\/([^/]+)/);
+        if (m) id = m[2];
+      }
+      if (id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+    }
+    // Fallback: high-res favicon for the show's site (Spotify/Apple/official).
+    return `https://www.google.com/s2/favicons?domain=${host}&sz=128`;
+  } catch {
+    return undefined;
+  }
 }
