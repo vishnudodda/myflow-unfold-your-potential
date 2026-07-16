@@ -159,15 +159,29 @@ function Dashboard() {
           <Panel title="Podcasts" tone="lemon" emoji="🎧">
             <div className="space-y-3">
               {(r.podcasts ?? []).map((p, i) => (
-                <div key={i} className="rounded-xl bg-card/80 border border-border p-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="font-semibold text-sm">{p.title}</div>
-                    {p.url && (
-                      <a href={p.url} target="_blank" rel="noreferrer" className="text-[10px] font-mono uppercase text-primary hover:underline shrink-0">Listen ↗</a>
-                    )}
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3 flex gap-3 items-start">
+                  {p.thumbnailUrl && (
+                    <img
+                      src={p.thumbnailUrl}
+                      alt={p.title}
+                      loading="lazy"
+                      className="h-16 w-16 rounded-lg object-cover border border-border shrink-0 bg-muted"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        t.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.title)}&background=fff7cc&color=8a6d00&size=256&bold=true`;
+                      }}
+                    />
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="font-semibold text-sm">{p.title}</div>
+                      {p.url && (
+                        <a href={p.url} target="_blank" rel="noreferrer" className="text-[10px] font-mono uppercase text-primary hover:underline shrink-0">Listen ↗</a>
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground">by {p.host}</div>
+                    <div className="text-xs mt-1">{p.pitch}</div>
                   </div>
-                  <div className="text-xs text-muted-foreground">by {p.host}</div>
-                  <div className="text-xs mt-1">{p.pitch}</div>
                 </div>
               ))}
             </div>
@@ -181,6 +195,9 @@ function Dashboard() {
               source={r.perspective.source}
               userStepValue={r.perspective.lessPrivileged?.number || r.perspective.statNumber}
               userStepLabel={r.perspective.lessPrivileged?.label || r.perspective.stat}
+              belowYou={r.perspective.belowYou}
+              motivation={r.perspective.motivation}
+              name={session.name}
             />
           </div>
         )}
@@ -194,10 +211,20 @@ function PerspectiveFunnel({
   source,
   userStepValue,
   userStepLabel,
+  belowYou,
+  motivation,
+  name,
 }: {
   source?: string;
   userStepValue?: string;
   userStepLabel?: string;
+  belowYou?: {
+    uneducated: { number: string; label: string };
+    unemployed: { number: string; label: string };
+    skillless: { number: string; label: string };
+  };
+  motivation?: string;
+  name?: string;
 }) {
   const steps = [
     { value: "1.4 Billion", label: "Indians" },
@@ -295,9 +322,32 @@ function PerspectiveFunnel({
 
       {done && (
         <div className="mt-8 flex flex-col items-center text-center gap-5 animate-fade-in">
-          <p className="text-base md:text-lg text-foreground/90 leading-relaxed max-w-2xl text-balance">
-            You're among the few who have the opportunity to pursue higher education.
-            Your future won't be defined by getting into college, but by what you choose to build from here.
+          {belowYou && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full max-w-3xl">
+              {[
+                { key: "uneducated", emoji: "📚", ...belowYou.uneducated },
+                { key: "unemployed", emoji: "💼", ...belowYou.unemployed },
+                { key: "skillless",  emoji: "🛠️", ...belowYou.skillless  },
+              ].map((b, i) => (
+                <div
+                  key={b.key}
+                  className="rounded-2xl border border-primary/25 bg-background/60 backdrop-blur p-4 text-center animate-scale-in"
+                  style={{ animationDelay: `${i * 150}ms` }}
+                >
+                  <div className="text-lg">{b.emoji}</div>
+                  <div className="mt-1 font-display text-2xl md:text-3xl font-bold text-primary tracking-tight">
+                    {b.number || "—"}
+                  </div>
+                  <div className="mt-1 text-[11px] font-mono uppercase tracking-widest text-muted-foreground leading-snug">
+                    {b.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <p className="relative mt-2 max-w-2xl text-balance font-display text-lg md:text-2xl font-semibold leading-snug bg-gradient-to-r from-amber via-primary to-amber bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(255,209,0,0.35)]">
+            {motivation?.trim()
+              || `${name ? name + ", y" : "Y"}ou're among the few with the chance to build something real — don't just get through, get remembered.`}
           </p>
           {source && (
             <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
