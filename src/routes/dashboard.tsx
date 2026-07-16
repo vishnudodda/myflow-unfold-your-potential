@@ -159,27 +159,15 @@ function Dashboard() {
           <Panel title="Podcasts" tone="lemon" emoji="🎧">
             <div className="space-y-3">
               {(r.podcasts ?? []).map((p, i) => (
-                <div key={i} className="rounded-xl bg-card/80 border border-border p-3 flex gap-3 items-start">
-                  <img
-                    src={p.thumbnailUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.title)}&background=1a1a1a&color=ffd633&size=256&bold=true`}
-                    alt={p.title}
-                    loading="lazy"
-                    className="h-14 w-14 rounded-lg object-cover border border-border shrink-0 bg-muted"
-                    onError={(e) => {
-                      const t = e.currentTarget;
-                      t.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.title)}&background=1a1a1a&color=ffd633&size=256&bold=true`;
-                    }}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="font-semibold text-sm">{p.title}</div>
-                      {p.url && (
-                        <a href={p.url} target="_blank" rel="noreferrer" className="text-[10px] font-mono uppercase text-primary hover:underline shrink-0">Listen ↗</a>
-                      )}
-                    </div>
-                    <div className="text-xs text-muted-foreground">by {p.host}</div>
-                    <div className="text-xs mt-1">{p.pitch}</div>
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="font-semibold text-sm">{p.title}</div>
+                    {p.url && (
+                      <a href={p.url} target="_blank" rel="noreferrer" className="text-[10px] font-mono uppercase text-primary hover:underline shrink-0">Listen ↗</a>
+                    )}
                   </div>
+                  <div className="text-xs text-muted-foreground">by {p.host}</div>
+                  <div className="text-xs mt-1">{p.pitch}</div>
                 </div>
               ))}
             </div>
