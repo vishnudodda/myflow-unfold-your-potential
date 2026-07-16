@@ -301,9 +301,8 @@ function PerspectiveFunnel({
 
       {done && (
         <div className="mt-8 flex flex-col items-center text-center gap-5 animate-fade-in">
-          <p className="text-base md:text-lg text-foreground/90 leading-relaxed max-w-2xl text-balance">
-            You're among the few who have the opportunity to pursue higher education.
-            Your future won't be defined by getting into college, but by what you choose to build from here.
+          <p className="inline-block rounded-2xl border border-primary/30 bg-primary/10 px-6 py-4 text-base md:text-lg font-semibold text-foreground/95 leading-relaxed max-w-2xl text-balance shadow-[0_0_30px_-8px_rgba(255,209,0,0.35)]">
+            You're in a rare place. What you build from here matters more than where you got in.
           </p>
           {(() => {
             const fallback: Array<{ number: string; label: string; detail: string; category: "uneducated" | "unemployed" | "unskilled" }> = [
