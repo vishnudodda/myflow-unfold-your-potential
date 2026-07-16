@@ -39,7 +39,7 @@ export type DashboardResult = {
   roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
-  podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
+  podcasts: Array<{ title: string; host: string; pitch: string; url?: string; thumbnailUrl?: string }>;
   analysis?: {
     personality: string;
     strengths: string[];
