@@ -39,7 +39,7 @@ export type DashboardResult = {
   roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
   opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
-  podcasts: Array<{ title: string; host: string; pitch: string; url?: string }>;
+  podcasts: Array<{ title: string; host: string; pitch: string; url?: string; thumbnailUrl?: string }>;
   analysis?: {
     personality: string;
     strengths: string[];
@@ -120,12 +120,12 @@ Rules:
   2. Improvements needed — framed as opportunities and next-level growth, never as flaws. Say "you could sharpen…", "adding X will amplify…". Keep it kind, actionable, forward-looking.
   3. Motivation — a rousing, personal pep talk addressed to them by name. End on an uplifting sentence.
   Keep summary.headline short (max 12 words) and hopeful. summary.motivation stays 1–2 warm sentences.
-- roleModels: MUST be INDIA-BASED, GENUINE, and PUBLICLY VERIFIABLE (real people with Wikipedia pages / mainstream press coverage — no fictional or unverifiable names). Tailor to the user's EXACT age band and goal — do NOT reuse the same 3 people for every user, and prefer role models whose OWN breakthrough age is close to (or realistically reachable from) the user's age.
-  • Age 10-14: Indian teen prodigies and youth changemakers whose achievements happened AS teens (e.g. Licypriya Kangujam, Tilak Mehta, Advait Kolarkar, Suhani Bhatnagar).
-  • Age 15-18: high-school-era Indian breakouts and young athletes/creators (e.g. R Praggnanandhaa, D Gukesh, Divyansh Singh Panwar, Anahat Singh) matched to their skills.
-  • Age 19-22: emerging Indian entrepreneurs, athletes, creators whose breakthrough came in college years (e.g. Neeraj Chopra, PV Sindhu, Ritesh Agarwal, Prajakta Koli).
-  • Age 23-27: early-career Indian founders and professionals (e.g. Kunal Shah, Nithin Kamath, Aman Gupta, Falguni Nayar, Byju Raveendran, Bhavish Aggarwal) whose trajectory maps to the user's goal.
-  Vary by skills — a coder gets different names than a writer, athlete, or designer. Never invent a person; if unsure, pick a widely-known Indian figure whose name is easy to Google-verify.
+- roleModels: MUST be INDIA-BASED, GENUINE, and PUBLICLY VERIFIABLE (real people with Wikipedia pages / mainstream press coverage — no fictional or unverifiable names). CRITICAL: match the user's EXACT age — pick people whose STANDOUT achievement happened at the user's current age (±2 years max). The user should look at each name and think "they did that when they were MY age". Never pick a role model whose breakthrough came 5+ years older than the user. In each "why", state the age at which that person's breakthrough happened so the age match is visible to the user.
+  • Age 10-14: Indian kids whose achievement happened AS 10-14-year-olds (e.g. Licypriya Kangujam, Tilak Mehta, Advait Kolarkar, Suhani Bhatnagar, Kautilya Pandit).
+  • Age 15-18: Indian teens whose breakthrough happened AS 15-18-year-olds (e.g. R Praggnanandhaa, D Gukesh, Anahat Singh, Linthoi Chanambam, Malavath Poorna).
+  • Age 19-22: Indians whose breakthrough happened AS 19-22-year-olds (e.g. Neeraj Chopra at 23 is borderline — prefer PV Sindhu at 21, Divya Deshmukh, Manu Bhaker, Rishabh Pant at 20, Shubman Gill at 20).
+  • Age 23-27: Indians whose breakthrough came AT 23-27 (e.g. Ritesh Agarwal at 24, Bhavish Aggarwal at 25, Kunal Shah at 27; avoid figures whose fame came in their 30s+).
+  Vary by skills — a coder gets different names than a writer, athlete, or designer. Never invent a person; if unsure, pick a widely-known Indian figure whose name is easy to Google-verify AND whose breakthrough age matches.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
 - opportunities: MUST be INDIA-BASED and matched to the user's education stage AND declared skills. Stipends in INR (₹). For school students: Indian scholarships, olympiads, and youth programs (KVPY successor INSPIRE, NTSE, Atal Tinkering Labs, Kishore Vaigyanik Protsahan Yojana, Pratham, Ashoka Youth Venture). For college students: Indian internships and fellowships (Internshala, LinkedIn India, SIP programs at TCS/Infosys/Flipkart/Zomato, IIT/IIM summer schools, Young India Fellowship, Teach For India, Gandhi Fellowship). For graduated / job-hunting: Indian entry-level roles, apprenticeships and paid fellowships (NASSCOM FutureSkills, Naukri, LinkedIn India Jobs, Chief of Staff programs at Indian startups). For working users: next-step Indian roles or upskilling (upGrad, Scaler, Newton School, GreatLearning). opportunities.url MUST be a real https link on an Indian site or a global site's India page (internshala.com, unstop.com, naukri.com, linkedin.com/jobs India, buddy4study.com, vidyalakshmi.co.in, official program pages). Stipend format: use "₹" with an INR range (e.g. "₹15,000–25,000/month" or "Unpaid" or "₹2 LPA"). Never invent a broken URL — if unsure, link to a search page on the Indian site.
 - perspective: a motivating "put things in context" panel.
@@ -178,6 +178,14 @@ export const analyzeGuest = createServerFn({ method: "POST" })
         })
       );
       parsed.roleModels = enriched;
+      // Enrich podcasts with iTunes artwork thumbnails.
+      const enrichedPodcasts = await Promise.all(
+        (parsed.podcasts ?? []).map(async (p) => {
+          const thumbnailUrl = await fetchPodcastArt(p.title, p.host);
+          return { ...p, thumbnailUrl };
+        })
+      );
+      parsed.podcasts = enrichedPodcasts;
       // Validation: enforce India-specific perspective content.
       if (parsed.perspective) {
         parsed.perspective = sanitizePerspective(parsed.perspective);
@@ -258,6 +266,22 @@ async function fetchWikiThumb(name: string): Promise<string | undefined> {
     if (!res.ok) return undefined;
     const j = (await res.json()) as { thumbnail?: { source?: string }; originalimage?: { source?: string } };
     return j.thumbnail?.source ?? j.originalimage?.source;
+  } catch {
+    return undefined;
+  }
+}
+
+async function fetchPodcastArt(title: string, host?: string): Promise<string | undefined> {
+  const term = encodeURIComponent(`${title} ${host ?? ""}`.trim());
+  try {
+    const res = await fetch(`https://itunes.apple.com/search?term=${term}&entity=podcast&limit=1`, {
+      headers: { accept: "application/json" },
+      signal: AbortSignal.timeout(1800),
+    });
+    if (!res.ok) return undefined;
+    const j = (await res.json()) as { results?: Array<{ artworkUrl600?: string; artworkUrl100?: string }> };
+    const art = j.results?.[0];
+    return art?.artworkUrl600 ?? art?.artworkUrl100;
   } catch {
     return undefined;
   }
