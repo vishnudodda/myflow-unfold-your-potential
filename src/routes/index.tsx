@@ -78,7 +78,6 @@ function Intro() {
 
   const stepsMeta = [
     { key: "name", label: "First, what's your name?", helper: "We'll use this to make things personal.", valid: nameValid, errorMsg: "Letters only, please." },
-    { key: "email", label: "What's your email?", helper: "We'll use this for your Letter to Your Future Self.", valid: emailValid, errorMsg: "Please enter a valid email." },
     { key: "age", label: "How old are you?", helper: "Pick the number that fits you today.", valid: ageValid, errorMsg: "Please pick your age." },
     { key: "education", label: "Where are you right now in life?", helper: "Helps us match real opportunities to your stage.", valid: educationValid, errorMsg: "Please tell us where you are." },
     { key: "skills", label: "Which skills already feel true for you?", helper: "Pick any that fit — even the basic ones count.", valid: skillsValid, errorMsg: "Pick at least one skill." },
