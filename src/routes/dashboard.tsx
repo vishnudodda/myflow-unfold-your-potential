@@ -1,7 +1,11 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import type { DashboardResult } from "@/lib/guest.functions";
+import { saveFutureLetter } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { jsPDF } from "jspdf";
 
@@ -14,6 +18,7 @@ export const Route = createFileRoute("/dashboard")({
 type FlatAnswer = { moduleSlug: string; question: string; answer?: string; custom?: string; skipped?: boolean };
 type Session = {
   name: string;
+  email?: string;
   age: number;
   education?: string;
   skills?: string[];
@@ -182,6 +187,11 @@ function Dashboard() {
               ))}
             </div>
           </Panel>
+        </div>
+
+        {/* Letter to My Future Self */}
+        <div className="mt-4">
+          <FutureLetterCard defaultEmail={session.email} name={session.name} />
         </div>
 
         {/* Perspective — motivational stats */}
