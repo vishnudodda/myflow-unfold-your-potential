@@ -29,6 +29,33 @@ export const listAssessments = createServerFn({ method: "GET" }).handler(async (
   return { assessments: data ?? [] };
 });
 
+export const saveFutureLetter = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        name: z.string().trim().max(120).optional(),
+        email: z.string().trim().email().max(255),
+        letter: z.string().trim().min(1).max(20000),
+        years: z.union([z.literal(1), z.literal(3), z.literal(5)]),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }) => {
+    const deliverAt = new Date();
+    deliverAt.setFullYear(deliverAt.getFullYear() + data.years);
+    const { error } = await publicClient()
+      .from("future_letters" as never)
+      .insert({
+        name: data.name ?? null,
+        email: data.email,
+        letter: data.letter,
+        years: data.years,
+        deliver_at: deliverAt.toISOString(),
+      } as never);
+    if (error) throw new Error(error.message);
+    return { ok: true, deliverAt: deliverAt.toISOString() };
+  });
+
 export const loadQuestions = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ slugs: z.array(z.string()).min(1) }).parse(d))
   .handler(async ({ data }) => {

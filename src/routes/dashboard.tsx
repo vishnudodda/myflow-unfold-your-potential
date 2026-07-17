@@ -1,7 +1,11 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import type { DashboardResult } from "@/lib/guest.functions";
+import { saveFutureLetter } from "@/lib/guest.functions";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { jsPDF } from "jspdf";
 
@@ -14,6 +18,7 @@ export const Route = createFileRoute("/dashboard")({
 type FlatAnswer = { moduleSlug: string; question: string; answer?: string; custom?: string; skipped?: boolean };
 type Session = {
   name: string;
+  email?: string;
   age: number;
   education?: string;
   skills?: string[];
@@ -182,6 +187,11 @@ function Dashboard() {
               ))}
             </div>
           </Panel>
+        </div>
+
+        {/* Letter to My Future Self */}
+        <div className="mt-4">
+          <FutureLetterCard defaultEmail={session.email} name={session.name} />
         </div>
 
         {/* Perspective — motivational stats */}
@@ -405,6 +415,125 @@ function Panel({ title, tone, emoji, children }: { title: string; tone: keyof ty
         <div className="text-xs font-mono uppercase tracking-widest text-amber">{title}</div>
       </div>
       <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+function FutureLetterCard({ defaultEmail, name }: { defaultEmail?: string; name: string }) {
+  const save = useServerFn(saveFutureLetter);
+  const [email, setEmail] = useState(defaultEmail ?? "");
+  const [letter, setLetter] = useState("");
+  const [years, setYears] = useState<1 | 3 | 5>(1);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const canSave = !saving && !saved && letter.trim().length > 0 && emailValid;
+
+  async function onSave() {
+    if (!canSave) return;
+    setSaving(true);
+    setError(null);
+    try {
+      await save({ data: { name, email: email.trim(), letter: letter.trim(), years } });
+      setSaved(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const yearOptions: Array<{ v: 1 | 3 | 5; label: string }> = [
+    { v: 1, label: "After 1 Year" },
+    { v: 3, label: "After 3 Years" },
+    { v: 5, label: "After 5 Years" },
+  ];
+
+  return (
+    <section className="bg-card rounded-3xl border border-amber/30 p-6 shadow-[0_10px_40px_-20px_rgba(255,209,0,0.25)]">
+      <div className="flex items-center gap-2">
+        <span className="text-lg leading-none">💌</span>
+        <div className="text-xs font-mono uppercase tracking-widest text-amber">Letter to My Future Self</div>
+      </div>
+
+      {saved ? (
+        <div className="mt-5 rounded-2xl bg-primary/10 border border-primary/30 p-5 text-center">
+          <div className="text-2xl">✨</div>
+          <p className="mt-2 font-display text-lg font-semibold">Your letter has been safely stored.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Your future self will receive it on the date you selected. Keep growing—your journey has just begun.
+          </p>
+        </div>
+      ) : (
+        <>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Write a message to your future self about your dreams, goals, and the person you aspire to become.
+            We'll safely store it and send it back to your email after 1, 3, or 5 years as a reminder of your journey.
+          </p>
+
+          <div className="mt-4 space-y-3">
+            <div>
+              <label className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">Email</label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="mt-1 bg-background/60 border-amber/30"
+              />
+            </div>
+
+            <div>
+              <label className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">Your letter</label>
+              <Textarea
+                value={letter}
+                onChange={(e) => setLetter(e.target.value)}
+                placeholder={`Dear future ${name || "me"}, ...`}
+                rows={8}
+                className="mt-1 min-h-[180px] bg-background/60 border-amber/30 text-sm leading-relaxed"
+              />
+            </div>
+
+            <div>
+              <label className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground">Deliver</label>
+              <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {yearOptions.map((o) => {
+                  const on = years === o.v;
+                  return (
+                    <button
+                      key={o.v}
+                      type="button"
+                      onClick={() => setYears(o.v)}
+                      className={`rounded-xl border p-3 text-sm font-medium transition-all ${
+                        on
+                          ? "bg-primary text-primary-foreground border-primary shadow-[0_0_20px_-4px_var(--amber)]"
+                          : "bg-background/60 hover:bg-amber/10 hover:border-amber/50 border-border"
+                      }`}
+                    >
+                      📅 {o.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {error && <p className="text-sm text-destructive">{error}</p>}
+
+            <div className="pt-1">
+              <Button
+                size="lg"
+                className="rounded-full px-6"
+                onClick={onSave}
+                disabled={!canSave}
+              >
+                {saving ? "Saving…" : "Save My Letter"}
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }

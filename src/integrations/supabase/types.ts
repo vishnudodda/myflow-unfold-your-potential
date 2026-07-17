@@ -237,6 +237,39 @@ export type Database = {
         }
         Relationships: []
       }
+      future_letters: {
+        Row: {
+          created_at: string
+          deliver_at: string
+          email: string
+          id: string
+          letter: string
+          name: string | null
+          sent_at: string | null
+          years: number
+        }
+        Insert: {
+          created_at?: string
+          deliver_at: string
+          email: string
+          id?: string
+          letter: string
+          name?: string | null
+          sent_at?: string | null
+          years: number
+        }
+        Update: {
+          created_at?: string
+          deliver_at?: string
+          email?: string
+          id?: string
+          letter?: string
+          name?: string | null
+          sent_at?: string | null
+          years?: number
+        }
+        Relationships: []
+      }
       industry_insights: {
         Row: {
           categories: string[]
