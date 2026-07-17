@@ -96,36 +96,22 @@ function Dashboard() {
             </div>
           </Panel>
 
-          <Panel title="Opportunity Timeline" tone="mint" emoji="🌱">
+          <Panel title="Opportunities" tone="mint" emoji="🌱">
             <div className="space-y-3">
-              {(["This week", "This month", "Next 6 months", "Next year"] as const).map((tf) => {
-                const o = (r.opportunities ?? []).find((x) => (x.timeframe || "").toLowerCase() === tf.toLowerCase());
-                const isAwareness = tf === "Next year";
-                return (
-                  <div key={tf} className="rounded-xl bg-card/80 border border-border p-3 relative pl-4">
-                    <span className="absolute left-0 top-3 bottom-3 w-1 rounded-full bg-primary/50" />
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="text-[10px] font-mono uppercase tracking-widest text-primary">{tf}{isAwareness ? " · heads-up" : ""}</div>
-                      {o?.confidence && !isAwareness && (
-                        <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/20 text-primary border border-primary/40" : o.confidence === "Medium" ? "bg-amber/10 text-amber border border-amber/30" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
-                      )}
-                    </div>
-                    {o ? (
-                      <>
-                        <div className="font-semibold text-sm mt-1">{o.title}</div>
-                        <div className="text-xs text-muted-foreground mt-0.5">{o.org}{o.stipend ? ` · ${o.stipend}` : ""}</div>
-                        {o.url && (
-                          <a href={o.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-[11px] font-mono uppercase text-primary hover:underline">
-                            {isAwareness ? "Learn more ↗" : "Apply / Start ↗"}
-                          </a>
-                        )}
-                      </>
-                    ) : (
-                      <div className="text-xs text-muted-foreground mt-1">—</div>
-                    )}
+              {(r.opportunities ?? []).map((o, i) => (
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="font-semibold text-sm">{o.title}</div>
+                    <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/20 text-primary border border-primary/40" : o.confidence === "Medium" ? "bg-amber/10 text-amber border border-amber/30" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
                   </div>
-                );
-              })}
+                  <div className="text-xs text-muted-foreground mt-1">{o.org} · {o.stipend}</div>
+                  {o.url && (
+                    <a href={o.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-[11px] font-mono uppercase text-primary hover:underline">
+                      Apply / Learn more ↗
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
           </Panel>
         </div>
@@ -574,9 +560,9 @@ function downloadReport(session: Session) {
   writeH2("Roadmap");
   (r.roadmap ?? []).forEach((m) => writeParagraph(`• ${m.horizon}: ${m.action}`, { gap: 2 }));
 
-  writeH2("Opportunity Timeline");
+  writeH2("Opportunities");
   (r.opportunities ?? []).forEach((o) => {
-    writeParagraph(`${o.timeframe || ""} — ${o.title} (${o.confidence})`, { size: 12, bold: true, gap: 2 });
+    writeParagraph(`${o.title} (${o.confidence})`, { size: 12, bold: true, gap: 2 });
     writeParagraph(`${o.org} · ${o.stipend}`, { size: 10, color: [90, 90, 110], gap: 2 });
     if (o.url) writeParagraph(o.url, { size: 9, color: [80, 90, 160] });
   });
