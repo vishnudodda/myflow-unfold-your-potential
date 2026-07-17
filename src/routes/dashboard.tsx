@@ -105,11 +105,18 @@ function Dashboard() {
                     <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/20 text-primary border border-primary/40" : o.confidence === "Medium" ? "bg-amber/10 text-amber border border-amber/30" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">{o.org} · {o.stipend}</div>
-                  {o.url && (
-                    <a href={o.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-[11px] font-mono uppercase text-primary hover:underline">
-                      Apply / Learn more ↗
-                    </a>
-                  )}
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    {o.url && (
+                      <a href={o.url} target="_blank" rel="noreferrer" className="inline-block text-[11px] font-mono uppercase text-primary hover:underline">
+                        Apply / Learn more ↗
+                      </a>
+                    )}
+                    {o.deadline && (
+                      <span className="text-[10px] font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded-full border border-border">
+                        Deadline: {o.deadline}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
