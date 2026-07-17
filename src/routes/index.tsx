@@ -124,6 +124,12 @@ function Intro() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden text-foreground">
+      <a
+        href="/admin/login"
+        className="absolute top-4 right-4 md:top-6 md:right-6 z-20 inline-flex items-center gap-1.5 rounded-full border border-amber/40 bg-card/80 backdrop-blur px-4 py-2 text-xs font-mono uppercase tracking-widest text-foreground hover:bg-amber/10 hover:border-amber transition-all shadow-[0_4px_20px_-8px_rgba(255,209,0,0.4)]"
+      >
+        <span className="text-amber">✦</span> Admin
+      </a>
       <div className="relative w-full max-w-xl py-12">
         <div className="flex items-center justify-between">
           <span className="font-display text-xl font-bold tracking-tighter"><span className="text-amber">MYFLOW</span> ✦</span>
