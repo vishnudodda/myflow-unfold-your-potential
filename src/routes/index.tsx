@@ -110,7 +110,6 @@ function Intro() {
       "myflow.session",
       JSON.stringify({
         name: trimmedName,
-        email: trimmedEmail,
         age: ageNum,
         education: finalEducation,
         skills: finalSkills,
