@@ -277,26 +277,6 @@ export const analyzeGuest = createServerFn({ method: "POST" })
       if (parsed.perspective) {
         parsed.perspective = sanitizePerspective(parsed.perspective);
       }
-      // Persist a durable copy of this completed session so admins can see it.
-      try {
-        await publicClient()
-          .from("guest_sessions" as never)
-          .insert({
-            name: data.name,
-            age: data.age,
-            education: data.education ?? null,
-            skills: data.skills ?? [],
-            custom_skill: data.customSkill ?? null,
-            goal: data.goal ?? null,
-            one_liner: data.oneLiner ?? null,
-            interests: data.slugs ?? [],
-            answers: data.answers ?? [],
-            result: parsed,
-            completed: true,
-          } as never);
-      } catch (e) {
-        console.warn("guest_sessions insert failed", e);
-      }
       return { result: parsed };
     } catch {
       throw new Error("AI returned an invalid response. Please try again.");
