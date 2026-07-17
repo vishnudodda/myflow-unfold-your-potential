@@ -97,7 +97,7 @@ export type DashboardResult = {
   summary: { headline: string; bullets: string[]; motivation?: string };
   roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
-  opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
+  opportunities: Array<{ timeframe: string; title: string; org: string; stipend: string; confidence: string; url?: string }>;
   podcasts: Array<{ title: string; host: string; pitch: string; url?: string; thumbnailUrl?: string }>;
   analysis?: {
     personality: string;
