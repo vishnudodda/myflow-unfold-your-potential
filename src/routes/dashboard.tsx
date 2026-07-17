@@ -557,12 +557,11 @@ function downloadReport(session: Session) {
   writeH2("Roadmap");
   (r.roadmap ?? []).forEach((m) => writeParagraph(`• ${m.horizon}: ${m.action}`, { gap: 2 }));
 
-  writeH2("Opportunities");
-  (r.opportunities ?? []).forEach((o) => {
-    writeParagraph(`${o.title} (${o.confidence})`, { size: 12, bold: true, gap: 2 });
-    writeParagraph(`${o.org} · ${o.stipend}`, { size: 10, color: [90, 90, 110], gap: 2 });
-    if (o.url) writeParagraph(o.url, { size: 9, color: [80, 90, 160] });
-  });
+  writeH2("Opportunity Timeline");
+  writeParagraph("• This week: Watch a Python basics course.", { gap: 2 });
+  writeParagraph("• This month: Build your first mini project.", { gap: 2 });
+  writeParagraph("• Next 6 months: Participate in a hackathon.", { gap: 2 });
+  writeParagraph("• Next year: Apply for internships.", { gap: 2 });
 
   writeH2("Podcasts");
   (r.podcasts ?? []).forEach((p) => {
