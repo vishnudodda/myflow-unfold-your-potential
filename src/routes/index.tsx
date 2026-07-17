@@ -16,6 +16,7 @@ export const Route = createFileRoute("/")({
 function Intro() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [education, setEducation] = useState("");
   const [skills, setSkills] = useState<Set<string>>(new Set());
@@ -66,6 +67,8 @@ function Intro() {
 
   const trimmedName = name.trim();
   const nameValid = /^[A-Za-z][A-Za-z\s'-]*$/.test(trimmedName);
+  const trimmedEmail = email.trim();
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
   const ageNum = parseInt(age, 10);
   const ageValid = !!ageNum && ageNum >= 10 && ageNum <= 27;
   const educationValid = !!education && (education !== "other" || customEducation.trim().length > 0);
@@ -73,10 +76,11 @@ function Intro() {
   const skillsValid = nonOtherSkills.length > 0 || (skills.has("Other") && customSkill.trim().length > 0);
   const goalValid = goal.trim().length > 0;
   const oneLinerValid = oneLiner.trim().length > 0;
-  const formValid = nameValid && ageValid && educationValid && skillsValid && goalValid && oneLinerValid;
+  const formValid = nameValid && emailValid && ageValid && educationValid && skillsValid && goalValid && oneLinerValid;
 
   const stepsMeta = [
     { key: "name", label: "First, what's your name?", helper: "We'll use this to make things personal.", valid: nameValid, errorMsg: "Letters only, please." },
+    { key: "email", label: "What's your email?", helper: "We'll use this for your Letter to Your Future Self.", valid: emailValid, errorMsg: "Please enter a valid email." },
     { key: "age", label: "How old are you?", helper: "Pick the number that fits you today.", valid: ageValid, errorMsg: "Please pick your age." },
     { key: "education", label: "Where are you right now in life?", helper: "Helps us match real opportunities to your stage.", valid: educationValid, errorMsg: "Please tell us where you are." },
     { key: "skills", label: "Which skills already feel true for you?", helper: "Pick any that fit — even the basic ones count.", valid: skillsValid, errorMsg: "Pick at least one skill." },
@@ -109,6 +113,7 @@ function Intro() {
       "myflow.session",
       JSON.stringify({
         name: trimmedName,
+        email: trimmedEmail,
         age: ageNum,
         education: finalEducation,
         skills: finalSkills,
@@ -147,6 +152,18 @@ function Intro() {
                 onChange={(e) => { setError(null); setName(e.target.value.replace(/[^A-Za-z\s'-]/g, "")); }}
                 onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
                 placeholder="e.g. Alex"
+                className="h-12 text-lg bg-background/60 border-amber/30"
+              />
+            )}
+
+            {current.key === "email" && (
+              <Input
+                autoFocus
+                type="email"
+                value={email}
+                onChange={(e) => { setError(null); setEmail(e.target.value); }}
+                onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
+                placeholder="you@example.com"
                 className="h-12 text-lg bg-background/60 border-amber/30"
               />
             )}
