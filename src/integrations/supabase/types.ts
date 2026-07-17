@@ -38,10 +38,41 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_audit_logs: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          target: string | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          target?: string | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          target?: string | null
+        }
+        Relationships: []
+      }
       admin_requests: {
         Row: {
           created_at: string
           email: string
+          full_name: string | null
           id: string
           reason: string | null
           reviewed_at: string | null
@@ -51,6 +82,7 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          full_name?: string | null
           id?: string
           reason?: string | null
           reviewed_at?: string | null
@@ -60,6 +92,7 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          full_name?: string | null
           id?: string
           reason?: string | null
           reviewed_at?: string | null
@@ -1043,7 +1076,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       age_band: "11_14" | "15_18" | "19_22" | "23_27"
