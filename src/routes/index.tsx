@@ -152,18 +152,6 @@ function Intro() {
               />
             )}
 
-            {current.key === "email" && (
-              <Input
-                autoFocus
-                type="email"
-                value={email}
-                onChange={(e) => { setError(null); setEmail(e.target.value); }}
-                onKeyDown={(e) => { if (e.key === "Enter") goNext(); }}
-                placeholder="you@example.com"
-                className="h-12 text-lg bg-background/60 border-amber/30"
-              />
-            )}
-
             {current.key === "age" && (
               <div className="grid grid-cols-6 gap-2">
                 {AGE_OPTIONS.map((a) => {
