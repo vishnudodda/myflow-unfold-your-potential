@@ -1047,7 +1047,7 @@ export type Database = {
     }
     Enums: {
       age_band: "11_14" | "15_18" | "19_22" | "23_27"
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "super_admin"
       assessment_status: "not_started" | "in_progress" | "completed"
       recommendation_kind:
         | "career"
@@ -1183,7 +1183,7 @@ export const Constants = {
   public: {
     Enums: {
       age_band: ["11_14", "15_18", "19_22", "23_27"],
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "super_admin"],
       assessment_status: ["not_started", "in_progress", "completed"],
       recommendation_kind: [
         "career",
