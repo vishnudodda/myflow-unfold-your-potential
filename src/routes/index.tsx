@@ -67,8 +67,6 @@ function Intro() {
 
   const trimmedName = name.trim();
   const nameValid = /^[A-Za-z][A-Za-z\s'-]*$/.test(trimmedName);
-  const trimmedEmail = email.trim();
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
   const ageNum = parseInt(age, 10);
   const ageValid = !!ageNum && ageNum >= 10 && ageNum <= 27;
   const educationValid = !!education && (education !== "other" || customEducation.trim().length > 0);
@@ -76,7 +74,7 @@ function Intro() {
   const skillsValid = nonOtherSkills.length > 0 || (skills.has("Other") && customSkill.trim().length > 0);
   const goalValid = goal.trim().length > 0;
   const oneLinerValid = oneLiner.trim().length > 0;
-  const formValid = nameValid && emailValid && ageValid && educationValid && skillsValid && goalValid && oneLinerValid;
+  const formValid = nameValid && ageValid && educationValid && skillsValid && goalValid && oneLinerValid;
 
   const stepsMeta = [
     { key: "name", label: "First, what's your name?", helper: "We'll use this to make things personal.", valid: nameValid, errorMsg: "Letters only, please." },
