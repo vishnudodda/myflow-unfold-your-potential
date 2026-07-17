@@ -36,7 +36,7 @@ export const loadQuestions = createServerFn({ method: "POST" })
       .from("assessments")
       .select("id, slug, title, questions(id, text, sort_order, question_options(id, label, sort_order))")
       .in("slug", data.slugs);
-    const modules = (asmts ?? []).map((a) => ({
+    const rawModules = (asmts ?? []).map((a) => ({
       slug: a.slug,
       title: a.title,
       questions: (a.questions ?? [])
@@ -47,8 +47,51 @@ export const loadQuestions = createServerFn({ method: "POST" })
           options: q.question_options.sort((x, y) => x.sort_order - y.sort_order).map((o) => ({ id: o.id, label: o.label })),
         })),
     }));
-    return { modules };
+    // Deduplicate near-identical questions across selected modules. A question
+    // that also appears (or has a ≥0.78 Jaccard match) in another selected
+    // module is kept once (on the first module it's seen in) and its
+    // `sharedModuleSlugs` records every module it represents.
+    const seen: Array<{ tokens: Set<string>; slugs: string[]; ownerModuleIdx: number; ownerQIdx: number }> = [];
+    const modules = rawModules.map((m) => ({
+      slug: m.slug,
+      title: m.title,
+      questions: [] as Array<{ id: string; text: string; options: Array<{ id: string; label: string }>; sharedModuleSlugs: string[] }>,
+    }));
+    rawModules.forEach((m, mi) => {
+      m.questions.forEach((q, qi) => {
+        const toks = tokenize(q.text);
+        const match = seen.find((s) => jaccard(s.tokens, toks) >= 0.78);
+        if (match) {
+          if (!match.slugs.includes(m.slug)) match.slugs.push(m.slug);
+          const owner = modules[match.ownerModuleIdx].questions[match.ownerQIdx];
+          if (owner && !owner.sharedModuleSlugs.includes(m.slug)) owner.sharedModuleSlugs.push(m.slug);
+          return;
+        }
+        const ownerQIdx = modules[mi].questions.length;
+        modules[mi].questions.push({ ...q, sharedModuleSlugs: [m.slug] });
+        seen.push({ tokens: toks, slugs: [m.slug], ownerModuleIdx: mi, ownerQIdx });
+      });
+    });
+    return { modules: modules.filter((m) => m.questions.length > 0) };
   });
+
+const STOPWORDS = new Set([
+  "a","an","the","is","are","am","be","been","being","do","does","did","have","has","had","of","to","in","on","for","with","and","or","but","if","then","than","that","this","these","those","it","its","as","at","by","from","you","your","yours","yourself","i","me","my","we","our","us","they","them","their","he","she","his","her","when","where","what","which","who","whom","how","why","would","could","should","will","shall","can","may","might","most","more","less","also","just","really","very","feel","feels","think","thinks","about","around","up","down","out","over","into","one","some","any","every","each","other","others","best","better",
+]);
+function tokenize(text: string): Set<string> {
+  const cleaned = text.toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  const toks = cleaned.split(" ").filter((t) => t.length > 2 && !STOPWORDS.has(t));
+  // Very short questions: fall back to full word set (no stopword filter) to avoid empty sets.
+  if (toks.length < 3) return new Set(cleaned.split(" ").filter(Boolean));
+  return new Set(toks);
+}
+function jaccard(a: Set<string>, b: Set<string>): number {
+  if (a.size === 0 || b.size === 0) return 0;
+  let inter = 0;
+  for (const t of a) if (b.has(t)) inter++;
+  const union = a.size + b.size - inter;
+  return inter / union;
+}
 
 export type DashboardResult = {
   summary: { headline: string; bullets: string[]; motivation?: string };

@@ -62,7 +62,7 @@ function Questions() {
   });
 
   const flatQs = useMemo(() => {
-    const out: Array<{ moduleSlug: string; moduleTitle: string; id: string; text: string; options: Array<{ id: string; label: string }> }> = [];
+    const out: Array<{ moduleSlug: string; moduleTitle: string; id: string; text: string; options: Array<{ id: string; label: string }>; sharedModuleSlugs: string[] }> = [];
     for (const m of data?.modules ?? []) {
       for (const q of m.questions) {
         out.push({
@@ -71,6 +71,7 @@ function Questions() {
           id: q.id,
           text: q.text,
           options: [...q.options, { id: OTHER_ID, label: "Other (type your own)" }],
+          sharedModuleSlugs: (q as { sharedModuleSlugs?: string[] }).sharedModuleSlugs ?? [m.slug],
         });
       }
     }
@@ -102,16 +103,19 @@ function Questions() {
     for (const m of data?.modules ?? []) {
       for (const qq of m.questions) {
         const oid = ans[qq.id];
-        if (!oid || oid === SKIP_ID) {
-          flat.push({ moduleSlug: m.slug, question: qq.text, skipped: true });
-          continue;
+        const shared = (qq as { sharedModuleSlugs?: string[] }).sharedModuleSlugs ?? [m.slug];
+        for (const slug of shared) {
+          if (!oid || oid === SKIP_ID) {
+            flat.push({ moduleSlug: slug, question: qq.text, skipped: true });
+            continue;
+          }
+          if (oid === OTHER_ID) {
+            flat.push({ moduleSlug: slug, question: qq.text, answer: "Other", custom: custom[qq.id]?.trim() || undefined });
+            continue;
+          }
+          const opt = qq.options.find((o) => o.id === oid);
+          if (opt) flat.push({ moduleSlug: slug, question: qq.text, answer: opt.label });
         }
-        if (oid === OTHER_ID) {
-          flat.push({ moduleSlug: m.slug, question: qq.text, answer: "Other", custom: custom[qq.id]?.trim() || undefined });
-          continue;
-        }
-        const opt = qq.options.find((o) => o.id === oid);
-        if (opt) flat.push({ moduleSlug: m.slug, question: qq.text, answer: opt.label });
       }
     }
     return flat;
