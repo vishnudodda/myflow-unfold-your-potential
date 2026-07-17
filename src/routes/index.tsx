@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -127,7 +127,10 @@ function Intro() {
       <div className="relative w-full max-w-xl py-12">
         <div className="flex items-center justify-between">
           <span className="font-display text-xl font-bold tracking-tighter"><span className="text-amber">MYFLOW</span> ✦</span>
-          <span className="text-[11px] font-mono uppercase tracking-widest text-foreground/60">Step {step + 1} / {total}</span>
+          <div className="flex items-center gap-3">
+            <Link to="/admin/login" className="text-[11px] font-mono uppercase tracking-widest text-foreground/60 hover:text-amber transition-colors border border-border/60 rounded-full px-3 py-1">Admin</Link>
+            <span className="text-[11px] font-mono uppercase tracking-widest text-foreground/60">Step {step + 1} / {total}</span>
+          </div>
         </div>
 
         <div className="mt-4 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
