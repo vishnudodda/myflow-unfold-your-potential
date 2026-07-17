@@ -17,7 +17,6 @@ export const Route = createFileRoute("/")({
 function Intro() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [education, setEducation] = useState("");
   const [skills, setSkills] = useState<Set<string>>(new Set());
