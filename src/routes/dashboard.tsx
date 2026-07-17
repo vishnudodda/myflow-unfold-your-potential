@@ -574,9 +574,9 @@ function downloadReport(session: Session) {
   writeH2("Roadmap");
   (r.roadmap ?? []).forEach((m) => writeParagraph(`• ${m.horizon}: ${m.action}`, { gap: 2 }));
 
-  writeH2("Opportunities");
+  writeH2("Opportunity Timeline");
   (r.opportunities ?? []).forEach((o) => {
-    writeParagraph(`${o.title} (${o.confidence})`, { size: 12, bold: true, gap: 2 });
+    writeParagraph(`${o.timeframe || ""} — ${o.title} (${o.confidence})`, { size: 12, bold: true, gap: 2 });
     writeParagraph(`${o.org} · ${o.stipend}`, { size: 10, color: [90, 90, 110], gap: 2 });
     if (o.url) writeParagraph(o.url, { size: 9, color: [80, 90, 160] });
   });
