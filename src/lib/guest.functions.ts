@@ -148,7 +148,7 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
   "summary": { "headline": string, "bullets": string[3], "motivation": string },
   "roleModels": [ { "name": string, "why": string } ] (exactly 3),
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
-  "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
+  "opportunities": [ { "timeframe": "This week"|"This month"|"Next 6 months"|"Next year", "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 4, one per timeframe in that order),
   "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string, "thumbnailUrl": string } ] (exactly 3),
   "analysis": {
     "personality": string (2-3 sentences describing personality patterns),
