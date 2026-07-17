@@ -96,20 +96,23 @@ function Dashboard() {
             </div>
           </Panel>
 
-          <Panel title="Opportunity Timeline" tone="mint" emoji="🌱">
-            <ol className="space-y-3">
-              {[
-                { horizon: "This week", action: "Watch a Python basics course." },
-                { horizon: "This month", action: "Build your first mini project." },
-                { horizon: "Next 6 months", action: "Participate in a hackathon." },
-                { horizon: "Next year", action: "Apply for internships." },
-              ].map((o, i) => (
-                <li key={i} className="rounded-xl bg-card/80 border border-border p-3">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-primary">{o.horizon}</div>
-                  <div className="mt-0.5 text-sm">{o.action}</div>
-                </li>
+          <Panel title="Opportunities" tone="mint" emoji="🌱">
+            <div className="space-y-3">
+              {(r.opportunities ?? []).map((o, i) => (
+                <div key={i} className="rounded-xl bg-card/80 border border-border p-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="font-semibold text-sm">{o.title}</div>
+                    <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${o.confidence === "High" ? "bg-primary/20 text-primary border border-primary/40" : o.confidence === "Medium" ? "bg-amber/10 text-amber border border-amber/30" : "bg-muted text-muted-foreground"}`}>{o.confidence}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">{o.org} · {o.stipend}</div>
+                  {o.url && (
+                    <a href={o.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-[11px] font-mono uppercase text-primary hover:underline">
+                      Apply / Learn more ↗
+                    </a>
+                  )}
+                </div>
               ))}
-            </ol>
+            </div>
           </Panel>
         </div>
 
@@ -557,11 +560,12 @@ function downloadReport(session: Session) {
   writeH2("Roadmap");
   (r.roadmap ?? []).forEach((m) => writeParagraph(`• ${m.horizon}: ${m.action}`, { gap: 2 }));
 
-  writeH2("Opportunity Timeline");
-  writeParagraph("• This week: Watch a Python basics course.", { gap: 2 });
-  writeParagraph("• This month: Build your first mini project.", { gap: 2 });
-  writeParagraph("• Next 6 months: Participate in a hackathon.", { gap: 2 });
-  writeParagraph("• Next year: Apply for internships.", { gap: 2 });
+  writeH2("Opportunities");
+  (r.opportunities ?? []).forEach((o) => {
+    writeParagraph(`${o.title} (${o.confidence})`, { size: 12, bold: true, gap: 2 });
+    writeParagraph(`${o.org} · ${o.stipend}`, { size: 10, color: [90, 90, 110], gap: 2 });
+    if (o.url) writeParagraph(o.url, { size: 9, color: [80, 90, 160] });
+  });
 
   writeH2("Podcasts");
   (r.podcasts ?? []).forEach((p) => {
