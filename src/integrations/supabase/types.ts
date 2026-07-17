@@ -38,36 +38,6 @@ export type Database = {
         }
         Relationships: []
       }
-      admin_requests: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          reason: string | null
-          reviewed_at: string | null
-          reviewed_by: string | null
-          status: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          reason?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          status?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          reason?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          status?: string
-        }
-        Relationships: []
-      }
       ai_prompts: {
         Row: {
           created_at: string
@@ -297,60 +267,6 @@ export type Database = {
           name?: string | null
           sent_at?: string | null
           years?: number
-        }
-        Relationships: []
-      }
-      guest_sessions: {
-        Row: {
-          age: number | null
-          answers: Json
-          completed: boolean
-          created_at: string
-          custom_skill: string | null
-          duration_ms: number | null
-          education: string | null
-          email: string | null
-          goal: string | null
-          id: string
-          interests: string[]
-          name: string
-          one_liner: string | null
-          result: Json | null
-          skills: string[]
-        }
-        Insert: {
-          age?: number | null
-          answers?: Json
-          completed?: boolean
-          created_at?: string
-          custom_skill?: string | null
-          duration_ms?: number | null
-          education?: string | null
-          email?: string | null
-          goal?: string | null
-          id?: string
-          interests?: string[]
-          name: string
-          one_liner?: string | null
-          result?: Json | null
-          skills?: string[]
-        }
-        Update: {
-          age?: number | null
-          answers?: Json
-          completed?: boolean
-          created_at?: string
-          custom_skill?: string | null
-          duration_ms?: number | null
-          education?: string | null
-          email?: string | null
-          goal?: string | null
-          id?: string
-          interests?: string[]
-          name?: string
-          one_liner?: string | null
-          result?: Json | null
-          skills?: string[]
         }
         Relationships: []
       }
