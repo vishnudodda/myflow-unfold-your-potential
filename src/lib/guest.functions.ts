@@ -97,7 +97,7 @@ export type DashboardResult = {
   summary: { headline: string; bullets: string[]; motivation?: string };
   roleModels: Array<{ name: string; why: string; photoUrl?: string }>;
   roadmap: Array<{ horizon: string; action: string }>;
-  opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string }>;
+  opportunities: Array<{ title: string; org: string; stipend: string; confidence: string; url?: string; deadline?: string }>;
   podcasts: Array<{ title: string; host: string; pitch: string; url?: string; thumbnailUrl?: string }>;
   analysis?: {
     personality: string;
@@ -148,7 +148,7 @@ CRITICAL: Return ONLY valid JSON (no markdown, no code fences) matching exactly 
   "summary": { "headline": string, "bullets": string[3], "motivation": string },
   "roleModels": [ { "name": string, "why": string } ] (exactly 3),
   "roadmap": [ { "horizon": "30 days"|"3 months"|"6 months"|"1 year", "action": string } ] (exactly 4, in that order),
-  "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string } ] (exactly 3),
+  "opportunities": [ { "title": string, "org": string, "stipend": string, "confidence": "High"|"Medium"|"Low", "url": string, "deadline": string } ] (exactly 3),
   "podcasts": [ { "title": string, "host": string, "pitch": string, "url": string, "thumbnailUrl": string } ] (exactly 3),
   "analysis": {
     "personality": string (2-3 sentences describing personality patterns),
@@ -190,7 +190,7 @@ Rules:
   AGE-EXACT PRIORITY: at least 2 of the 3 role models MUST have had their breakthrough within ±3 years of the user's current age, so the user sees "someone my age already did this". The 3rd may be slightly older to show trajectory. Never pick a role model whose famous work happened more than 10 years past the user's age.
 - podcasts.url: a real, direct https link (Spotify, Apple Podcasts, YouTube, or the show's official site). Never invent a broken URL — if unsure, link to the show's Spotify or Apple Podcasts search page.
 - podcasts.thumbnailUrl: a real, direct https image URL of the show's cover art (Spotify i.scdn.co CDN, Apple Podcasts is1-ssl.mzstatic.com CDN, or the show's official site). Square art preferred. If you cannot recall a real cover URL, return an empty string "" — the app will render a fallback tile. NEVER invent a URL that looks plausible but doesn't exist.
-- opportunities: MUST be INDIA-BASED and matched to the user's education stage AND declared skills. Stipends in INR (₹). For school students: Indian scholarships, olympiads, and youth programs (KVPY successor INSPIRE, NTSE, Atal Tinkering Labs, Kishore Vaigyanik Protsahan Yojana, Pratham, Ashoka Youth Venture). For college students: Indian internships and fellowships (Internshala, LinkedIn India, SIP programs at TCS/Infosys/Flipkart/Zomato, IIT/IIM summer schools, Young India Fellowship, Teach For India, Gandhi Fellowship). For graduated / job-hunting: Indian entry-level roles, apprenticeships and paid fellowships (NASSCOM FutureSkills, Naukri, LinkedIn India Jobs, Chief of Staff programs at Indian startups). For working users: next-step Indian roles or upskilling (upGrad, Scaler, Newton School, GreatLearning). opportunities.url MUST be a real https link on an Indian site or a global site's India page (internshala.com, unstop.com, naukri.com, linkedin.com/jobs India, buddy4study.com, vidyalakshmi.co.in, official program pages). Stipend format: use "₹" with an INR range (e.g. "₹15,000–25,000/month" or "Unpaid" or "₹2 LPA"). Never invent a broken URL — if unsure, link to a search page on the Indian site.
+- opportunities: MUST be INDIA-BASED and matched to the user's education stage AND declared skills. Stipends in INR (₹). For school students: Indian scholarships, olympiads, and youth programs (KVPY successor INSPIRE, NTSE, Atal Tinkering Labs, Kishore Vaigyanik Protsahan Yojana, Pratham, Ashoka Youth Venture). For college students: Indian internships and fellowships (Internshala, LinkedIn India, SIP programs at TCS/Infosys/Flipkart/Zomato, IIT/IIM summer schools, Young India Fellowship, Teach For India, Gandhi Fellowship). For graduated / job-hunting: Indian entry-level roles, apprenticeships and paid fellowships (NASSCOM FutureSkills, Naukri, LinkedIn India Jobs, Chief of Staff programs at Indian startups). For working users: next-step Indian roles or upskilling (upGrad, Scaler, Newton School, GreatLearning). opportunities.url MUST be a real https link on an Indian site or a global site's India page (internshala.com, unstop.com, naukri.com, linkedin.com/jobs India, buddy4study.com, vidyalakshmi.co.in, official program pages). Stipend format: use "₹" with an INR range (e.g. "₹15,000–25,000/month" or "Unpaid" or "₹2 LPA"). deadline is the application closing date as a human-readable string (e.g. "15 Aug 2026" or "Rolling" or "Closes 31 Dec 2026"). Never invent a broken URL — if unsure, link to a search page on the Indian site.
 - perspective: a motivating "put things in context" panel.
   • MUST be INDIA-SPECIFIC — every number, label, and source must refer to India (Indian children, Indian youth, Indian workforce), NOT global/world figures.
   • statNumber is a big bold figure about India (e.g. "32 million", "1.5 crore", "12 million"). Prefer plain-language units (million/billion) over abbreviations.
