@@ -1,62 +1,56 @@
-# Reframe MyFlow — No-Auth Guided Journey
+# Admin Portal Plan
 
-## New user flow (single-session, no login)
+Because this is a large, multi-part feature, I'll build it in phases. Here's the proposed scope and approach — please confirm or adjust before I start.
 
-```text
-/ (Intro)          → Name + Age form
-/pick              → "What do you want to know about you?"
-                     10 assessment checkboxes (multi-select)
-/questions         → Renders questions ONLY for selected assessments,
-                     stacked in one scrollable page with progress bar.
-                     Final button: [ Analyze ]
-/dashboard         → 5 segments:
-                     1. Summary        2. Role Models
-                     3. Roadmap        4. Opportunities
-                     5. Suggested Podcasts
-```
+## Phase 1 — Foundations (Auth + Access Control)
 
-No sign-in / sign-up / Google / email anywhere. Session lives in `localStorage` (name, age, selected slugs, answers, generated results).
+**Backend (Lovable Cloud / Supabase)**
+- Enable Supabase email/password auth (already used by the app).
+- Add a `admin_role` enum: `super_admin`, `admin`.
+- Reuse existing `user_roles` table + `has_role()` RPC (already present).
+- Seed the primary super admin `kallerenuka793@gmail.com` / `Renu@123` via a migration (creates the auth user with the service role and inserts a `super_admin` role row).
+- Reuse existing `admin_requests` table (already present) — verify columns match: `email`, `full_name`, `reason`, `status`, `requested_at`, `reviewed_by`, `reviewed_at`.
+- Add `admin_audit_logs` table: `id`, `actor_id`, `action` (login / login_failed / approve_request / reject_request / add_admin / remove_admin), `target`, `metadata`, `created_at`.
+- RLS: only `super_admin`/`admin` can read admin tables; audit logs insert-only from server functions.
 
-## Screens
+**Frontend**
+- "Admin" link in top nav → `/admin/login`.
+- `/admin/login` — email, password, Login, "Request Admin Access" (opens modal with email + name + reason).
+- `/admin` (protected by `_authenticated` + role check) — dashboard shell with sub-tabs.
 
-**1. `/` Intro** — hero + a card with `Name` and `Age` inputs and a "Continue" button. Stores `{ name, age }` in localStorage, routes to `/pick`.
+## Phase 2 — Requests Management
 
-**2. `/pick` Feature picker** — heading "What do you want to know about you?"; grid of 10 checkboxes, one per assessment (pulled from `assessments` table). "Continue" enabled when ≥1 checked. Stores selected slugs.
+- `/admin/requests` — list of pending / approved / rejected requests.
+- Approve → creates auth user (server fn using `supabaseAdmin`), assigns `admin` role, sends default password (or magic link), writes audit log.
+- Reject → updates status + audit log.
 
-**3. `/questions` Combined questionnaire** — loads all questions + options for the selected assessments in one page, grouped by module with a sticky progress indicator. Radio group per question. Bottom "Analyze" button; disabled until every question answered. On click: calls one new server fn `analyzeGuest` that runs each selected assessment's prompt + the recommendations/roadmap/stats prompts, returns a bundled result object, stored in localStorage under `myflow.result`.
+## Phase 3 — Analytics Dashboard
 
-**4. `/dashboard` 5-panel** — reads `myflow.result` from localStorage. Grid:
-- **Summary** — top-line headline + 3-bullet insights synthesized across modules.
-- **Role Models** — 3 cards (name, why they match).
-- **Roadmap** — 4 milestones (30d / 3m / 6m / 1y), one line each.
-- **Opportunities** — 3 cards (title, org, stipend, confidence).
-- **Podcasts** — 3 cards (title, host, one-line pitch, link if any).
+Data sources: `guest_sessions`, `ai_results`, `future_letters`, `profiles`.
 
-## Technical changes
+- **Overview cards**: total users, total analyses, new today/week/month, completion rate, avg completion time.
+- **User table** with search + filters (age, age-group, interests, skills, goals, date, status).
+- **Segmentation**: derive interest tags from stored answers + `pick` selections; group counts, %, avg age, top goals/skills.
+- **Age analytics**: per-age (10–27) + bucketed (10–13, 14–16, 17–19, 20–22, 23–27) with top interests/goals.
+- **Questionnaire analytics**: most-selected options, most-skipped, top "Other" text, top goals, top self-descriptions, top skills, top custom skills.
+- **Charts**: use `recharts` (already common in shadcn stack) — pie, bar, line, trend.
 
-### Routes
-- Delete or bypass `/auth`, `/_authenticated/*` gating on the new user path. Keep the files, but remove nav links; add redirect from `/` to new flow.
-- Add: `src/routes/index.tsx` (rewritten intro), `src/routes/pick.tsx`, `src/routes/questions.tsx`, `src/routes/dashboard.tsx` (public, reads localStorage).
+## Phase 4 — Export
 
-### Server functions (public, no auth middleware)
-- `src/lib/guest.functions.ts`:
-  - `listAssessments()` → returns 10 assessments + categories.
-  - `loadQuestions({ slugs })` → returns questions & options for chosen slugs.
-  - `analyzeGuest({ name, age, answers, slugs })` → runs prompts via existing `runPrompt` / `loadPrompt`, returns `{ summary, roleModels, roadmap, opportunities, podcasts }`. No DB writes — pure compute. Uses `supabaseAdmin` only to read prompts/questions.
+- CSV export (client-side, `papaparse` or native).
+- PDF export (`jspdf` + `jspdf-autotable`) for the currently visible report.
 
-### Removed from client UX (kept in code but unlinked)
-- Auth page, protected dashboard, per-assessment page, results detail page.
+## Phase 5 — Hardening
 
-### State
-- `localStorage['myflow.session']` = `{ name, age, slugs, answers, result }`.
-- No profiles / user_responses / ai_results writes on the guest path.
+- Password hashing is handled by Supabase Auth (bcrypt) — nothing to store manually.
+- Force password change on first login for accounts created via approval flow (flag `must_reset_password`).
+- All privileged writes go through `createServerFn` + `requireSupabaseAuth` + explicit `has_role('admin')` check before loading `supabaseAdmin`.
+- Audit-log every login (success/failure), approval, rejection, add/remove.
 
-### Landing metadata
-- `head()` on `/`: title "MyFlow — Discover who you are", description matches new flow.
+## Notes / Confirmations Needed
 
-## Out of scope
-- Persisting results server-side.
-- Sharing / permalinks for dashboard (localStorage only).
-- Editing the underlying prompt table.
+1. **Seeded password `Renu@123`** — this is weak and will be visible in the migration file. I'll seed it as requested and force a reset on first login. OK?
+2. **Approval flow**: when an admin is approved, should the system (a) auto-create the auth account with a temp password emailed to them, or (b) require them to sign up separately after approval? I recommend (a).
+3. **Scope**: shall I ship all 5 phases in one go, or start with Phases 1–2 (auth + requests) and follow up with 3–5 (analytics + export)? Given the size, I recommend shipping in two turns.
 
-Approve to build.
+Reply "go" to proceed with all phases, or tell me which phase(s) to start with and any changes to the answers above.
